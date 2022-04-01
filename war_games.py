@@ -154,9 +154,9 @@ if __name__ == "__main__":
     # print(f"computer deck: {deal_cards()[1]}\n")
     # print(f"cards on table: {deal_cards()[2]}")
 
-    # print(define_value("Ace of Spades"))
-    # print(define_value("3 of Spades"))
-    # print(define_value("Jack of Diamonds"))
+    # print(define_value("Ace"))
+    # print(define_value("3"))
+    # print(define_value("Jack"))
 
     play_game()
 
