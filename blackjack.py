@@ -242,13 +242,12 @@ def player_options(player_cards, dealer_cards):
 def is_natural(player_cards, dealer_cards):
     if debug: print("called is_natural()")
 
-    additional_dealer_cards = dealers_move()
-    dealer_cards += additional_dealer_cards
+    updated_dealer_cards = dealers_move(dealer_cards)
 
     player_hand_total = define_value(player_cards[0][0] + define_value(player_cards[1][0])
     dealer_hand_total = 0
 
-    for card in dealer_cards:
+    for card in updated_dealer_cards:
         dealer_hand_total += define_value(cards[0])
         
     if player_hand_total == 21 and dealer_hand_total != 21:
@@ -271,11 +270,15 @@ def is_natural(player_cards, dealer_cards):
 def dealers_move(dealer_cards):
     if debug: print("called dealers_move()")
 
-    print(f"dealer hand revealed: {dealer_hand}")
+    print(f"dealer hand revealed: {dealer_cards}")
+
+    dealer_hand_total = 0
+    for card in dealer_cards:
+        dealer_hand_total += define_value(card[0])
         
     while dealer_hand_total < 17:
         dealer_card = deck.pop()
-        dealer_hand.append(dealer_card)
+        dealer_cards.append(dealer_card)
         dealer_hand_total += define_value(dealer_card[0])
         
         if dealer_card[0] == "Ace" and dealer_hand_total >= 17:
