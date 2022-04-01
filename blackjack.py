@@ -33,16 +33,10 @@ def define_value(rank):
 
     else:
         if rank == "Ace":
-            value = 14
+            value = 1
 
-        if rank == "Jack":
-            value = 11
-
-        if rank == "Queen":
-            value = 12
-
-        if rank == "King":
-            value = 13
+        if rank == "Jack" or rank == "Queen" or rank == "King":
+            value = 10
 
     return value
 
@@ -103,7 +97,7 @@ def play_game():
         if trace: print(f"dealer hand total: {dealer_hand_total}")
         print(f"dealer card2 value: {define_value(dealer_hand[1][0])}") 
 
-#         player_options(player_hand, dealer_hand)
+        player_options(player_hand, dealer_hand)
         
 #         print(f">>> Updated Player Bank: ${player_bank}")
 
@@ -116,19 +110,28 @@ def play_game():
 #         os.system("clear")
 
 
-def player_options(player_hand, dealer_hand):
+def player_options(player_cards, dealer_cards):
     if debug: print("called player_options()")
 
-    if 
+    if trace: print(player_cards)
 
-#     while True:
-#         first_option = input("\nEnter first move: ").lower()
+    player_card1_rank = player_cards[0].split()[0]
+    player_card2_rank = player_cards[1].split()[0]
+
+    if trace: print(player_card1_rank, player_card2_rank)
+
+    if define_value(player_card1_rank) + define_value(player_card2_rank) == 21:
+        is_natural(player_cards, dealer_cards)
+        return
+
+    while True:
+        first_option = input("\nEnter first move: ").lower()
     
-#         if first_option == "t":
-#             if trace: print("player elected to stand")
+        if first_option == "t":
+            if trace: print("player elected to stand")
                 
-#             self.is_natural()
-#             break
+            dealers_move()
+            break
     
         # elif first_option == "s":
         #     if trace: print("player elected to split pair")
@@ -236,46 +239,52 @@ def player_options(player_hand, dealer_hand):
 #     pass
 
 
-# def is_natural(self):
-    
-#     while True: 
-#         if debug: print("called is_natural()")
+def is_natural(player_cards, dealer_cards):
+    if debug: print("called is_natural()")
 
-#         self.dealers_move()
-            
-#         if self.player_hand_total == 21 and self.dealer_hand_total != 21:
-#             print("\n>>> Player has Natural...You Win")
-#             self.player_bank += self.initial_bet * 2.5
-#             break
+    additional_dealer_cards = dealers_move()
+    dealer_cards += additional_dealer_cards
 
-#         elif self.dealer_hand_total == 21 and self.player_hand_total != 21:
-#             print("\n>>> Dealer has Natural...You Lose")
-#             break
+    player_hand_total = define_value(player_cards[0][0] + define_value(player_cards[1][0])
+    dealer_hand_total = 0
 
-#         elif self.player_hand_total == 21 and self.dealer_hand_total == 21:
-#             print("\n>>> Both have Natural...Its a Draw")
-#             self.player_bank += self.initial_bet
-#             break
-
-#         self.define_winner()
-#         break
-
-
-# def dealers_move(self):
-#     if debug: print("called dealers_move()")
-
-#     print(f"dealer hand revealed: {self.dealer.hand}")
+    for card in dealer_cards:
+        dealer_hand_total += define_value(cards[0])
         
-#     while self.dealer_hand_total < 17:
-#         dealer_card = self.deck.get_card()
-#         self.dealer_hand.append(dealer_card)
-#         self.dealer_hand_total += dealer_card.value 
-        
-#         if self.dealer.hit_card.rank == Ace and self.dealer_hand_total >= 17:
-#             break
+    if player_hand_total == 21 and dealer_hand_total != 21:
+        print("\n>>> Player has Natural...You Win")
+        player_bank += self.initial_bet * 2.5
+        return
 
-#     print(f"updated dealer hand: {self.dealer.hand}")
-#     print(f"updated dealer hand total: {self.dealer_hand_total}")
+    if dealer_hand_total == 21 and player_hand_total != 21:
+        print("\n>>> Dealer has Natural...You Lose")
+        return
+
+    if player_hand_total == 21 and dealer_hand_total == 21:
+        print("\n>>> Both have Natural...Its a Draw")
+        player_bank += initial_bet
+        return
+
+    define_winner()
+
+
+def dealers_move(dealer_cards):
+    if debug: print("called dealers_move()")
+
+    print(f"dealer hand revealed: {dealer_hand}")
+        
+    while dealer_hand_total < 17:
+        dealer_card = deck.pop()
+        dealer_hand.append(dealer_card)
+        dealer_hand_total += define_value(dealer_card[0])
+        
+        if dealer_card[0] == "Ace" and dealer_hand_total >= 17:
+            break
+
+    return dealer_cards
+
+    print(f"updated dealer hand: {dealer_hand}")
+    print(f"updated dealer hand total: {dealer_hand_total}")
 
     
 # def define_winner(self):
