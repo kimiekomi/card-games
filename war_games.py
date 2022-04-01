@@ -27,22 +27,26 @@ def build_deck():
 def define_value(card):
     if debug: print("called define_value()")
 
+    card = card.split()
+
+    if trace: print(card[0])
+
     value = 0
 
     if card[0].isnumeric():
         value = int(card[0])
 
     else:
-        if card[0] == A:
+        if card[0] == "Ace":
             value = 1
 
-        if card[0] == J:
+        if card[0] == "Jack":
             value = 11
 
-        if card[0] == Q:
+        if card[0] == "Queen":
             value = 12
 
-        if card[0] == K:
+        if card[0] == "King":
             value = 13
 
     return value
@@ -56,6 +60,9 @@ def deal_cards():
     player_deck = []
     computer_deck = []
     cards_on_table = []
+
+    for i in range(32):
+        deck.pop()
 
     while len(deck) > 0:
         player_deck.insert(0, deck.pop())
@@ -88,7 +95,10 @@ def play_game():
 
         if trace: print(f"player card: {player_battle_card}\ncomputer card: {computer_battle_card}")
 
-        if player_battle_card == computer_battle_card:
+        player_battle_card = player_battle_card.split()
+        computer_battle_card = computer_battle_card.split()
+
+        if player_battle_card[0] == computer_battle_card[0]:
             if trace: print("*** time for war ***")
                 
             lets_war(player_deck, computer_deck, cards_on_table)
@@ -138,10 +148,11 @@ def lets_war(player_deck, computer_deck, cards_on_table):
 
     
 def lets_battle(player_card, computer_card):
-
     if debug: print("lets_battle()")
 
-    if define_value(player_card[0]) > define_value(computer_card[0]):
+    if trace: print(f"player card: {player_card[0]}, computer_card: {computer_card[0]}")
+
+    if define_value(player_card) > define_value(computer_card):
         print("<player card is higher>")
         return True
 
@@ -156,7 +167,9 @@ if __name__ == "__main__":
     # print(f"computer deck: {deal_cards()[1]}\n")
     # print(f"cards on table: {deal_cards()[2]}")
 
-    define_value(build_deck())
+    # print(define_value("Ace of Spades"))
+    # print(define_value("3 of Spades"))
+    # print(define_value("Jack of Diamonds"))
 
-    # play_game()
+    play_game()
 
