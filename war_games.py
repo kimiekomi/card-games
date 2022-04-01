@@ -92,8 +92,7 @@ def play_game():
         if player_battle_card[0] == computer_battle_card[0]:
             if trace: print("*** time for war ***")
                 
-            lets_war(player_deck, computer_deck)
-            if trace: print(f"cards on table({len(cards_on_table)}): {cards_on_table}")
+            lets_war(player_deck, computer_deck, cards_on_table)
             continue
 
         if trace: print("*** time for battle ***")
@@ -124,7 +123,7 @@ def play_game():
         print("computer deck empty\n\n>>> Game Over...Player Won War\n")
 
     
-def lets_war(deck1, deck2):
+def lets_war(deck1, deck2, card_list):
 
     if debug: print("lets_war()")
 
@@ -133,6 +132,8 @@ def lets_war(deck1, deck2):
         if len(deck1) != 0 and len(deck2) != 0:
             card_list.append(deck1.pop())
             card_list.append(deck2.pop())
+
+    if trace: print(f"cards on table({len(card_list)}): {card_list}")
 
     
 def lets_battle(card1, card2):
