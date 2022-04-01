@@ -24,6 +24,30 @@ def build_deck():
     return deck
 
 
+def define_value(card):
+    if debug: print("called define_value()")
+
+    value = 0
+
+    if card[0].isnumeric():
+        value = int(card[0])
+
+    else:
+        if card[0] == A:
+            value = 1
+
+        if card[0] == J:
+            value = 11
+
+        if card[0] == Q:
+            value = 12
+
+        if card[0] == K:
+            value = 13
+
+    return value
+
+
 def deal_cards():
     if debug: print("called deal()")
 
@@ -72,15 +96,17 @@ def play_game():
 
         if trace: print("*** time for battle ***")
 
-        lets_battle(player_battle_card, computer_battle_card)
+        battle_result = lets_battle(player_battle_card, computer_battle_card)
 
-        if lets_battle:
+        if battle_result:
             for card in cards_on_table:
                 player_deck.insert(0, card)
 
         else:
             for card in cards_on_table:
                 computer_deck.insert(0, card)
+
+        if trace: print(f"battle result: {battle_result}")
 
         cards_on_table = []
     
@@ -115,7 +141,7 @@ def lets_battle(player_card, computer_card):
 
     if debug: print("lets_battle()")
 
-    if player_card > computer_card:
+    if define_value(player_card[0]) > define_value(computer_card[0]):
         print("<player card is higher>")
         return True
 
@@ -130,5 +156,7 @@ if __name__ == "__main__":
     # print(f"computer deck: {deal_cards()[1]}\n")
     # print(f"cards on table: {deal_cards()[2]}")
 
-    play_game()
+    define_value(build_deck())
+
+    # play_game()
 
