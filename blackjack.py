@@ -97,7 +97,7 @@ def play_game():
         if trace: print(f"dealer hand total: {dealer_hand_total}")
         print(f"dealer card2 value: {define_value(dealer_hand[1][0])}") 
 
-        player_options(player_hand, dealer_hand)
+        player_options(player_hand, dealer_hand, deck)
         
 #         print(f">>> Updated Player Bank: ${player_bank}")
 
@@ -110,7 +110,7 @@ def play_game():
 #         os.system("clear")
 
 
-def player_options(player_cards, dealer_cards):
+def player_options(player_cards, dealer_cards, card_deck):
     if debug: print("called player_options()")
 
     if trace: print(player_cards)
@@ -130,8 +130,15 @@ def player_options(player_cards, dealer_cards):
         if first_option == "t":
             if trace: print("player elected to stand")
                 
-            dealers_move()
+            updated_dealer_cards = dealers_move(dealer_cards, card_deck)
+            define_winner(player_cards, updated_dealer_cards)
             break
+
+        # elif first_option == "h":
+        #     if trace: print("player elected to hit")
+                
+        #     self.hit_loop()
+        #     break
     
         # elif first_option == "s":
         #     if trace: print("player elected to split pair")
@@ -159,12 +166,6 @@ def player_options(player_cards, dealer_cards):
         #     self.surrender()
         #     break
     
-        # elif first_option == "h":
-        #     if trace: print("player elected to hit")
-                
-        #     self.hit_loop()
-        #     break
-            
 
 # def hit_loop(self):
 #     if debug: print("called hit_loop()")
@@ -239,16 +240,27 @@ def player_options(player_cards, dealer_cards):
 #     pass
 
 
+# def calculate_total(cards_list):
+    # if debug: print("called calculate_total()")
+
+    # total = 0
+
+    # for card in cards_list:
+    #    total += define_value(card[0]) 
+
+    # return total
+
+
 def is_natural(player_cards, dealer_cards):
     if debug: print("called is_natural()")
 
     updated_dealer_cards = dealers_move(dealer_cards)
 
-    player_hand_total = define_value(player_cards[0][0] + define_value(player_cards[1][0])
+    player_hand_total = define_value(player_cards[0][0]) + define_value(player_cards[1][0])
     dealer_hand_total = 0
 
     for card in updated_dealer_cards:
-        dealer_hand_total += define_value(cards[0])
+        dealer_hand_total += define_value(card[0])
         
     if player_hand_total == 21 and dealer_hand_total != 21:
         print("\n>>> Player has Natural...You Win")
@@ -267,7 +279,7 @@ def is_natural(player_cards, dealer_cards):
     define_winner()
 
 
-def dealers_move(dealer_cards):
+def dealers_move(dealer_cards, deck_of_cards):
     if debug: print("called dealers_move()")
 
     print(f"dealer hand revealed: {dealer_cards}")
@@ -277,7 +289,7 @@ def dealers_move(dealer_cards):
         dealer_hand_total += define_value(card[0])
         
     while dealer_hand_total < 17:
-        dealer_card = deck.pop()
+        dealer_card = deck_of_cards.pop()
         dealer_cards.append(dealer_card)
         dealer_hand_total += define_value(dealer_card[0])
         
@@ -290,45 +302,53 @@ def dealers_move(dealer_cards):
     print(f"updated dealer hand total: {dealer_hand_total}")
 
     
-# def define_winner(self):
+# def define_winner(player_cards, dealer_cards):
     
 #     while True:
 #         if debug: print("called define_winner()")
 
-#         if self.player_hand_total > 21:
+        # playerer_hand_total = 0
+            # for card in player_cards:
+            #     player_hand_total += define_value(card[0])
+
+        # dealer_hand_total = 0
+            # for card in dealer_cards:
+            #     dealer_hand_total += define_value(card[0])
+
+#         if player_hand_total > 21:
 #             print("\n>>> Player Bust...You Lose")
 #             break
 
-#         if self.dealer_hand_total > 21:
+#         if dealer_hand_total > 21:
 #             print("\n>>> Dealer Bust...You Win")
 #             self.player_bank += self.initial_bet * 2
 #             break
             
-#         if self.player_hand_total == 21 and self.dealer_hand_total != 21:
+#         if player_hand_total == 21 and dealer_hand_total != 21:
 #             print("\n>>> Player has Blackjack...You Win")
-#             self.player_bank += self.initial_bet * 2
+#             player_bank += self.initial_bet * 2
 #             break
 
-#         if self.dealer_hand_total == 21 and self.player_hand_total != 21:
+#         if dealer_hand_total == 21 and player_hand_total != 21:
 #             print("\n>>> Dealer has Blackjack...You Lose")
 #             break
             
-#         if self.player_hand_total == 21 and self.dealer_hand_total == 21:
+#         if player_hand_total == 21 and dealer_hand_total == 21:
 #             print("\n>>> Both have Blackjack")
-#             self.player_bank += self.initial_bet
+#             player_bank += initial_bet
 #             break
             
-#         if self.player_hand_total < 21 and self.dealer_hand_total < 21:
-#             if self.player_hand_total > self.dealer_hand_total:
+#         if player_hand_total < 21 and dealer_hand_total < 21:
+#             if player_hand_total > dealer_hand_total:
 #                 print("\n>>> You are closer to 21...You Win")
-#                 self.player_bank += self.initial_bet * 2
+#                 player_bank += initial_bet * 2
             
-#             elif self.player_hand_total == self.dealer_hand_total:
+#             elif player_hand_total == dealer_hand_total:
 #                 print("\n>>> Equal Value...Its a Draw")
-#                 self.player_bank += self.initial_bet
+#                 player_bank += initial_bet
 
 #             else:
-#                 self.player_hand_total < self.dealer_hand_total
+#                 player_hand_total < dealer_hand_total
 #                 print("\n>>> Dealer is closer to 21...You Lose") 
 
 #             break
