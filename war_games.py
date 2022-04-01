@@ -17,8 +17,6 @@ def build_deck():
         for rank in ranks:
             deck.append(f"{rank} of {suit}")
 
-    # if trace: print(f"deck({len(deck)}): {deck}")
-
     random.shuffle(deck)
 
     return deck
@@ -26,8 +24,6 @@ def build_deck():
 
 def define_value(rank):
     if debug: print("called define_value()")
-
-    # if trace: print(rank)
 
     value = 0
 
@@ -65,9 +61,6 @@ def deal_cards():
     while len(deck) > 0:
         player_deck.insert(0, deck.pop())
         computer_deck.insert(0, deck.pop())
-
-    # if trace: print(f"\nplayer deck({len(player_deck)}): {player_deck}")
-    # if trace: print(f"\ncomputer deck({len(computer_deck)}): {computer_deck}")
 
     return player_deck, computer_deck, cards_on_table
 
