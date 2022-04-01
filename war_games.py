@@ -24,29 +24,27 @@ def build_deck():
     return deck
 
 
-def define_value(card):
+def define_value(rank):
     if debug: print("called define_value()")
 
-    card = card.split()
-
-    if trace: print(card[0])
+    # if trace: print(rank)
 
     value = 0
 
-    if card[0].isnumeric():
-        value = int(card[0])
+    if rank.isnumeric():
+        value = int(rank)
 
     else:
-        if card[0] == "Ace":
+        if rank == "Ace":
             value = 1
 
-        if card[0] == "Jack":
+        if rank == "Jack":
             value = 11
 
-        if card[0] == "Queen":
+        if rank == "Queen":
             value = 12
 
-        if card[0] == "King":
+        if rank == "King":
             value = 13
 
     return value
@@ -81,7 +79,7 @@ def play_game():
     computer_deck = deal_cards()[1]
     cards_on_table = deal_cards()[2]
 
-    if trace: print(f"player deck({len(player_deck)}), computer deck({len(computer_deck)}), cards on table({len(cards_on_table)})")
+    if trace: print(f"player deck({len(player_deck)}), computer deck({len(computer_deck)})")
     
     while len(player_deck) != 0 and len(computer_deck) != 0:
         if trace: print("\ngame_loop")
@@ -116,8 +114,6 @@ def play_game():
             for card in cards_on_table:
                 computer_deck.insert(0, card)
 
-        if trace: print(f"battle result: {battle_result}")
-
         cards_on_table = []
     
         if trace: print(f"table cleared: {len(cards_on_table)} cards on table")
@@ -150,9 +146,7 @@ def lets_war(player_deck, computer_deck, cards_on_table):
 def lets_battle(player_card, computer_card):
     if debug: print("lets_battle()")
 
-    if trace: print(f"player card: {player_card[0]}, computer_card: {computer_card[0]}")
-
-    if define_value(player_card) > define_value(computer_card):
+    if define_value(player_card[0]) > define_value(computer_card[0]):
         print("<player card is higher>")
         return True
 
