@@ -164,7 +164,7 @@ def player_options(player_cards, dealer_cards, card_deck):
         return
 
     while True:
-        first_option = input("\nEnter first move: ").lower()
+        first_option = input("\nEnter first move (t - stand, h - hit): ").lower()
     
         if first_option == "t":
             if trace: print("player elected to stand")
@@ -173,11 +173,11 @@ def player_options(player_cards, dealer_cards, card_deck):
             define_winner(player_cards, updated_dealer_cards)
             break
 
-        # elif first_option == "h":
-        #     if trace: print("player elected to hit")
+        elif first_option == "h":
+            if trace: print("player elected to hit")
                 
-        #     self.hit_loop()
-        #     break
+            self.hit(player_cards, dealer_cards, card_deck)
+            break
     
         # elif first_option == "s":
         #     if trace: print("player elected to split pair")
@@ -206,47 +206,47 @@ def player_options(player_cards, dealer_cards, card_deck):
         #     break
     
 
-# def hit_loop(self):
+# def hit_loop(player_cards, dealer_cards, card_deck):
 #     if debug: print("called hit_loop()")
         
 #     while True:
-#         self.player.hit()
+#         hit(player_cards, dealer_cards, card_deck)
 
-#         self.player_hand_total += self.player.hit_card.value
+#         player_hand_total += player.hit_card.value
 
-#         print(f"updated player hand: {self.player.hand}")
-#         print(f"updated player hand total: {self.player_hand_total}") 
-#         print(f"dealer card1 value: {self.dealer.hand[1].value}") 
+#         print(f"updated player hand: {player.hand}")
+#         print(f"updated player hand total: {player_hand_total}") 
+#         print(f"dealer card1 value: {dealer.hand[1].value}") 
 
-#         if self.player_hand_total >= 21: 
-#             self.define_winner()
+#         if player_hand_total >= 21: 
+#             define_winner()
 #             break
 
-#         next_option = input("\nEnter next move: ").lower()
+#         next_option = input("\nEnter next move (t - stand, h - hit): ").lower()
 
 #         if next_option == "h":
 #             continue
 
 #         if trace: print("player elected to stand")
 
-#         self.dealers_move()
-#         self.define_winner()
+#         dealers_move()
+#         define_winner()
 #         break
         
 
-# def hit(self):
+# def hit(player_cards, dealer_cards):
 #     if debug: print("called hit()")
 
-#     hit_card = self.deck.get_card()
-#     self.player_hand.append(hit_card)
-#     self.player_hand_total += hit_card.value
+#     hit_card = deck.get_card()
+#     player_hand.append(hit_card)
+#     player_hand_total += hit_card.value
 
-#     if hit_card.rank == Ace and self.player_hand_total > 21:
-#         self.player_hand_total -= 10
+#     if hit_card.rank == Ace and player_hand_total > 21:
+#         player_hand_total -= 10
 
-#     print(f"updated player hand: {self.player_hand}")
-#     print(f"updated player hand total: {self.player_hand_total}") 
-#     print(f"dealer card1 value: {self.dealer_hand[0].value}") 
+#     print(f"updated player hand: {player_hand}")
+#     print(f"updated player hand total: {player_hand_total}") 
+#     print(f"dealer card1 value: {define_value(dealer_hand[0])}") 
 
     
 # def split(self):
