@@ -134,7 +134,7 @@ def play_game():
 
         print(f"player hand total: {player_hand_total}") 
         if trace: print(f"dealer hand total: {dealer_hand_total}")
-        print(f"dealer card2 value: {define_value(dealer_hand[1][0])}") 
+        print(f"dealer card2 value: {define_value(dealer_hand[1].split()[0])}") 
 
         player_options(player_hand, dealer_hand, deck)
         
@@ -216,9 +216,7 @@ def hit_loop(player_cards, dealer_cards, card_deck):
         player_cards.append(hit_card)
         
         hit_card = hit_card.split()
-        print(f"line 219: {hit_card}")
         player_hand_total += define_value(hit_card[0])
-        print(f"line 221: {player_hand_total}")
     
         if hit_card[0] == Ace and player_hand_total > 21:
             player_hand_total -= 10
