@@ -99,15 +99,15 @@ def play_game():
 
         player_options(player_hand, dealer_hand, deck)
         
-#         print(f">>> Updated Player Bank: ${player_bank}")
+        print(f">>> Updated Player Bank: ${player_bank}")
 
-#         another_round = input("\nAnother Round? ").lower()
+        another_round = input("\nAnother Round? ").lower()
 
-#         if another_round[0] != "y":
-#             print("\n>>> Goodbye...\n")
-#             break
+        if another_round[0] != "y":
+            print("\n>>> Goodbye...\n")
+            break
 
-#         os.system("clear")
+        os.system("clear")
 
 
 def player_options(player_cards, dealer_cards, card_deck):
