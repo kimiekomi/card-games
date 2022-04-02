@@ -210,9 +210,10 @@ def player_options(player_cards, dealer_cards, card_deck):
 #     if debug: print("called hit_loop()")
         
 #     while True:
-#         hit(player_cards, dealer_cards, card_deck)
+#         player_hand_total = hit(player_cards, dealer_cards, card_deck)[1]
+        # hit_card = hit(player_cards, dealer_cards, card_deck)[0]
 
-#         player_hand_total += player.hit_card.value
+#         player_hand_total += define_value(hit_card)
 
 #         print(f"updated player hand: {player.hand}")
 #         print(f"updated player hand total: {player_hand_total}") 
@@ -234,19 +235,25 @@ def player_options(player_cards, dealer_cards, card_deck):
 #         break
         
 
-# def hit(player_cards, dealer_cards):
+# def hit(player_cards, dealer_cards, card_deck):
 #     if debug: print("called hit()")
 
-#     hit_card = deck.get_card()
-#     player_hand.append(hit_card)
-#     player_hand_total += hit_card.value
+    # player_hand_total = calculatate_total(players_cards)
 
-#     if hit_card.rank == Ace and player_hand_total > 21:
+#     hit_card = card_deck.get_card()
+#     player_cards.append(hit_card)
+#     player_hand_total += define_value(hit_card)
+
+    # hit_card.split()
+
+#     if hit_card[0] == Ace and player_hand_total > 21:
 #         player_hand_total -= 10
 
 #     print(f"updated player hand: {player_hand}")
 #     print(f"updated player hand total: {player_hand_total}") 
 #     print(f"dealer card1 value: {define_value(dealer_hand[0])}") 
+
+    # return hit_card, player_hand_total
 
     
 # def split(self):
