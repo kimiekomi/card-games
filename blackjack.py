@@ -348,7 +348,7 @@ def define_winner(player_cards, dealer_cards):
 
     if dealer_hand_total > 21:
         print("\n>>> Dealer Bust...You Win")
-        self.player_bank += self.initial_bet * 2
+        player_bank += initial_bet * 2
         return
         
     if player_hand_total == 21 and dealer_hand_total != 21:

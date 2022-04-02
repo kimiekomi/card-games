@@ -70,16 +70,16 @@ def define_value(rank):
         value = int(rank)
 
     else:
-        if rank == Ace:
-            value = 1
+        if rank == "Ace":
+            value = 14
 
-        if rank == Jack:
+        if rank == "Jack":
             value = 11
 
-        if rank == Queen:
+        if rank == "Queen":
             value = 12
 
-        if rank == King:
+        if rank == "King":
             value = 13
 
     return value
