@@ -152,12 +152,12 @@ def play_game():
 def player_options(player_cards, dealer_cards, card_deck):
     if debug: print("called player_options()")
 
-    if trace: print(player_cards)
+    # if trace: print(player_cards)
 
     player_card1_rank = player_cards[0].split()[0]
     player_card2_rank = player_cards[1].split()[0]
 
-    if trace: print(player_card1_rank, player_card2_rank)
+    # if trace: print(player_card1_rank, player_card2_rank)
 
     if define_value(player_card1_rank) + define_value(player_card2_rank) == 21:
         is_natural(player_cards, dealer_cards)
@@ -175,8 +175,8 @@ def player_options(player_cards, dealer_cards, card_deck):
 
         elif first_option == "h":
             if trace: print("player elected to hit")
-                
-            self.hit(player_cards, dealer_cards, card_deck)
+
+            hit_loop(player_cards, dealer_cards, card_deck)
             break
     
         # elif first_option == "s":
@@ -206,54 +206,64 @@ def player_options(player_cards, dealer_cards, card_deck):
         #     break
     
 
-# def hit_loop(player_cards, dealer_cards, card_deck):
-#     if debug: print("called hit_loop()")
+def hit_loop(player_cards, dealer_cards, card_deck):
+    if debug: print("called hit_loop()")
         
-#     while True:
-#         player_hand_total = hit(player_cards, dealer_cards, card_deck)[1]
-        # hit_card = hit(player_cards, dealer_cards, card_deck)[0]
+    while True:
+        player_hand_total = calculate_total(player_cards)
 
-#         player_hand_total += define_value(hit_card)
+        hit_card = card_deck.pop()
+        player_cards.append(hit_card)
+        
+        hit_card = hit_card.split()
+        print(f"line 219: {hit_card}")
+        player_hand_total += define_value(hit_card[0])
+        print(f"line 221: {player_hand_total}")
+    
+        if hit_card[0] == Ace and player_hand_total > 21:
+            player_hand_total -= 10
+        
+        print(player_hand_total)
+        
+        print(f"updated player hand: {player_cards}")
+        print(f"updated player hand total: {player_hand_total}") 
+        print(f"dealer card1 value: {define_value(dealer_cards[1][0])}") 
 
-#         print(f"updated player hand: {player.hand}")
-#         print(f"updated player hand total: {player_hand_total}") 
-#         print(f"dealer card1 value: {dealer.hand[1].value}") 
+        if player_hand_total >= 21: 
+            define_winner(player_cards, dealer_cards)
+            break
 
-#         if player_hand_total >= 21: 
-#             define_winner()
-#             break
+        next_option = input("\nEnter next move (t - stand, h - hit): ").lower()
 
-#         next_option = input("\nEnter next move (t - stand, h - hit): ").lower()
+        if next_option == "h":
+            continue
 
-#         if next_option == "h":
-#             continue
+        if trace: print("player elected to stand")
 
-#         if trace: print("player elected to stand")
-
-#         dealers_move()
-#         define_winner()
-#         break
+        dealers_move()
+        define_winner(player_cards, dealer_cards)
+        break
         
 
 # def hit(player_cards, dealer_cards, card_deck):
 #     if debug: print("called hit()")
 
-    # player_hand_total = calculatate_total(players_cards)
+#     player_hand_total = calculate_total(player_cards)
 
-#     hit_card = card_deck.get_card()
+#     hit_card = card_deck.pop()
 #     player_cards.append(hit_card)
 #     player_hand_total += define_value(hit_card)
 
-    # hit_card.split()
+#     hit_card.split()
 
 #     if hit_card[0] == Ace and player_hand_total > 21:
 #         player_hand_total -= 10
 
-#     print(f"updated player hand: {player_hand}")
+#     print(f"updated player hand: {player_cards}")
 #     print(f"updated player hand total: {player_hand_total}") 
-#     print(f"dealer card1 value: {define_value(dealer_hand[0])}") 
+#     print(f"dealer card1 value: {define_value(dealer_cards[0])}") 
 
-    # return hit_card, player_hand_total
+#     return hit_card, player_hand_total
 
     
 # def split(self):
@@ -319,7 +329,7 @@ def is_natural(player_cards, dealer_cards):
         player_bank += initial_bet
         return
 
-    define_winner()
+    define_winner(player_cards, updated_dealer_cards)
 
 
 def dealers_move(dealer_cards, deck_of_cards):
