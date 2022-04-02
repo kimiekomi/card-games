@@ -325,10 +325,10 @@ def dealers_move(dealer_cards, deck_of_cards):
         if dealer_card[0] == "Ace" and dealer_hand_total >= 17:
             break
 
-    return dealer_cards
-
     print(f"updated dealer hand: {dealer_hand}")
     print(f"updated dealer hand total: {dealer_hand_total}")
+
+    return dealer_cards
 
     
 def define_winner(player_cards, dealer_cards, player_bank, initial_bet):
