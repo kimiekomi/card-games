@@ -161,8 +161,11 @@ def player_options(player_cards, dealer_cards, card_deck, player_bank, initial_b
         is_natural(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
         return
 
+    if define_value(player_card1_rank) + define_value(player_card2_rank) == 21:
+        double(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
+
     while True:
-        first_option = input("\nEnter first move (t - stand, h - hit): ").lower()
+        first_option = input("\nEnter first move (t-stand, h-hit, d-double): ").lower()
     
         if first_option == "t":
             if trace: print("player elected to stand")
@@ -171,13 +174,13 @@ def player_options(player_cards, dealer_cards, card_deck, player_bank, initial_b
             define_winner(player_cards, updated_dealer_cards, player_bank, initial_bet)
             break
 
-        elif first_option == "h":
+        if first_option == "h":
             if trace: print("player elected to hit")
 
             hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
             break
     
-        # elif first_option == "s":
+        # if first_option == "s":
         #     if trace: print("player elected to split pair")
     
         #     if self.player.hand[0].rank == self.player.hand[1].rank:
@@ -187,15 +190,15 @@ def player_options(player_cards, dealer_cards, card_deck, player_bank, initial_b
         #     print("> equal rank cards...unable split")
         #     continue
     
-        # elif first_option == "d":
-        #     if trace: print("player elected to double down")
+        if first_option == "d":
+            if trace: print("player elected to double down")
 
-        #     if self.player.hand[0].value + self.player.hand[0].value == 9 or self.player.hand[0].value + self.player.hand[0].value == 10 or self.player.hand[0].value + self.player.hand[0].value == 11:
-        #         self.double()
-        #         break
+            if define_value(player_card1_rank) + define_value(player_card2_rank) == 9 or define_value(player_card1_rank) + define_value(player_card2_rank) == 10 or define_value(player_card1_rank) + define_value(player_card2_rank) == 11:
+                double(player_cards, dealer_cards, player_bank, initial_bet)
+                break
 
-        #     print("> cards total not 9, 10, or 11...unable double")
-        #     continue
+            print("> cards total NOT 9, 10, or 11...unable double")
+            continue
     
         # elif first_option != "t" and first_option != "s" and first_option != "d" and first_option != "h":
         #     if trace: print("player elected to surrender")
@@ -254,16 +257,16 @@ def hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
 #     split2.append(self.player_hand[1])
 
 
-# def double(self):
-#     if debug: print("called double()")
+def double(player_cards, dealer_cards, player_bank, initial_bet):
+    if debug: print("called double()")
         
-#     self.initial_bet += self.initial_bet
-#     self.player_bank -= (self.initial_bet/2)
+    initial_bet += initial_bet
+    player_bank -= (initial_bet/2)
 
-#     print(f"Updated Player Bank: ${self.player_bank}")
+    print(f"Updated Player Bank: ${player_bank}")
 
-#     self.player.hit()
-#     self.define_winner()
+    player.hit()
+    define_winner(player_cards, dealer_cards, player_bank, initial_bet)
 
 
 # def insurance(self):
@@ -325,7 +328,7 @@ def dealers_move(dealer_cards, deck_of_cards):
         if dealer_card[0] == "Ace" and dealer_hand_total >= 17:
             break
 
-    print(f"updated dealer hand: {dealer_hand}")
+    print(f"updated dealer hand: {dealer_cards}")
     print(f"updated dealer hand total: {dealer_hand_total}")
 
     return dealer_cards
