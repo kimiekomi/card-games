@@ -100,6 +100,8 @@ def play_game():
         player_hand_total = 0
         dealer_hand_total = 0
 
+        player_bank = define_winner(player_hand, dealer_hand, player_bank, initial_bet)
+
         if trace: print(f"\nplayer hand({len(player_hand)}), dealer hand({len(dealer_hand)})\nplayer total: {player_hand_total}, dealer total: {dealer_hand_total}")
             
         print(f"\nPlayer Bank: ${player_bank}\n")
@@ -377,6 +379,8 @@ def define_winner(player_cards, dealer_cards, player_bank, initial_bet):
             print("\n>>> Dealer is closer to 21...You Lose") 
 
         print(f">>> Updated Player Bank: ${player_bank}")
+
+        return player_bank
 
 
 if __name__ == "__main__":
