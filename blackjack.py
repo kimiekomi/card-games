@@ -6,16 +6,55 @@ import os
 debug = False
 trace = True
 
+Ace = 1
+Jack = 11
+Queen = 12
+King = 13
+
+Spades = 1
+Clubs = 2
+Hearts = 3
+Diamonds = 4
+
 def build_deck():
     if debug: print("called deck()")
 
-    suits = ["Spades", "Clubs", "Hearts", "Diamonds"]        
-    ranks = ["Ace", 2, 3, 4, 5, 6, 7, 8, 9, 10, "Jack", "Queen", "King"]
+    suits = [Spades, Clubs, Hearts, Diamonds]        
+    ranks = [Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King]
 
     deck = []
     
     for suit in suits:
+        
+        if suit == Spades:
+            suit = "Spades"
+
+        elif suit == Clubs:
+            suit = "Clubs"
+    
+        elif suit == Hearts:
+            suit = "Hearts"
+    
+        elif suit == Diamonds:
+            suit = "Diamonds"
+        
         for rank in ranks:
+            
+            if rank == Ace:
+                rank = "Ace"
+
+            elif rank == Jack:
+                rank = "Jack"
+    
+            elif rank == Queen:
+                rank = "Queen"
+    
+            elif rank == King:
+                rank = "King" 
+    
+            else:
+                rank = str(rank)
+            
             deck.append(f"{rank} of {suit}")
 
     random.shuffle(deck)
