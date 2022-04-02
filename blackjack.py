@@ -72,7 +72,7 @@ def define_value(rank):
 
     else:
         if rank == "Ace":
-            value = 1
+            value = 11
 
         if rank == "Jack" or rank == "Queen" or rank == "King":
             value = 10
@@ -136,9 +136,10 @@ def play_game():
         if trace: print(f"dealer hand total: {dealer_hand_total}")
         print(f"dealer card2 value: {define_value(dealer_hand[1].split()[0])}") 
 
-        player_options(player_hand, dealer_hand, deck)
+        updated_dealer_cards = player_options(player_hand, dealer_hand, deck)
+        updated_player_bank = define_winner(player_cards, updated_dealer_cards)
         
-        print(f">>> Updated Player Bank: ${player_bank}")
+        print(f">>> Updated Player Bank: ${updated_player_bank}")
 
         another_round = input("\nAnother Round? ").lower()
 
@@ -215,17 +216,15 @@ def hit_loop(player_cards, dealer_cards, card_deck):
         hit_card = card_deck.pop()
         player_cards.append(hit_card)
         
-        hit_card = hit_card.split()
-        player_hand_total += define_value(hit_card[0])
+        player_hand_total += define_value(hit_card.split()[0])
     
-        if hit_card[0] == Ace and player_hand_total > 21:
+        if hit_card.split()[0] == "Ace" and player_hand_total > 21:
+            if trace: print("soft hand")
             player_hand_total -= 10
-        
-        print(player_hand_total)
         
         print(f"updated player hand: {player_cards}")
         print(f"updated player hand total: {player_hand_total}") 
-        print(f"dealer card1 value: {define_value(dealer_cards[1][0])}") 
+        print(f"dealer card1 value: {define_value(dealer_cards[1].split()[0])}") 
 
         if player_hand_total >= 21: 
             define_winner(player_cards, dealer_cards)
@@ -243,27 +242,6 @@ def hit_loop(player_cards, dealer_cards, card_deck):
         break
         
 
-# def hit(player_cards, dealer_cards, card_deck):
-#     if debug: print("called hit()")
-
-#     player_hand_total = calculate_total(player_cards)
-
-#     hit_card = card_deck.pop()
-#     player_cards.append(hit_card)
-#     player_hand_total += define_value(hit_card)
-
-#     hit_card.split()
-
-#     if hit_card[0] == Ace and player_hand_total > 21:
-#         player_hand_total -= 10
-
-#     print(f"updated player hand: {player_cards}")
-#     print(f"updated player hand total: {player_hand_total}") 
-#     print(f"dealer card1 value: {define_value(dealer_cards[0])}") 
-
-#     return hit_card, player_hand_total
-
-    
 # def split(self):
 #     if debug: print("called split()")
 
@@ -300,7 +278,7 @@ def calculate_total(cards_list):
     total = 0
 
     for card in cards_list:
-       total += define_value(card[0]) 
+       total += define_value(str(card[0]))
 
     return total
 
@@ -327,6 +305,8 @@ def is_natural(player_cards, dealer_cards):
         player_bank += initial_bet
         return
 
+    return player_cards, updated_dealer_cards
+
     define_winner(player_cards, updated_dealer_cards)
 
 
@@ -351,7 +331,7 @@ def dealers_move(dealer_cards, deck_of_cards):
     print(f"updated dealer hand total: {dealer_hand_total}")
 
     
-def define_winner(player_cards, dealer_cards):
+def define_winner(player_cards, dealer_cards, player_bank):
     if debug: print("called define_winner()")
 
     player_hand_total = calculate_total(player_cards)
@@ -393,7 +373,7 @@ def define_winner(player_cards, dealer_cards):
             player_hand_total < dealer_hand_total
             print("\n>>> Dealer is closer to 21...You Lose") 
 
-        return
+        return player_bank
 
 
 if __name__ == "__main__":
