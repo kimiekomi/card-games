@@ -133,7 +133,7 @@ def play_game():
     # burn card
     deck.pop()
 
-    # if trace: print(f"\ngame deck({len(deck)}): {deck}")
+    if trace: print(f"\ngame deck({len(deck)}): {deck}")
 
     while True:
         player_hand = []
@@ -237,10 +237,40 @@ def play_game():
     
             if first_option == "h":
                 if trace: print("player elected to hit")
+
+                while True:
+                    player_hand_total = calculate_total(player_cards)
+            
+                    hit_card = card_deck.pop()
+                    player_cards.append(hit_card)
+                    
+                    player_hand_total += define_value(hit_card)
+                
+                    if hit_card[0] == 1 and player_hand_total > 21:
+                        if trace: print("soft hand")
+                        player_hand_total -= 10
+            
+                    print(f"updated player hand: {player_cards}")
+                    print(f"updated player hand total: {player_hand_total}") 
+                    print(f"dealer card1 value: {define_value(dealer_cards[1])}") 
+            
+                    if player_hand_total == 21: 
+                        dealers_move(dealer_cards, card_deck)
+                        break
+            
+                    if player_hand_total > 21: 
+                        break
+            
+                    next_option = input("\nEnter next move (t - stand, h - hit): ").lower()
+            
+                    if next_option == "h":
+                        continue
+            
+                    if trace: print("player elected to stand")
+            
+                    dealers_move(dealer_cards, card_deck)
+                    break
     
-                hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
-                break
-        
             # if first_option == "s":
             #     if trace: print("player elected to split pair")
         
@@ -323,46 +353,6 @@ def play_game():
 
         os.system("clear")
 
-
-def hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
-    if debug: print("called hit_loop()")
-        
-    while True:
-        player_hand_total = calculate_total(player_cards)
-
-        hit_card = card_deck.pop()
-        player_cards.append(hit_card)
-        
-        player_hand_total += define_value(hit_card)
-    
-        if hit_card[0] == 1 and player_hand_total > 21:
-            if trace: print("soft hand")
-            player_hand_total -= 10
-
-        print(f"updated player hand: {player_cards}")
-        print(f"updated player hand total: {player_hand_total}") 
-        print(f"dealer card1 value: {define_value(dealer_cards[1])}") 
-
-        if player_hand_total == 21: 
-            dealers_move(dealer_cards, card_deck)
-            define_winner(player_cards, dealer_cards, player_bank, initial_bet)
-            break
-
-        if player_hand_total > 21: 
-            define_winner(player_cards, dealer_cards, player_bank, initial_bet)
-            break
-
-        next_option = input("\nEnter next move (t - stand, h - hit): ").lower()
-
-        if next_option == "h":
-            continue
-
-        if trace: print("player elected to stand")
-
-        dealers_move(dealer_cards, card_deck)
-        define_winner(player_cards, dealer_cards, player_bank, initial_bet)
-        break
-        
 
 # def split(self):
 #     if debug: print("called split()")
