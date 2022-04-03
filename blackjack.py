@@ -25,37 +25,8 @@ def build_deck():
     deck = []
     
     for suit in suits:
-        
-        if suit == Spades:
-            suit = "Spades"
-
-        elif suit == Clubs:
-            suit = "Clubs"
-    
-        elif suit == Hearts:
-            suit = "Hearts"
-    
-        elif suit == Diamonds:
-            suit = "Diamonds"
-        
         for rank in ranks:
-            
-            if rank == Ace:
-                rank = "Ace"
-
-            elif rank == Jack:
-                rank = "Jack"
-    
-            elif rank == Queen:
-                rank = "Queen"
-    
-            elif rank == King:
-                rank = "King" 
-    
-            else:
-                rank = str(rank)
-            
-            deck.append(f"{rank} of {suit}")
+            deck.append((rank, suit))
 
     random.shuffle(deck)
 
@@ -150,7 +121,7 @@ def play_game():
                         if insurance_bet <= (initial_bet/2):
                             break
                             
-                        if insurance_bet > (initial_bet/2)
+                        if insurance_bet > (initial_bet/2):
                             print("> may only bet up to HALF the initial bet")
                             continue
                         
@@ -429,10 +400,10 @@ def define_winner(player_cards, dealer_cards, player_bank, initial_bet):
 
 
 if __name__ == "__main__":
-    # print(build_deck())
+    print(build_deck())
  
     # print(define_value("Ace"))
     # print(define_value("3"))
     # print(define_value("Jack"))
 
-    play_game()
+    # play_game()
