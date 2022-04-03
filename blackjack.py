@@ -122,9 +122,15 @@ def play_game():
                 player_hand.append(deck.pop())
                 dealer_hand.append(deck.pop())
 
-        print(f"\ncards dealt")
-        print(f"\nplayer hand: {print_card(player_hand[0]} {print_card(player_hand[0]}")
-        print(f"\ndealer hand:  _ of _, {print_card(dealer_hand[1]}")
+        print("cards dealt")
+        
+        print("\nplayer hand:")
+        for card in player_hand:
+            print_card(card)
+            
+        print("\ndealer hand:")
+        print("___ of ___")
+        print_card(dealer_hand[1])
 
         player_hand_total = 0
         for card in player_hand:
@@ -439,8 +445,8 @@ if __name__ == "__main__":
     # print_card((1,2))
     # print_card((11,1))
  
-    print(define_value((7,4)))
-    print(define_value((1,2)))
-    print(define_value((11,1)))
+    # print(define_value((7,4)))
+    # print(define_value((1,2)))
+    # print(define_value((11,1)))
 
-    # play_game()
+    play_game()
