@@ -91,7 +91,7 @@ def play_game():
     # burn card
     deck.pop()
 
-    if trace: print(f"\ngame deck({len(deck)}): {deck}")
+    # if trace: print(f"\ngame deck({len(deck)}): {deck}")
 
     while True:
         player_hand = []
@@ -100,11 +100,9 @@ def play_game():
         player_hand_total = 0
         dealer_hand_total = 0
 
-        player_bank = define_winner(player_hand, dealer_hand, player_bank, initial_bet)
-
         if trace: print(f"\nplayer hand({len(player_hand)}), dealer hand({len(dealer_hand)})\nplayer total: {player_hand_total}, dealer total: {dealer_hand_total}")
             
-        print(f"\nPlayer Bank: ${player_bank}\n")
+        # print(f"\nPlayer Bank: ${player_bank}\n")
         
         try:
             initial_bet = int(input("Enter initial bet: $ ") or 10)
@@ -196,7 +194,7 @@ def player_options(player_cards, dealer_cards, card_deck, player_bank, initial_b
             if trace: print("player elected to double down")
 
             if define_value(player_card1_rank) + define_value(player_card2_rank) == 9 or define_value(player_card1_rank) + define_value(player_card2_rank) == 10 or define_value(player_card1_rank) + define_value(player_card2_rank) == 11:
-                double(player_cards, dealer_cards, player_bank, initial_bet)
+                double(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
                 break
 
             print("> cards total NOT 9, 10, or 11...unable double")
@@ -212,11 +210,9 @@ def player_options(player_cards, dealer_cards, card_deck, player_bank, initial_b
 
 def hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
     if debug: print("called hit_loop()")
-    print(f"line 211: {player_cards}")
         
     while True:
         player_hand_total = calculate_total(player_cards)
-        print(f"line 215: {player_hand_total}")
 
         hit_card = card_deck.pop()
         player_cards.append(hit_card)
@@ -227,8 +223,6 @@ def hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
             if trace: print("soft hand")
             player_hand_total -= 10
 
-        print(f"line 226: {player_hand_total}")
-        
         print(f"updated player hand: {player_cards}")
         print(f"updated player hand total: {player_hand_total}") 
         print(f"dealer card1 value: {define_value(dealer_cards[1].split()[0])}") 
@@ -259,7 +253,7 @@ def hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
 #     split2.append(self.player_hand[1])
 
 
-def double(player_cards, dealer_cards, player_bank, initial_bet):
+def double(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
     if debug: print("called double()")
         
     initial_bet += initial_bet
@@ -267,7 +261,14 @@ def double(player_cards, dealer_cards, player_bank, initial_bet):
 
     print(f"Updated Player Bank: ${player_bank}")
 
-    player.hit()
+    player_hand_total = calculate_total(player_cards)
+
+    hit_card = card_deck.pop()
+    player_cards.append(hit_card)
+        
+    player_hand_total += define_value(hit_card.split()[0])
+
+    dealers_move(dealer_cards, card_deck)
     define_winner(player_cards, dealer_cards, player_bank, initial_bet)
 
 
@@ -295,12 +296,12 @@ def is_natural(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
 
     updated_dealer_cards = dealers_move(dealer_cards, card_deck)
 
-    player_hand_total = define_value(player_cards[0][0]) + define_value(player_cards[1][0])
+    player_hand_total = define_value(player_cards[0].split()[0]) + define_value(player_cards[1].split()[0])
     dealer_hand_total = calculate_total(updated_dealer_cards)
 
     if player_hand_total == 21 and dealer_hand_total != 21:
         print("\n>>> Player has Natural...You Win")
-        player_bank += self.initial_bet * 2.5
+        player_bank += initial_bet * 2.5
         return
 
     if dealer_hand_total == 21 and player_hand_total != 21:
@@ -325,9 +326,9 @@ def dealers_move(dealer_cards, deck_of_cards):
     while dealer_hand_total < 17:
         dealer_card = deck_of_cards.pop()
         dealer_cards.append(dealer_card)
-        dealer_hand_total += define_value(dealer_card[0])
+        dealer_hand_total += define_value(dealer_card.split()[0])
         
-        if dealer_card[0] == "Ace" and dealer_hand_total >= 17:
+        if dealer_card.split()[0] == "Ace" and dealer_hand_total >= 17:
             break
 
     print(f"updated dealer hand: {dealer_cards}")
