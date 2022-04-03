@@ -33,6 +33,42 @@ def build_deck():
     return deck
 
 
+def print_card(card):
+    if debug: print("called print_card()")
+
+    rank = card[0]
+    suit = card[1]
+
+    if rank == 1:
+        rank = "Ace"
+
+    elif rank == 11:
+        rank = "Jack"
+
+    elif rank == 12:
+        rank = "Queen"
+
+    elif rank == 13:
+        rank = "King" 
+
+    else:
+        rank = str(rank)
+
+    if suit == 1:
+        suit = "Spades"
+
+    elif suit == 2:
+        suit = "Clubs"
+
+    elif suit == 3:
+        suit = "Hearts"
+
+    elif suit == 4:
+        suit = "Diamonds"
+        
+    print(f"{rank} of {suit}")
+    
+
 def define_value(rank):
     if debug: print("called define_value()")
 
@@ -400,7 +436,9 @@ def define_winner(player_cards, dealer_cards, player_bank, initial_bet):
 
 
 if __name__ == "__main__":
-    print(build_deck())
+    # print(build_deck())
+
+    print_card((7,4))
  
     # print(define_value("Ace"))
     # print(define_value("3"))
