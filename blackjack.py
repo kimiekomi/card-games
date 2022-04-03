@@ -16,6 +16,7 @@ Clubs = 2
 Hearts = 3
 Diamonds = 4
 
+
 def build_deck():
     if debug: print("called deck()")
 
@@ -82,7 +83,7 @@ def define_value(card):
 
 
 def play_game():
-    if debug: print(f"\ncalled play()")
+    if debug: print(f"\ncalled play_game()")
 
     initial_bet = 0
     player_bank = 0
@@ -121,7 +122,9 @@ def play_game():
                 player_hand.append(deck.pop())
                 dealer_hand.append(deck.pop())
 
-        print(f"\ncards dealt\nplayer hand: {player_hand}\ndealer hand: [ _ of _, {dealer_hand[1]}]")
+        print(f"\ncards dealt")
+        print(f"\nplayer hand: {print_card(player_hand[0]} {print_card(player_hand[0]}")
+        print(f"\ndealer hand:  _ of _, {print_card(dealer_hand[1]}")
 
         player_hand_total = 0
         for card in player_hand:
