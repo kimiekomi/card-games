@@ -227,7 +227,12 @@ def hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
         print(f"updated player hand total: {player_hand_total}") 
         print(f"dealer card1 value: {define_value(dealer_cards[1].split()[0])}") 
 
-        if player_hand_total >= 21: 
+        if player_hand_total = 21: 
+            dealers_move(dealer_cards, card_deck)
+            define_winner(player_cards, dealer_cards, player_bank, initial_bet)
+            break
+
+        if player_hand_total > 21: 
             define_winner(player_cards, dealer_cards, player_bank, initial_bet)
             break
 
