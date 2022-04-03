@@ -238,9 +238,9 @@ def play_game():
 
         else:
             while True:
-                first_option = input("\nEnter first move (t-stand, h-hit, d-double): ").lower()
+                first_option = input("\nEnter first move (s-stand, h-hit, d-double): ").lower()
             
-                if first_option == "t":
+                if first_option == "s":
                     if trace: print("player elected to stand")
                         
                     dealer_hand_total = dealers_move(dealer_hand, deck)
@@ -272,7 +272,7 @@ def play_game():
                         if player_hand_total > 21: 
                             break
                 
-                        next_option = input("\nEnter next move (t-stand, h-hit): ").lower()
+                        next_option = input("\nEnter next move (s-stand, h-hit): ").lower()
                 
                         if next_option == "h":
                             continue
@@ -328,6 +328,7 @@ def play_game():
         # game over logic
         if player_hand_total > 21:
             print("\n>>> Player Bust...You Lose")
+            player_bank -= initial_bet
 
         elif dealer_hand_total > 21:
             print("\n>>> Dealer Bust...You Win")
@@ -339,6 +340,7 @@ def play_game():
             
         elif dealer_hand_total == 21 and player_hand_total != 21:
             print("\n>>> Dealer has Blackjack...You Lose")
+            player_bank -= initial_bet
             
         elif player_hand_total == 21 and dealer_hand_total == 21:
             print("\n>>> Both have Blackjack")
@@ -356,6 +358,7 @@ def play_game():
             else:
                 player_hand_total < dealer_hand_total
                 print("\n>>> Dealer is closer to 21...You Lose") 
+                player_bank -= initial_bet
 
         print(f">>> Updated Player Bank: ${player_bank}")
         
