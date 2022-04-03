@@ -69,22 +69,17 @@ def print_card(card):
     print(f"{rank} of {suit}")
     
 
-def define_value(rank):
+def define_value(card):
     if debug: print("called define_value()")
 
-    value = 0
+    if card[0].isnumeric():
+        return int(card[0])
 
-    if rank.isnumeric():
-        value = int(rank)
+    if card[0] == 1:
+        return 11
 
-    else:
-        if rank == "Ace":
-            value = 11
-
-        if rank == "Jack" or rank == "Queen" or rank == "King":
-            value = 10
-
-    return value
+    if card[0] == 11 or card[0] == 12 or card[0] == 13:
+        return 10
 
 
 def play_game():
@@ -439,6 +434,8 @@ if __name__ == "__main__":
     # print(build_deck())
 
     print_card((7,4))
+    print_card((1,2))
+    print_card((11,1))
  
     # print(define_value("Ace"))
     # print(define_value("3"))
