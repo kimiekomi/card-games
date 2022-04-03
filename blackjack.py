@@ -40,31 +40,31 @@ def print_card(card):
     rank = card[0]
     suit = card[1]
 
-    if rank == 1:
+    if rank == Ace:
         rank = "Ace"
 
-    elif rank == 11:
+    elif rank == Jack:
         rank = "Jack"
 
-    elif rank == 12:
+    elif rank == Queen:
         rank = "Queen"
 
-    elif rank == 13:
+    elif rank == King:
         rank = "King" 
 
     else:
         rank = str(rank)
 
-    if suit == 1:
+    if suit == Spades:
         suit = "Spades"
 
-    elif suit == 2:
+    elif suit == Clubs:
         suit = "Clubs"
 
-    elif suit == 3:
+    elif suit == Hearts:
         suit = "Hearts"
 
-    elif suit == 4:
+    elif suit == Diamonds:
         suit = "Diamonds"
         
     return f"{rank} of {suit}"
@@ -80,10 +80,10 @@ def print_hand(hand):
 def define_value(card):
     if debug: print("called define_value()")
 
-    if card[0] == 1:
+    if card[0] == Ace:
         return 11
 
-    if card[0] == 11 or card[0] == 12 or card[0] == 13:
+    if card[0] == Jack or card[0] == Queen or card[0] == King:
         return 10
 
     return card[0]
@@ -393,7 +393,7 @@ def play_game():
 
 
 if __name__ == "__main__":
-    # print(build_deck())
+    print(build_deck())
 
     # print_card((7,4))
     # print_card((1,2))
@@ -403,4 +403,4 @@ if __name__ == "__main__":
     # print(define_value((1,2)))
     # print(define_value((11,1)))
 
-    play_game()
+    # play_game()
