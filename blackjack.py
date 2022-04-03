@@ -73,10 +73,10 @@ def print_card(card):
 def print_hand(hand):
     if debug: print("called print_hand()")
 
-    for i, card in enumerate(hand):
-        print(print_card(card), ", " , end="")
+    for card in hand:
+        print(print_card(card))
         
-
+        
 def define_value(card):
     if debug: print("called define_value()")
 
@@ -113,7 +113,7 @@ def dealers_move(hand, card_deck):
 
     print(f"dealer hand revealed:")
     print_hand(hand)
-
+    
     dealer_hand_total = calculate_total(hand)
          
     while dealer_hand_total < 17:
@@ -173,8 +173,8 @@ def play_game():
                 player_hand.append(deck.pop())
                 dealer_hand.append(deck.pop())
 
-        print(f"\nplayer hand:{print_hand(player_hand)}")
-        print(f"\ndealer hand: ___ of ___ , {print_card(dealer_hand[1])}, ")
+        print(f"\nplayer hand: {print_card(player_hand[0])}, {print_card(player_hand[1])}")
+        print(f"dealer hand: ___ of ___ , {print_card(dealer_hand[1])}")
         
         player_hand_total = 0
         for card in player_hand:
@@ -262,7 +262,8 @@ def play_game():
                             if trace: print("soft hand")
                             player_hand_total -= 10
                 
-                        print(f"updated player hand: {print_hand(player_hand)}")
+                        print(f"updated player hand:")
+                        print_hand(player_hand)
                         print(f"\nupdated player hand total: {player_hand_total}") 
                         print(f"dealer card1 value: {define_value(dealer_hand[1])}") 
                 
@@ -309,7 +310,8 @@ def play_game():
                             
                         player_hand_total += define_value(hit_card)
                     
-                        print(f"updated player hand: {print_hand(player_hand)}")
+                        print(f"updated player hand:")
+                        print_hand(player_hand)
                         print(f"updated player hand total: {player_hand_total}") 
                     
                         dealers_hand_total = dealers_move(dealer_hand, deck)
