@@ -82,6 +82,17 @@ def define_value(card):
     return card[0]
 
 
+def calculate_total(cards_list):
+    if debug: print("called calculate_total()")
+
+    total = 0
+
+    for card in cards_list:
+       total += define_value(card))
+
+    return total
+
+
 def is_natural(hand):
     if debug: print("called is_natural()")
 
@@ -352,17 +363,6 @@ def double(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
 
 # def surrender(self):
 #     pass
-
-
-def calculate_total(cards_list):
-    if debug: print("called calculate_total()")
-
-    total = 0
-
-    for card in cards_list:
-       total += define_value(card))
-
-    return total
 
 
 def dealers_move(dealer_cards, deck_of_cards):
