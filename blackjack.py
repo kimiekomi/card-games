@@ -204,8 +204,25 @@ def player_options(player_cards, dealer_cards, card_deck, player_bank, initial_b
             if trace: print("player elected insurance")
 
             if dealer_cards[1].split()[0] == "Ace":
-                insurance(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
-                break
+                
+                while True:
+                    print(f"initial bet: ${initial_bet}")
+                    insurance_bet = int(input("Enter insurance amount: "))
+            
+                    if insurance_bet <= (initial_bet/2):
+                        break
+                        
+                    if insurance_bet > (initial_bet/2)
+                        print("> may only bet up to HALF the initial bet")
+                        continue
+                    
+                if is_natural(player_cards, dealer_cards, player_bank, initial_bet):
+                    player_bank += ((insurance_bet * 2) + insurance_bet)
+                    player_bank -= initial_bet
+                    break
+
+                player_bank -= insurance_bet
+                continue
                 
             print("> dealer 2nd card NOT Ace...unable insurance")
             continue
@@ -290,23 +307,6 @@ def double(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
     define_winner(player_cards, dealer_cards, player_bank, initial_bet)
 
 
-def insurance(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
-    if debug: print("called insurance()")
-        
-    while True:
-        print(f"initial bet: ${initial_bet}")
-        insurance_bet = int(input("Enter insurance amount: "))
-
-        if insurance_bet <= (initial_bet/2):
-            break
-            
-        if insurance_bet > (initial_bet/2)
-            print("> may only bet up to HALF the initial bet")
-            continue
-
-    hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
-
-
 # def surrender(self):
 #     pass
 
@@ -331,16 +331,16 @@ def is_natural(player_cards, dealer_cards, player_bank, initial_bet):
     if player_hand_total == 21 and dealer_hand_total != 21:
         print("\n>>> Player has Natural...You Win")
         player_bank += initial_bet * 2.5
-        return
+        return 
 
     if dealer_hand_total == 21 and player_hand_total != 21:
         print("\n>>> Dealer has Natural...You Lose")
-        return
+        return True
 
     if player_hand_total == 21 and dealer_hand_total == 21:
         print("\n>>> Both have Natural...Its a Draw")
         player_bank += initial_bet
-        return 
+        return False
 
 
 def dealers_move(dealer_cards, deck_of_cards):
