@@ -98,7 +98,28 @@ def is_natural(hand):
 
     hand_total = define_value(hand[0]) + define_value(hand[1])
 
-    return hand_total == 21:
+    return hand_total == 21
+
+
+def dealers_move(dealer_cards, deck_of_cards):
+    if debug: print("called dealers_move()")
+
+    print(f"dealer hand revealed: {dealer_cards}")
+
+    dealer_hand_total = calculate_total(dealer_cards)
+         
+    while dealer_hand_total < 17:
+        dealer_card = deck_of_cards.pop()
+        dealer_cards.append(dealer_card)
+        dealer_hand_total += define_value(dealer_card)
+        
+        if dealer_card[0] == 1 and dealer_hand_total >= 17:
+            break
+
+    print(f"updated dealer hand: {dealer_cards}")
+    print(f"updated dealer hand total: {dealer_hand_total}")
+
+    return dealer_cards
 
 
 def play_game():
@@ -363,27 +384,6 @@ def double(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
 
 # def surrender(self):
 #     pass
-
-
-def dealers_move(dealer_cards, deck_of_cards):
-    if debug: print("called dealers_move()")
-
-    print(f"dealer hand revealed: {dealer_cards}")
-
-    dealer_hand_total = calculate_total(dealer_cards)
-         
-    while dealer_hand_total < 17:
-        dealer_card = deck_of_cards.pop()
-        dealer_cards.append(dealer_card)
-        dealer_hand_total += define_value(dealer_card)
-        
-        if dealer_card[0] == 1 and dealer_hand_total >= 17:
-            break
-
-    print(f"updated dealer hand: {dealer_cards}")
-    print(f"updated dealer hand total: {dealer_hand_total}")
-
-    return dealer_cards
 
 
 if __name__ == "__main__":
