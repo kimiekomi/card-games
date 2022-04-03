@@ -145,29 +145,28 @@ def play_game():
         if define_value(dealer_hand[1]) == 11:
             want_insurance = input("Do you want insurance? ").lower()
 
-            while True: 
-                if want_insurance == "y":
-                    if trace: print("player wants insurance")
-                    
-                    while True:
-                        print(f"initial bet: ${initial_bet}")
-                        insurance_bet = int(input("Enter insurance amount: "))
+            if want_insurance == "y":
+                if trace: print("player wants insurance")
                 
-                        if insurance_bet > (initial_bet/2):
-                            print("> may only bet up to HALF the initial bet")
-                            continue
+                while True:
+                    print(f"initial bet: ${initial_bet}")
+                    insurance_bet = int(input("Enter insurance amount: "))
+            
+                    if insurance_bet > (initial_bet/2):
+                        print("> may only bet up to HALF the initial bet")
+                        continue
 
-                        break
-                        
-                    if is_natural(player_cards, dealer_cards, player_bank, initial_bet):
-                        player_bank += ((insurance_bet * 2) + insurance_bet)
-                        player_bank -= initial_bet
-                        break
-    
-                    player_bank -= insurance_bet
                     break
+                    
+                if is_natural(player_cards, dealer_cards, player_bank, initial_bet):
+                    player_bank += ((insurance_bet * 2) + insurance_bet)
+                    player_bank -= initial_bet
+                    print("You win insurance bet")
 
-                break
+                else:
+                    print("You win insurance bet")
+                    player_bank -= insurance_bet
+                
 
         if define_value(dealer_hand[1]) == 10 or define_value(dealer_hand[1]) == 11 and dealer_hand_total == 21:
             is_natural(player_hand, dealer_hand, deck, player_bank, initial_bet)
