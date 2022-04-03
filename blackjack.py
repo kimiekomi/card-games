@@ -204,8 +204,11 @@ def player_options(player_cards, dealer_cards, card_deck, player_bank, initial_b
             if trace: print("player elected insurance")
 
             if dealer_cards[1].split()[0] == "Ace":
-                insurance(insurance_bet)
-                hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
+                insurance(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
+                break
+                
+            print("> dealer 2nd card NOT Ace...unable insurance")
+            continue
     
         # elif first_option != "t" and first_option != "s" and first_option != "d" and first_option != "h":
         #     if trace: print("player elected to surrender")
@@ -287,11 +290,12 @@ def double(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
     define_winner(player_cards, dealer_cards, player_bank, initial_bet)
 
 
-def insurance():
+def insurance(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
     if debug: print("called insurance()")
         
     while True:
-        insurance_bet = input("Enter insurance amount: ")
+        print(f"initial bet: ${initial_bet}")
+        insurance_bet = int(input("Enter insurance amount: "))
 
         if insurance_bet <= (initial_bet/2):
             break
@@ -299,6 +303,8 @@ def insurance():
         if insurance_bet > (initial_bet/2)
             print("> may only bet up to HALF the initial bet")
             continue
+
+    hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
 
 
 # def surrender(self):
@@ -316,13 +322,11 @@ def calculate_total(cards_list):
     return total
 
 
-def is_natural(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
+def is_natural(player_cards, dealer_cards, player_bank, initial_bet):
     if debug: print("called is_natural()")
 
-    updated_dealer_cards = dealers_move(dealer_cards, card_deck)
-
     player_hand_total = define_value(player_cards[0].split()[0]) + define_value(player_cards[1].split()[0])
-    dealer_hand_total = calculate_total(updated_dealer_cards)
+    dealer_hand_total = define_value(dealer_cards[0].split()[0]) + define_value(dealer_cards[1].split()[0])
 
     if player_hand_total == 21 and dealer_hand_total != 21:
         print("\n>>> Player has Natural...You Win")
@@ -337,8 +341,6 @@ def is_natural(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
         print("\n>>> Both have Natural...Its a Draw")
         player_bank += initial_bet
         return 
-
-    define_winner(player_cards, updated_dealer_cards, player_bank, initial_bet)
 
 
 def dealers_move(dealer_cards, deck_of_cards):
