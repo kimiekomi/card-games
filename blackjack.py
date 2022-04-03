@@ -164,8 +164,6 @@ def play_game():
             print("> Error: Enter a valid number\n")
             continue
 
-        player_bank -= initial_bet
-
         print(f"Updated Player Bank: ${player_bank}")
 
         for i in range(2):
