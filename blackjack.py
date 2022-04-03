@@ -72,14 +72,13 @@ def print_card(card):
 def define_value(card):
     if debug: print("called define_value()")
 
-    if card[0].isnumeric():
-        return int(card[0])
-
     if card[0] == 1:
         return 11
 
     if card[0] == 11 or card[0] == 12 or card[0] == 13:
         return 10
+
+    return card[0]
 
 
 def play_game():
@@ -433,12 +432,12 @@ def define_winner(player_cards, dealer_cards, player_bank, initial_bet):
 if __name__ == "__main__":
     # print(build_deck())
 
-    print_card((7,4))
-    print_card((1,2))
-    print_card((11,1))
+    # print_card((7,4))
+    # print_card((1,2))
+    # print_card((11,1))
  
-    # print(define_value("Ace"))
-    # print(define_value("3"))
-    # print(define_value("Jack"))
+    print(define_value((7,4)))
+    print(define_value((1,2)))
+    print(define_value((11,1)))
 
     # play_game()
