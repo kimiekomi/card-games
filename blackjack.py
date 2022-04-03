@@ -82,6 +82,14 @@ def define_value(card):
     return card[0]
 
 
+def is_natural(hand):
+    if debug: print("called is_natural()")
+
+    hand_total = define_value(hand[0]) + define_value(hand[1])
+
+    return hand_total == 21:
+
+
 def play_game():
     if debug: print(f"\ncalled play_game()")
 
@@ -164,12 +172,13 @@ def play_game():
                     print("You win insurance bet")
 
                 else:
-                    print("You win insurance bet")
+                    print("You lose insurance bet")
                     player_bank -= insurance_bet
                 
 
         if define_value(dealer_hand[1]) == 10 or define_value(dealer_hand[1]) == 11 and dealer_hand_total == 21:
-            is_natural(player_hand, dealer_hand, deck, player_bank, initial_bet)
+            dealer_natural = is_natural(dealer_hand)
+            player_natural = is_natural(player_hand)
             break
         
         player_options(player_hand, dealer_hand, deck, player_bank, initial_bet)
@@ -321,25 +330,19 @@ def calculate_total(cards_list):
     return total
 
 
-def is_natural(player_cards, dealer_cards, player_bank, initial_bet):
-    if debug: print("called is_natural()")
+    # and dealer_hand_total != 21:
+    #     print("\n>>> Player has Natural...You Win")
+    #     player_bank += initial_bet * 2.5
+    #     return 
 
-    player_hand_total = define_value(player_cards[0]) + define_value(player_cards[1])
-    dealer_hand_total = define_value(dealer_cards[0]) + define_value(dealer_cards[1])
+    # if dealer_hand_total == 21 and player_hand_total != 21:
+    #     print("\n>>> Dealer has Natural...You Lose")
+    #     return True
 
-    if player_hand_total == 21 and dealer_hand_total != 21:
-        print("\n>>> Player has Natural...You Win")
-        player_bank += initial_bet * 2.5
-        return 
-
-    if dealer_hand_total == 21 and player_hand_total != 21:
-        print("\n>>> Dealer has Natural...You Lose")
-        return True
-
-    if player_hand_total == 21 and dealer_hand_total == 21:
-        print("\n>>> Both have Natural...Its a Draw")
-        player_bank += initial_bet
-        return False
+    # if player_hand_total == 21 and dealer_hand_total == 21:
+    #     print("\n>>> Both have Natural...Its a Draw")
+    #     player_bank += initial_bet
+    #     return False
 
 
 def dealers_move(dealer_cards, deck_of_cards):

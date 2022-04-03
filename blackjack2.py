@@ -22,14 +22,14 @@ Rank_Index = 1
 Suits = [Spades, Clubs, Hearts, Diamonds]        
 Ranks = [Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King]
 
-Suit_map = {Spades: "Spades", Clubs: "Clubs", Hearts: "Hearts", Diamonds: "Diamonds"}
+Suit_Map = {Spades: "Spades", Clubs: "Clubs", Hearts: "Hearts", Diamonds: "Diamonds"}
 Suit_Symbols = ['♠', '♣', '♥', '♦']
 
-Rank_map = {1: "Ace", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King"}
+Rank_Map = {1: "Ace", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King"}
 
 
 def build_deck(shuffle=True):
-    if debug: print("build_deck()")
+    if debug: print(f"build_deck({shuffle})")
 
     deck = []
     
@@ -50,15 +50,13 @@ def is_ace (card): return card[Rank_Index] == Ace
 def is_face_card (card): return card[Rank_Index] >= Jack and card[Rank_Index] <= King
 
 def card_value (card):
-    if debug: print (f"card_value: {card}")
+    if debug: print (f"card_value({card})")
 
     if is_ace (card): return 11
 
     if is_face_card (card): return 10
 
     return card[Rank_Index]
-
-def is_blackjack (hand): return len(hand) == 2 and ((card_value(hand[0]) + card_value(hand[1])) == 21)
 
 def value_of(hand):
     if debug: print (f"value_of ({hand})")
@@ -79,6 +77,9 @@ def value_of(hand):
     return value
 
 
+def is_blackjack (hand): return len(hand) == 2 and value_of(hand) == 21
+
+
 def soft(hand, value):
     if debug: print (f"soft ({hand}, {value}")
 
@@ -90,7 +91,7 @@ def soft(hand, value):
 def print_card(card, indent=4):
     
     print (" "*indent, end="")
-    print (f"{Rank_map[card[Rank_Index]]} of {Suit_map[card[Suit_Index]]}")
+    print (f"{Rank_Map[card[Rank_Index]]} of {Suit_Map[card[Suit_Index]]}")
 
 
 def print_hand(player, hand):
@@ -105,20 +106,29 @@ def print_hand(player, hand):
 
 def display_hand (player, hand, hide_first=False):
 
-    if hide_first:
+    if not hide_first:
+        lines = [ [] for i in range(9) ]
+    
+    else:
         hand = hand.copy()
         hand.pop (0)
 
-        lines = [['┌─────────┐'], ['│░░░░░░░░░│'], ['│░░░░░░░░░│'], ['│░░░░░░░░░│'], ['│░░░░░░░░░│'], ['│░░░░░░░░░│'], ['│░░░░░░░░░│'], ['│░░░░░░░░░│'], ['└─────────┘']]
-    else:
-        lines = [ [] for i in range(9) ]
+        lines = [['┌─────────┐'],
+                 ['│░░░░░░░░░│'],
+                 ['│░░░░░░░░░│'],
+                 ['│░░░░░░░░░│'],
+                 ['│░░░░░░░░░│'],
+                 ['│░░░░░░░░░│'],
+                 ['│░░░░░░░░░│'],
+                 ['│░░░░░░░░░│'],
+                 ['└─────────┘']]
 
     for card in hand:
         space = " "
         suit = Suit_Symbols[card[Suit_Index]-1]
 
         if is_face_card (card) or is_ace(card):
-            rank = Rank_map[card[Rank_Index]][0]
+            rank = Rank_Map[card[Rank_Index]][0]
         else:
             rank = str(card[Rank_Index])
 
@@ -126,7 +136,7 @@ def display_hand (player, hand, hide_first=False):
                 space = ""
 
         lines[0].append('┌─────────┐')
-        lines[1].append('│{}{}       │'.format(rank, space))  # use two {} one for char, one for space or char
+        lines[1].append('│{}{}       │'.format(rank, space))
         lines[2].append('│         │')
         lines[3].append('│         │')
         lines[4].append('│    {}    │'.format(suit))
@@ -151,8 +161,7 @@ def play():
 
     deck = build_deck(shuffle=True)
 
-    # burn card
-    deck.pop()
+    deck.pop() # burn a card
 
     playing_game = True
 
@@ -171,6 +180,7 @@ def play():
             print(f"\nPlayer Bank: ${player_bank}\n")
 
             while True:
+
                 try:
                     player_bet = int(input("Enter your bet: $ ") or 10)
         
