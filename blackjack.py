@@ -328,44 +328,36 @@ def play_game():
                 #     break
 
         # game over logic
-        while True:
-            if player_hand_total > 21:
-                print("\n>>> Player Bust...You Lose")
-                break
-    
-            if dealer_hand_total > 21:
-                print("\n>>> Dealer Bust...You Win")
-                player_bank += initial_bet * 2
-                break
-                
-            if player_hand_total == 21 and dealer_hand_total != 21:
-                print("\n>>> Player has Blackjack...You Win")
-                player_bank += initial_bet * 2
-                break
-                
-            if dealer_hand_total == 21 and player_hand_total != 21:
-                print("\n>>> Dealer has Blackjack...You Lose")
-                break
-                
-            if player_hand_total == 21 and dealer_hand_total == 21:
-                print("\n>>> Both have Blackjack")
-                player_bank += initial_bet
-                break
-                
-            if player_hand_total < 21 and dealer_hand_total < 21:
-                if player_hand_total > dealer_hand_total:
-                    print("\n>>> You are closer to 21...You Win")
-                    player_bank += initial_bet * 2
-                
-                elif player_hand_total == dealer_hand_total:
-                    print("\n>>> Equal Value...Its a Draw")
-                    player_bank += initial_bet
-        
-                else:
-                    player_hand_total < dealer_hand_total
-                    print("\n>>> Dealer is closer to 21...You Lose") 
+        if player_hand_total > 21:
+            print("\n>>> Player Bust...You Lose")
 
-                break
+        elif dealer_hand_total > 21:
+            print("\n>>> Dealer Bust...You Win")
+            player_bank += initial_bet * 2
+            
+        elif player_hand_total == 21 and dealer_hand_total != 21:
+            print("\n>>> Player has Blackjack...You Win")
+            player_bank += initial_bet * 2
+            
+        elif dealer_hand_total == 21 and player_hand_total != 21:
+            print("\n>>> Dealer has Blackjack...You Lose")
+            
+        elif player_hand_total == 21 and dealer_hand_total == 21:
+            print("\n>>> Both have Blackjack")
+            player_bank += initial_bet
+            
+        elif player_hand_total < 21 and dealer_hand_total < 21:
+            if player_hand_total > dealer_hand_total:
+                print("\n>>> You are closer to 21...You Win")
+                player_bank += initial_bet * 2
+            
+            elif player_hand_total == dealer_hand_total:
+                print("\n>>> Equal Value...Its a Draw")
+                player_bank += initial_bet
+    
+            else:
+                player_hand_total < dealer_hand_total
+                print("\n>>> Dealer is closer to 21...You Lose") 
 
         print(f">>> Updated Player Bank: ${player_bank}")
         
