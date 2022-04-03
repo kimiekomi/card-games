@@ -201,7 +201,6 @@ def play_game():
                 if trace: print("player elected to stand")
                     
                 updated_dealer_cards = dealers_move(dealer_cards, card_deck)
-                define_winner(player_cards, updated_dealer_cards, player_bank, initial_bet)
                 break
     
             if first_option == "h":
@@ -235,6 +234,40 @@ def play_game():
                     
             #     self.surrender()
             #     break
+
+        # game over logic
+        if player_hand_total > 21:
+            print("\n>>> Player Bust...You Lose")
+
+        if dealer_hand_total > 21:
+            print("\n>>> Dealer Bust...You Win")
+            player_bank += initial_bet * 2
+            
+        if player_hand_total == 21 and dealer_hand_total != 21:
+            print("\n>>> Player has Blackjack...You Win")
+            player_bank += initial_bet * 2
+    
+        if dealer_hand_total == 21 and player_hand_total != 21:
+            print("\n>>> Dealer has Blackjack...You Lose")
+            
+        if player_hand_total == 21 and dealer_hand_total == 21:
+            print("\n>>> Both have Blackjack")
+            player_bank += initial_bet
+            
+        if player_hand_total < 21 and dealer_hand_total < 21:
+            if player_hand_total > dealer_hand_total:
+                print("\n>>> You are closer to 21...You Win")
+                player_bank += initial_bet * 2
+            
+            elif player_hand_total == dealer_hand_total:
+                print("\n>>> Equal Value...Its a Draw")
+                player_bank += initial_bet
+    
+            else:
+                player_hand_total < dealer_hand_total
+                print("\n>>> Dealer is closer to 21...You Lose") 
+
+        print(f">>> Updated Player Bank: ${player_bank}")
         
         another_round = input("\nAnother Round? ").lower()
 
@@ -351,65 +384,6 @@ def dealers_move(dealer_cards, deck_of_cards):
     print(f"updated dealer hand total: {dealer_hand_total}")
 
     return dealer_cards
-
-    
-def define_winner(player_cards, dealer_cards, player_bank, initial_bet):
-    if debug: print("called define_winner()")
-
-    print(f"initial bet: {initial_bet}")
-
-    player_hand_total = calculate_total(player_cards)
-    dealer_hand_total = calculate_total(dealer_cards)
-
-    if player_hand_total > 21:
-        print("\n>>> Player Bust...You Lose")
-        print(f">>> Updated Player Bank: ${player_bank}")
-        
-        return
-
-    if dealer_hand_total > 21:
-        print("\n>>> Dealer Bust...You Win")
-        player_bank += initial_bet * 2
-        print(f">>> Updated Player Bank: ${player_bank}")
-        
-        return
-        
-    if player_hand_total == 21 and dealer_hand_total != 21:
-        print("\n>>> Player has Blackjack...You Win")
-        player_bank += initial_bet * 2
-        print(f">>> Updated Player Bank: ${player_bank}")
-        
-        return
-
-    if dealer_hand_total == 21 and player_hand_total != 21:
-        print("\n>>> Dealer has Blackjack...You Lose")
-        print(f">>> Updated Player Bank: ${player_bank}")
-        
-        return
-        
-    if player_hand_total == 21 and dealer_hand_total == 21:
-        print("\n>>> Both have Blackjack")
-        player_bank += initial_bet
-        print(f">>> Updated Player Bank: ${player_bank}")
-        
-        return
-        
-    if player_hand_total < 21 and dealer_hand_total < 21:
-        if player_hand_total > dealer_hand_total:
-            print("\n>>> You are closer to 21...You Win")
-            player_bank += initial_bet * 2
-        
-        elif player_hand_total == dealer_hand_total:
-            print("\n>>> Equal Value...Its a Draw")
-            player_bank += initial_bet
-
-        else:
-            player_hand_total < dealer_hand_total
-            print("\n>>> Dealer is closer to 21...You Lose") 
-
-        print(f">>> Updated Player Bank: ${player_bank}")
-
-        return player_bank
 
 
 if __name__ == "__main__":
