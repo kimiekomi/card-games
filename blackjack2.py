@@ -104,9 +104,11 @@ def print_hand(player, hand):
     print(f"total: {value_of(hand)}\n")
 
 
-def display_hand (player, hand, hide_first=False):
+def display_hand (player, hand, hide_first_card=False):
 
-    if not hide_first:
+    print (f"{player}'s hand")
+
+    if not hide_first_card:
         lines = [ [] for i in range(9) ]
     
     else:
@@ -150,8 +152,12 @@ def display_hand (player, hand, hide_first=False):
     for index, line in enumerate(lines):
         result.append(''.join(lines[index]))
 
-    print ('\n'.join(result), "\n")
+    print ('\n'.join(result))
 
+    if not hide_first_card:
+        print(f"total: {value_of(hand)}\n")
+    else:
+        print ()
 
 def play():
     if debug: print(f"play()")
@@ -163,9 +169,9 @@ def play():
 
     deck.pop() # burn a card
 
-    playing_game = True
+    another_round = True
 
-    while playing_game:
+    while another_round:
         os.system("clear")
 
         playing_hand = True
@@ -197,16 +203,16 @@ def play():
                     player_hand.append(deck.pop())
                     dealer_hand.append(deck.pop())
     
-            # print_hand("Player", player_hand)
-
-            display_hand ("Player", player_hand)
-
             # print ("Dealer's cards")
             # print ("    face down card")
             # print_card (dealer_hand[1])
             # print ()
 
-            display_hand ("Dealer", dealer_hand, hide_first=True)
+            display_hand ("Dealer", dealer_hand, hide_first_card=True)
+            
+            # print_hand("Player", player_hand)
+
+            display_hand ("Player", player_hand)
 
             if is_ace (dealer_hand[1]):
                 insurance = input("Do you want insurance? ").lower()
@@ -285,7 +291,8 @@ def play():
 
                 playing_hand = False
                 continue
-    
+
+            print ()
             display_hand("Dealer", dealer_hand)
 
             while value_of(dealer_hand) < 17:
@@ -323,7 +330,7 @@ def play():
 
         print(f"\nPlayer Bank: ${player_bank}\n")
 
-        playing_game = not input("Another Round? ").lower()[0] != "y"
+        another_round = not input("Another Round? ").lower()[0] != "y"
 
     print("\n>>> Goodbye...\n")
 
