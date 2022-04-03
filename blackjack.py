@@ -232,7 +232,7 @@ def play_game():
             if first_option == "t":
                 if trace: print("player elected to stand")
                     
-                updated_dealer_cards = dealers_move(dealer_cards, card_deck)
+                updated_dealer_cards = dealers_move(dealer_hand, card_deck)
                 break
     
             if first_option == "h":
@@ -254,8 +254,22 @@ def play_game():
             if first_option == "d":
                 if trace: print("player elected to double down")
     
-                if define_value(player_cards[0]) + define_value(player_cards[1]) == 9 or define_value(player_cards[0]) + define_value(player_cards[1]) == 10 or define_value(player_cards[0]) + define_value(player_cards[1]) == 11:
-                    double(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
+                if define_value(player_hand[0]) + define_value(player_hand[1]) == 9 or define_value(player_hand[0]) + define_value(player_hand[1]) == 10 or define_value(player_hand[0]) + define_value(player_hand[1]) == 11:
+                    initial_bet += initial_bet
+                    player_bank -= (initial_bet/2)
+
+                    print(f"Updated Player Bank: ${player_bank}")
+
+                    hit_card = card_deck.pop()
+                    player_hand.append(hit_card)
+                        
+                    player_hand_total += define_value(hit_card)
+                
+                    print(f"updated player hand: {player_hand}")
+                    print(f"updated player hand total: {player_hand_total}") 
+                
+                    dealers_move(dealer_hand, card_deck)
+                    
                     break
     
                 print("> cards total NOT 9, 10, or 11...unable double")
@@ -358,28 +372,6 @@ def hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
 
 #     split1.append(self.player_hand[0])
 #     split2.append(self.player_hand[1])
-
-
-def double(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
-    if debug: print("called double()")
-        
-    initial_bet += initial_bet
-    player_bank -= (initial_bet/2)
-
-    print(f"Updated Player Bank: ${player_bank}")
-
-    player_hand_total = calculate_total(player_cards)
-
-    hit_card = card_deck.pop()
-    player_cards.append(hit_card)
-        
-    player_hand_total += define_value(hit_card)
-
-    print(f"updated player hand: {player_cards}")
-    print(f"updated player hand total: {player_hand_total}") 
-
-    dealers_move(dealer_cards, card_deck)
-    define_winner(player_cards, dealer_cards, player_bank, initial_bet)
 
 
 # def surrender(self):
