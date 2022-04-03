@@ -113,7 +113,7 @@ def play_game():
 
         player_bank -= initial_bet
 
-        print(f"Updated Player Bank: ${player_bank}")
+        # print(f"Updated Player Bank: ${player_bank}")
 
         for i in range(2):
             if len(deck) > 0:
@@ -268,6 +268,9 @@ def double(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
         
     player_hand_total += define_value(hit_card.split()[0])
 
+    print(f"updated player hand: {player_cards}")
+    print(f"updated player hand total: {player_hand_total}") 
+
     dealers_move(dealer_cards, card_deck)
     define_winner(player_cards, dealer_cards, player_bank, initial_bet)
 
@@ -345,25 +348,35 @@ def define_winner(player_cards, dealer_cards, player_bank, initial_bet):
 
     if player_hand_total > 21:
         print("\n>>> Player Bust...You Lose")
+        print(f">>> Updated Player Bank: ${player_bank}")
+        
         return
 
     if dealer_hand_total > 21:
         print("\n>>> Dealer Bust...You Win")
         player_bank += initial_bet * 2
+        print(f">>> Updated Player Bank: ${player_bank}")
+        
         return
         
     if player_hand_total == 21 and dealer_hand_total != 21:
         print("\n>>> Player has Blackjack...You Win")
-        player_bank += self.initial_bet * 2
+        player_bank += initial_bet * 2
+        print(f">>> Updated Player Bank: ${player_bank}")
+        
         return
 
     if dealer_hand_total == 21 and player_hand_total != 21:
         print("\n>>> Dealer has Blackjack...You Lose")
+        print(f">>> Updated Player Bank: ${player_bank}")
+        
         return
         
     if player_hand_total == 21 and dealer_hand_total == 21:
         print("\n>>> Both have Blackjack")
         player_bank += initial_bet
+        print(f">>> Updated Player Bank: ${player_bank}")
+        
         return
         
     if player_hand_total < 21 and dealer_hand_total < 21:
