@@ -122,8 +122,6 @@ def play_game():
                 player_hand.append(deck.pop())
                 dealer_hand.append(deck.pop())
 
-        print("cards dealt")
-        
         print("\nplayer hand:")
         for card in player_hand:
             print_card(card)
@@ -155,12 +153,11 @@ def play_game():
                         print(f"initial bet: ${initial_bet}")
                         insurance_bet = int(input("Enter insurance amount: "))
                 
-                        if insurance_bet <= (initial_bet/2):
-                            break
-                            
                         if insurance_bet > (initial_bet/2):
                             print("> may only bet up to HALF the initial bet")
                             continue
+
+                        break
                         
                     if is_natural(player_cards, dealer_cards, player_bank, initial_bet):
                         player_bank += ((insurance_bet * 2) + insurance_bet)
