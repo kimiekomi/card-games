@@ -199,6 +199,13 @@ def player_options(player_cards, dealer_cards, card_deck, player_bank, initial_b
 
             print("> cards total NOT 9, 10, or 11...unable double")
             continue
+
+        if first_option == "i":
+            if trace: print("player elected insurance")
+
+            if dealer_cards[1].split()[0] == "Ace":
+                insurance(insurance_bet)
+                hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet)
     
         # elif first_option != "t" and first_option != "s" and first_option != "d" and first_option != "h":
         #     if trace: print("player elected to surrender")
@@ -227,7 +234,7 @@ def hit_loop(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
         print(f"updated player hand total: {player_hand_total}") 
         print(f"dealer card1 value: {define_value(dealer_cards[1].split()[0])}") 
 
-        if player_hand_total = 21: 
+        if player_hand_total == 21: 
             dealers_move(dealer_cards, card_deck)
             define_winner(player_cards, dealer_cards, player_bank, initial_bet)
             break
@@ -280,8 +287,18 @@ def double(player_cards, dealer_cards, card_deck, player_bank, initial_bet):
     define_winner(player_cards, dealer_cards, player_bank, initial_bet)
 
 
-# def insurance(self):
-#     pass
+def insurance():
+    if debug: print("called insurance()")
+        
+    while True:
+        insurance_bet = input("Enter insurance amount: ")
+
+        if insurance_bet <= (initial_bet/2):
+            break
+            
+        if insurance_bet > (initial_bet/2)
+            print("> may only bet up to HALF the initial bet")
+            continue
 
 
 # def surrender(self):
@@ -347,6 +364,8 @@ def dealers_move(dealer_cards, deck_of_cards):
     
 def define_winner(player_cards, dealer_cards, player_bank, initial_bet):
     if debug: print("called define_winner()")
+
+    print(f"initial bet: {initial_bet}")
 
     player_hand_total = calculate_total(player_cards)
     dealer_hand_total = calculate_total(dealer_cards)
