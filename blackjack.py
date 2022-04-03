@@ -156,13 +156,14 @@ def play_game():
         if trace: print(f"\nplayer hand({len(player_hand)}), dealer hand({len(dealer_hand)})\nplayer total: {player_hand_total}, dealer total: {dealer_hand_total}")
             
         print(f"\nPlayer Bank: ${player_bank}\n")
-        
-        try:
-            initial_bet = int(input("Enter initial bet: $ ") or 10)
 
-        except ValueError:
-            print("> Error: Enter a valid number\n")
-            continue
+        while True:
+            try:
+                initial_bet = int(input("Enter initial bet: $ ") or 10)
+    
+            except ValueError:
+                print("> Error: Enter a valid number\n")
+                continue
 
         print(f"Updated Player Bank: ${player_bank}")
 
