@@ -67,7 +67,17 @@ def print_card(card):
     elif suit == 4:
         suit = "Diamonds"
         
-    print(f"{rank} of {suit}")
+    return f"{rank} of {suit}"
+
+
+def print_hand(hand):
+    if debug: print("called print_hand()")
+
+    for i, card in enumerate(hand):
+        print(print_card(card), ", ", end="")
+        
+        if i == len(hand):
+            print_card(card)
     
 
 def define_value(card):
@@ -105,8 +115,7 @@ def dealers_move(hand, card_deck):
     if debug: print("called dealers_move()")
 
     print(f"dealer hand revealed:")
-    for card in hand:
-        print_card(card)
+    print_hand(hand)
 
     dealer_hand_total = calculate_total(hand)
          
@@ -118,9 +127,10 @@ def dealers_move(hand, card_deck):
         if hand[0] == 1 and dealer_hand_total >= 17:
             break
 
-    print(f"updated dealer hand:")
-    for card in hand:
-        print_card(card)
+    if len(hand) > 2:
+        print(f"updated dealer hand:")
+        print_hand(hand)
+    
     print(f"updated dealer hand total: {dealer_hand_total}")
 
     return dealer_hand_total
@@ -167,12 +177,11 @@ def play_game():
                 dealer_hand.append(deck.pop())
 
         print("\nplayer hand:")
-        for card in player_hand:
-            print_card(card)
+        print_hand(player_hand)
             
-        print("\ndealer hand:")
-        print("___ of ___")
-        print_card(dealer_hand[1])
+        print(f"\ndealer hand: ___ of ___, {print_card(dealer_hand[1])}")
+        # print("___ of ___")
+        # print_card(dealer_hand[1])
 
         player_hand_total = 0
         for card in player_hand:
@@ -206,6 +215,9 @@ def play_game():
                         continue
 
                     break
+
+                print(f"dealer hand revealed:")
+                print_hand(hand)
                     
                 if is_natural(dealer_hand):
                     player_bank += ((insurance_bet * 2) + insurance_bet)
@@ -215,11 +227,12 @@ def play_game():
                 else:
                     print("You lose insurance bet")
                     player_bank -= insurance_bet
+
+                print(f"Updated Player Bank: ${player_bank}")
                 
         if define_value(dealer_hand[1]) >= 10 and dealer_hand_total == 21:
             print(f"dealer hand revealed:")
-            for card in dealer_hand:
-                print_card(card)
+            print_hand(dealer_hand)
             
             if not is_natural(player_hand):
                 print("\n>>> Dealer has Natural...You Lose")
@@ -229,11 +242,10 @@ def play_game():
 
         if player_hand_total == 21:
             if not is_natural(dealer_hand):
-                print("\n>>> Player has Natural...You Win")
                 player_bank += initial_bet * 2.5
 
-            print("\n>>> Both have Natural...Its a Draw")
-            player_bank += initial_bet
+            else:
+                player_bank += initial_bet
 
         else:
             while True:
@@ -260,8 +272,7 @@ def play_game():
                             player_hand_total -= 10
                 
                         print(f"updated player hand:")
-                        for card in player_hand:
-                            print_card(card)
+                        print_hand(player_hand)
                         print(f"\nupdated player hand total: {player_hand_total}") 
                         print(f"dealer card1 value: {define_value(dealer_hand[1])}") 
                 
@@ -309,8 +320,7 @@ def play_game():
                         player_hand_total += define_value(hit_card)
                     
                         print(f"updated player hand:")
-                        for card in player_hand:
-                            print_card(card)
+                        print_hand(player_hand)
                         print(f"updated player hand total: {player_hand_total}") 
                     
                         dealers_hand_total = dealers_move(dealer_hand, deck)
