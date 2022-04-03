@@ -120,9 +120,10 @@ def dealers_move(hand, card_deck):
 
     print(f"updated dealer hand:")
     for card in hand:
+        print_card(card)
     print(f"updated dealer hand total: {dealer_hand_total}")
 
-    return hand
+    return dealer_hand_total
 
 
 def play_game():
@@ -241,7 +242,7 @@ def play_game():
                 if first_option == "t":
                     if trace: print("player elected to stand")
                         
-                    updated_dealer_cards = dealers_move(dealer_hand, deck)
+                    dealer_hand_total = dealers_move(dealer_hand, deck)
                     break
         
                 if first_option == "h":
@@ -307,10 +308,12 @@ def play_game():
                             
                         player_hand_total += define_value(hit_card)
                     
-                        print(f"updated player hand: {player_hand}")
+                        print(f"updated player hand:")
+                        for card in player_hand:
+                            print_card(card)
                         print(f"updated player hand total: {player_hand_total}") 
                     
-                        dealers_move(dealer_hand, deck)
+                        dealers_hand_total = dealers_move(dealer_hand, deck)
                         
                         break
         
