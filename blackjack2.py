@@ -37,8 +37,9 @@ def build_deck(shuffle=True):
 
         for rank in Ranks:
             card = (suit, rank)
-            if trace: print (card)
             deck.append (card)
+
+            if trace: print (card)
 
     if shuffle: 
         random.shuffle(deck)
@@ -57,6 +58,7 @@ def card_value (card):
     if is_face_card (card): return 10
 
     return card[Rank_Index]
+
 
 def value_of(hand):
     if debug: print (f"value_of ({hand})")
@@ -162,7 +164,7 @@ def display_hand (player, hand, hide_first_card=False):
 def play():
     if debug: print(f"play()")
 
-    player_bet = 0
+    global player_bank
     player_bank = 0
 
     deck = build_deck(shuffle=True)
@@ -174,165 +176,163 @@ def play():
     while another_round:
         os.system("clear")
 
-        playing_hand = True
-
-        while playing_hand:
-            player_hand = []
-            dealer_hand = []
-    
-            player_hand_total = 0
-            dealer_hand_total = 0
-    
-            print(f"\nPlayer Bank: ${player_bank}\n")
-
-            while True:
-
-                try:
-                    player_bet = int(input("Enter your bet: $ ") or 10)
-        
-                except ValueError:
-                    print("> Error: Enter a valid number\n")
-                    continue
-
-                break
-
-            print(f"\nPlayer Bet: ${player_bet}\n")
-
-            for i in range(2):
-                if len(deck) > 0:
-                    player_hand.append(deck.pop())
-                    dealer_hand.append(deck.pop())
-    
-            # print ("Dealer's cards")
-            # print ("    face down card")
-            # print_card (dealer_hand[1])
-            # print ()
-
-            display_hand ("Dealer", dealer_hand, hide_first_card=True)
-            
-            # print_hand("Player", player_hand)
-
-            display_hand ("Player", player_hand)
-
-            if is_ace (dealer_hand[1]):
-                insurance = input("Do you want insurance? ").lower()
-    
-                if insurance == "y":
-                    if trace: print("player wants insurance")
-                    
-                    while True:
-                        print(f"initial bet: ${player_bet}")
-                        insurance_bet = int(input("How much insurance amount: "))
-                
-                        if insurance_bet > (player_bet/2):
-                            print("you may only bet up to 1/2 of your initial bet")
-                            continue
-                        
-                        break
-    
-                if is_blackjack (dealer_hand):
-                    player_bank -= player_bet
-                    player_bank += 2*insurance_bet
-
-                    playing_hand = False
-                    continue
-
-                print ("Dealer does not have Blackjack; Player loses insurance bet\n")
-                player_bank -= insurance_bet
-    
-            if is_blackjack(dealer_hand):
-                player_bank -= player_bet
-
-                playing_hand = False
-                continue
-    
-            if value_of(player_hand) == 21:
-                player_bank += 1.5 * player_bet
-
-                playing_hand = False
-                continue
-    
-            player_can_hit = True
-    
-            double_down = input("Do you want double down? ").lower()
-    
-            if double_down == "y":
-                player_bet *= 2.0
-                player_hand.append(deck.pop())
-                display_hand("Player", player_hand)
-    
-                player_can_hit = False
-    
-            while player_can_hit:
-                player_choice = input("\nPlease choose to (S)tand, (H)it, or s(P)lit: ").lower()
-                
-                if player_choice == "s":
-                    player_can_hit = False
-                    continue
-    
-                if player_choice == "h":
-                    card = deck.pop()
-                    print ("Players hits and gets the", end=" ")
-                    print_card (card, 0)
-
-                    player_hand.append(card)
-                    display_hand("Player", player_hand)
-    
-                    if value_of(player_hand) > 21:
-                        player_can_hit = False
-                        continue
-    
-                if player_choice == "p":
-                    pass
-
-            if value_of(player_hand) > 21:
-                print ("Player busts")
-                player_bank -= player_bet
-
-                playing_hand = False
-                continue
-
-            print ()
-            display_hand("Dealer", dealer_hand)
-
-            while value_of(dealer_hand) < 17:
-                card = deck.pop()
-                print (f"Dealer hits and gets the", end=" ")
-                print_card (card, 0)
-                print ()
-
-                dealer_hand.append(card)
-                display_hand("Dealer", dealer_hand)
-    
-            if value_of(dealer_hand) > 21:
-                print ("Dealer busts")
-                player_bank += player_bet
-
-                playing_hand = False
-                continue
-    
-            if value_of(dealer_hand) > value_of(player_hand):
-                print ("Dealer has better hand, so player loses")
-                player_bank -= player_bet
-
-                playing_hand = False
-                continue
-    
-            if value_of(dealer_hand) == value_of(player_hand):
-                print ("Dealer pushes, so player loses")
-                player_bank -= player_bet
-
-                playing_hand = False
-                continue
-    
-            print ("Player wins")
-            player_bank += player_bet
+        play_hand (deck)
 
         print(f"\nPlayer Bank: ${player_bank}\n")
-
         another_round = not input("Another Round? ").lower()[0] != "y"
 
-    print("\n>>> Goodbye...\n")
+    print(f"\nPlayer Bank: ${player_bank}")
+    print(">>> Goodbye...\n")
+
+
+def play_hand (deck):
+
+    global player_bank
+
+    player_bet = 0
+
+    while True:
+
+        try:
+            player_bet = int(input("Enter your bet: $ ") or 10)
+
+        except ValueError:
+            print("> Error: Enter a valid number\n")
+            continue
+
+        break
+
+    print(f"\nPlayer Bet: ${player_bet}\n")
+
+    player_hand = []
+    dealer_hand = []
+
+    for i in range(2):
+
+        if len(deck) > 0:
+            player_hand.append(deck.pop())
+            dealer_hand.append(deck.pop())
+
+    # print ("Dealer's cards")
+    # print ("    face down card")
+    # print_card (dealer_hand[1])
+    # print ()
+
+    display_hand ("Dealer", dealer_hand, hide_first_card=True)
+    
+    # print_hand("Player", player_hand)
+
+    display_hand ("Player", player_hand)
+
+    if is_ace (dealer_hand[1]):
+        insurance = input("Do you want insurance? ").lower()
+
+        if insurance == "y":
+            if trace: print("player wants insurance")
+            
+            while True:
+                print(f"initial bet: ${player_bet}")
+                insurance_bet = int(input("How much insurance amount: "))
+        
+                if insurance_bet > (player_bet/2):
+                    print("you may only bet up to 1/2 of your initial bet")
+                    continue
+                
+                break
+
+        if is_blackjack (dealer_hand):
+            player_bank -= player_bet
+            player_bank += 2*insurance_bet
+
+            return
+
+        print ("Dealer does not have Blackjack; Player loses insurance bet\n")
+        player_bank -= insurance_bet
+
+    if is_blackjack(dealer_hand):
+        player_bank -= player_bet
+
+        return
+
+    if value_of(player_hand) == 21:
+        player_bank += 1.5 * player_bet
+
+        return
+
+    player_can_hit = True
+
+    double_down = input("Do you want double down? ").lower()
+
+    if double_down == "y":
+        player_bet *= 2.0
+        player_hand.append(deck.pop())
+        display_hand("Player", player_hand)
+
+        player_can_hit = False
+
+    while player_can_hit:
+        player_choice = input("\nPlease choose to (S)tand, (H)it, or s(P)lit: ").lower()
+        
+        if player_choice == "s":
+            player_can_hit = False
+            continue
+
+        if player_choice == "h":
+            card = deck.pop()
+            print ("Players hits and gets the", end=" ")
+            print_card (card, 0)
+
+            player_hand.append(card)
+            display_hand("Player", player_hand)
+
+            if value_of(player_hand) > 21:
+                player_can_hit = False
+                continue
+
+        if player_choice == "p":
+            pass
+
+    if value_of(player_hand) > 21:
+        print ("Player busts")
+        player_bank -= player_bet
+
+        return
+
+
+    print ()
+    display_hand("Dealer", dealer_hand)
+
+    while value_of(dealer_hand) < 17:
+        card = deck.pop()
+        print (f"Dealer hits and gets the", end=" ")
+        print_card (card, 0)
+        print ()
+
+        dealer_hand.append(card)
+        display_hand("Dealer", dealer_hand)
+
+    if value_of(dealer_hand) > 21:
+        print ("Dealer busts")
+        player_bank += player_bet
+
+        return
+
+    if value_of(dealer_hand) > value_of(player_hand):
+        print ("Dealer has better hand, so player loses")
+        player_bank -= player_bet
+
+        return
+
+
+    if value_of(dealer_hand) == value_of(player_hand):
+        print ("Dealer pushes, so player loses")
+        player_bank -= player_bet
+
+        return
+
+
+    print ("Player wins")
+    player_bank += player_bet
 
 
 if __name__ == "__main__":

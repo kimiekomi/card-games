@@ -3,8 +3,8 @@
 import random
 import os
 
-debug = False
-trace = True
+debug = True
+trace = False
 
 Ace = 1
 Jack = 11
@@ -16,9 +16,16 @@ Clubs = 2
 Hearts = 3
 Diamonds = 4
 
+dealer_blackjack_test = [(), (2, Clubs), (King, Hearts), (4, Diamonds), (Ace, Spades)]
+dealer_ace_test       = [(), (2, Clubs), (9, Hearts), (4, Diamonds), (Ace, Spades)]
+
+player_blackjack_test  = [(), (Ace, Clubs), (6, Hearts), (10, Diamonds), (Ace, Spades)]
+player_double_test     = [(), (6, Clubs), (6, Hearts), (4, Diamonds), (Ace, Spades)]
+player_split_test      = [(), (10, Clubs), (6, Hearts), (10, Diamonds), (Ace, Spades)]
+
 
 def build_deck():
-    if debug: print("called deck()")
+    if debug: print("deck() called")
 
     suits = [Spades, Clubs, Hearts, Diamonds]        
     ranks = [Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King]
@@ -35,7 +42,7 @@ def build_deck():
 
 
 def print_card(card):
-    if debug: print("called print_card()")
+    # if debug: print(f"print_card({card})")
 
     rank = card[0]
     suit = card[1]
@@ -71,31 +78,37 @@ def print_card(card):
 
 
 def print_hand(hand):
-    if debug: print("called print_hand()")
+    # if debug: print("print_hand() called")
 
     for card in hand:
         print(print_card(card))
         
         
-def define_value(card):
-    if debug: print("called define_value()")
+def get_value(card):
+    # if debug: print("called define_value()")
 
-    if card[0] == Ace:
+    card[0] = rank
+    
+    if rank == Ace:
         return 11
 
-    if card[0] == Jack or card[0] == Queen or card[0] == King:
+    if rank == Jack or rank == Queen or rank == King:
         return 10
 
-    return card[0]
+    return rank
 
 
-def calculate_total(cards_list):
+def calculate_total(hand):
     if debug: print("called calculate_total()")
 
+    card[0] = rank
     total = 0
 
     for card in cards_list:
        total += define_value(card)
+
+        if rank == Ace and total > 21:
+            total -= 10
 
     return total
 
@@ -103,9 +116,7 @@ def calculate_total(cards_list):
 def is_natural(hand):
     if debug: print("called is_natural()")
 
-    hand_total = define_value(hand[0]) + define_value(hand[1])
-
-    return hand_total == 21
+    return len(hand) == 2 and calculate_total(hand) == 21
 
 
 def dealers_move(hand, card_deck):
@@ -121,7 +132,7 @@ def dealers_move(hand, card_deck):
         hand.append(dealer_card)
         dealer_hand_total += define_value(dealer_card)
         
-        if hand[0] == 1 and dealer_hand_total >= 17:
+        if dealer_hand_total >= 17:
             break
 
     if len(hand) > 2:
@@ -140,9 +151,10 @@ def play_game():
     player_bank = 0
 
     deck = build_deck()
-
+    deck = player_split_test
+    
     # burn card
-    deck.pop()
+    deck.pop(0)
 
     # if trace: print(f"\ngame deck({len(deck)}): {deck}")
 
@@ -165,12 +177,15 @@ def play_game():
                 print("> Error: Enter a valid number\n")
                 continue
 
-        print(f"Updated Player Bank: ${player_bank}")
+            break
 
         for i in range(2):
             if len(deck) > 0:
-                player_hand.append(deck.pop())
-                dealer_hand.append(deck.pop())
+                player_hand.append(deck.pop(0))
+                dealer_hand.append(deck.pop(0))
+
+            else: 
+                raise Exception("Handle later...need at least 4 cards")
 
         print(f"\nplayer hand: {print_card(player_hand[0])}, {print_card(player_hand[1])}")
         print(f"dealer hand: ___ of ___ , {print_card(dealer_hand[1])}")
@@ -180,6 +195,7 @@ def play_game():
             player_hand_total += define_value(card)
             
         dealer_hand_total = 0
+
         for card in dealer_hand:
             dealer_hand_total += define_value(card)
 
@@ -226,16 +242,13 @@ def play_game():
             
             if not is_natural(player_hand):
                 print("\n>>> Dealer has Natural...You Lose")
+                player_bank -= insurance_bet
 
             print("\n>>> Both have Natural...Its a Draw")
-            player_bank += initial_bet
 
         if player_hand_total == 21:
             if not is_natural(dealer_hand):
-                player_bank += initial_bet * 2.5
-
-            else:
-                player_bank += initial_bet
+                player_bank += initial_bet * 1.5
 
         else:
             while True:
@@ -244,7 +257,6 @@ def play_game():
                 if first_option == "s":
                     if trace: print("player elected to stand")
                         
-                    dealer_hand_total = dealers_move(dealer_hand, deck)
                     break
         
                 if first_option == "h":
@@ -257,7 +269,7 @@ def play_game():
                         
                         player_hand_total += define_value(hit_card)
                     
-                        if hit_card[0] == 1 and player_hand_total > 21:
+                        if hit_card[Rank] == Ace and player_hand_total > 21:
                             if trace: print("soft hand")
                             player_hand_total -= 10
                 
@@ -267,7 +279,6 @@ def play_game():
                         print(f"dealer card1 value: {define_value(dealer_hand[1])}") 
                 
                         if player_hand_total == 21: 
-                            dealers_move(dealer_hand, deck)
                             break
                 
                         if player_hand_total > 21: 
@@ -280,9 +291,8 @@ def play_game():
                 
                         if trace: print("player elected to stand")
                 
-                        dealers_move(dealer_hand, deck)
                         break
-    
+
                     break
         
                 # if first_option == "s":
@@ -313,8 +323,6 @@ def play_game():
                         print_hand(player_hand)
                         print(f"updated player hand total: {player_hand_total}") 
                     
-                        dealers_hand_total = dealers_move(dealer_hand, deck)
-                        
                         break
         
                     print("> cards total NOT 9, 10, or 11...unable double")
@@ -331,36 +339,21 @@ def play_game():
             print("\n>>> Player Bust...You Lose")
             player_bank -= initial_bet
 
-        elif dealer_hand_total > 21:
-            print("\n>>> Dealer Bust...You Win")
-            player_bank += initial_bet * 2
+        else:
+            dealers_hand_total = dealers_move(dealer_hand, deck)
             
-        elif player_hand_total == 21 and dealer_hand_total != 21:
-            print("\n>>> Player has Blackjack...You Win")
-            player_bank += initial_bet * 2
-            
-        elif dealer_hand_total == 21 and player_hand_total != 21:
-            print("\n>>> Dealer has Blackjack...You Lose")
-            player_bank -= initial_bet
-            
-        elif player_hand_total == 21 and dealer_hand_total == 21:
-            print("\n>>> Both have Blackjack")
-            player_bank += initial_bet
-            
-        elif player_hand_total < 21 and dealer_hand_total < 21:
-            if player_hand_total > dealer_hand_total:
-                print("\n>>> You are closer to 21...You Win")
-                player_bank += initial_bet * 2
-            
-            elif player_hand_total == dealer_hand_total:
-                print("\n>>> Equal Value...Its a Draw")
+            if dealer_hand_total > 21:
+                print("\n>>> Dealer Bust...You Win")
+                player_bank += initial_bet 
+                
+            elif player_hand_total > dealer_hand_total:
+                print("\n>>> You Win")
                 player_bank += initial_bet
-    
-            else:
-                player_hand_total < dealer_hand_total
-                print("\n>>> Dealer is closer to 21...You Lose") 
+                
+            else: 
+                print("\n>>> You Lose")
                 player_bank -= initial_bet
-
+                
         print(f">>> Updated Player Bank: ${player_bank}")
         
         another_round = input("\nAnother Round? ").lower()
@@ -387,7 +380,7 @@ def play_game():
 
 
 if __name__ == "__main__":
-    print(build_deck())
+    # print(build_deck())
 
     # print_card((7,4))
     # print_card((1,2))
@@ -397,4 +390,4 @@ if __name__ == "__main__":
     # print(define_value((1,2)))
     # print(define_value((11,1)))
 
-    # play_game()
+    play_game()
