@@ -117,7 +117,7 @@ def dealers_move(hand, card_deck):
     dealer_hand_total = calculate_total(hand)
          
     while dealer_hand_total < 17:
-        dealer_card = hand.pop()
+        dealer_card = card_deck.pop()
         hand.append(dealer_card)
         dealer_hand_total += define_value(dealer_card)
         
