@@ -74,8 +74,12 @@ def print_card(card):
 def print_hand(hand):
     if debug: print("print_hand() called")
 
+    results = []
     for card in hand:
-        print(print_card(card))
+        result = print_card(card)
+        results.append(result)
+
+    return results
         
         
 def get_value(card):
@@ -383,4 +387,6 @@ def play_game(deck=None, shuffle=False):
 
 
 if __name__ == "__main__":
-    play_game()
+    # play_game()
+
+    print_hand([(2, Spades), (4, Clubs), (6, Hearts), (8, Diamonds)])
