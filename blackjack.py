@@ -3,7 +3,7 @@
 import random
 import os
 
-debug = True
+debug = False
 trace = False
 
 Ace = 1
@@ -15,14 +15,6 @@ Spades = 1
 Clubs = 2
 Hearts = 3
 Diamonds = 4
-
-dealer_blackjack_test = [(), (2, Clubs), (King, Hearts), (4, Diamonds), (Ace, Spades)]
-dealer_ace_test       = [(), (2, Clubs), (9, Hearts), (4, Diamonds), (Ace, Spades)]
-
-player_blackjack_test  = [(), (Ace, Clubs), (6, Hearts), (10, Diamonds), (Ace, Spades)]
-player_double_test     = [(), (6, Clubs), (6, Hearts), (4, Diamonds), (Ace, Spades)]
-player_split_test      = [(), (10, Clubs), (6, Hearts), (10, Diamonds), (Ace, Spades)]
-
 
 def build_deck():
     if debug: print("deck() called")
@@ -36,13 +28,13 @@ def build_deck():
         for rank in ranks:
             deck.append((rank, suit))
 
-    random.shuffle(deck)
+    if trace: print(f"\ngame deck({len(deck)}): {deck}")
 
     return deck
 
 
 def print_card(card):
-    # if debug: print(f"print_card({card})")
+    if debug: print("print_card()")
 
     rank = card[0]
     suit = card[1]
@@ -73,21 +65,23 @@ def print_card(card):
 
     elif suit == Diamonds:
         suit = "Diamonds"
+
+    if trace: print(f"{rank} of {suit}")
         
     return f"{rank} of {suit}"
 
 
 def print_hand(hand):
-    # if debug: print("print_hand() called")
+    if debug: print("print_hand() called")
 
     for card in hand:
         print(print_card(card))
         
         
 def get_value(card):
-    # if debug: print("called define_value()")
+    if debug: print("called define_value()")
 
-    card[0] = rank
+    rank = card[0]
     
     if rank == Ace:
         return 11
@@ -95,21 +89,26 @@ def get_value(card):
     if rank == Jack or rank == Queen or rank == King:
         return 10
 
+    if trace: print(f"rank: {rank}")
+        
     return rank
 
 
 def calculate_total(hand):
     if debug: print("called calculate_total()")
 
-    card[0] = rank
     total = 0
 
-    for card in cards_list:
-       total += define_value(card)
+    for card in hand:
+       total += get_value(card)
 
-        if rank == Ace and total > 21:
-            total -= 10
+    rank = card[0]
 
+    if rank == Ace and total > 21:
+        total -= 10
+    
+    if trace: print(f"hand total: {total}")
+    
     return total
 
 
@@ -126,13 +125,15 @@ def dealers_move(hand, card_deck):
     print_hand(hand)
     
     dealer_hand_total = calculate_total(hand)
+
+    if trace: print(f"dealer hand total: {dealer_hand_total}")
          
     while dealer_hand_total < 17:
         dealer_card = card_deck.pop()
         hand.append(dealer_card)
         dealer_hand_total += define_value(dealer_card)
         
-        if dealer_hand_total >= 17:
+        if define_value(dealer_card) == 11 and dealer_hand_total >= 17:
             break
 
     if len(hand) > 2:
@@ -144,15 +145,18 @@ def dealers_move(hand, card_deck):
     return dealer_hand_total
 
 
-def play_game():
+def play_game(deck=None, shuffle=False):
     if debug: print(f"\ncalled play_game()")
 
     initial_bet = 0
     player_bank = 0
 
-    deck = build_deck()
-    deck = player_split_test
-    
+    if deck == None:
+        deck = build_deck()
+        
+        if shuttfle == True:
+            random.shuffle(deck)
+
     # burn card
     deck.pop(0)
 
@@ -190,14 +194,8 @@ def play_game():
         print(f"\nplayer hand: {print_card(player_hand[0])}, {print_card(player_hand[1])}")
         print(f"dealer hand: ___ of ___ , {print_card(dealer_hand[1])}")
         
-        player_hand_total = 0
-        for card in player_hand:
-            player_hand_total += define_value(card)
-            
-        dealer_hand_total = 0
-
-        for card in dealer_hand:
-            dealer_hand_total += define_value(card)
+        player_hand_total = calculate_total(player_hand)
+        dealer_hand_total = calculate_total(dealer_hand)
 
         print(f"\nplayer hand total: {player_hand_total}") 
         if trace: print(f"dealer hand total: {dealer_hand_total}")
@@ -264,12 +262,13 @@ def play_game():
     
                     while True:
                 
-                        hit_card = deck.pop()
+                        hit_card = deck.pop(0)
+                        hit_card_rank = hit_card[0]
                         player_hand.append(hit_card)
                         
-                        player_hand_total += define_value(hit_card)
+                        player_hand_total = calculate_total(player_hand)
                     
-                        if hit_card[Rank] == Ace and player_hand_total > 21:
+                        if hit_card_rank == Ace and player_hand_total > 21:
                             if trace: print("soft hand")
                             player_hand_total -= 10
                 
@@ -307,25 +306,29 @@ def play_game():
             
                 if first_option == "d":
                     if trace: print("player elected to double down")
+
+                    if len(player_hand) == 2:
+                        if define_value(player_hand[0]) + define_value(player_hand[1]) == 9 or define_value(player_hand[0]) + define_value(player_hand[1]) == 10 or define_value(player_hand[0]) + define_value(player_hand[1]) == 11:
+                            initial_bet += initial_bet
+                            player_bank -= (initial_bet/2)
         
-                    if define_value(player_hand[0]) + define_value(player_hand[1]) == 9 or define_value(player_hand[0]) + define_value(player_hand[1]) == 10 or define_value(player_hand[0]) + define_value(player_hand[1]) == 11:
-                        initial_bet += initial_bet
-                        player_bank -= (initial_bet/2)
-    
-                        print(f"Updated Player Bank: ${player_bank}")
-    
-                        hit_card = deck.pop()
-                        player_hand.append(hit_card)
-                            
-                        player_hand_total += define_value(hit_card)
-                    
-                        print(f"updated player hand:")
-                        print_hand(player_hand)
-                        print(f"updated player hand total: {player_hand_total}") 
-                    
-                        break
+                            print(f"Updated Player Bank: ${player_bank}")
         
-                    print("> cards total NOT 9, 10, or 11...unable double")
+                            hit_card = deck.pop(0)
+                            player_hand.append(hit_card)
+                                
+                            player_hand_total += define_value(hit_card)
+                        
+                            print(f"updated player hand:")
+                            print_hand(player_hand)
+                            print(f"updated player hand total: {player_hand_total}") 
+                        
+                            break
+        
+                        print("> cards total NOT 9, 10, or 11...unable double")
+                        continue
+
+                    print("> unable double after initial move")
                     continue
         
                 # elif first_option != "t" and first_option != "s" and first_option != "d" and first_option != "h":
@@ -380,14 +383,4 @@ def play_game():
 
 
 if __name__ == "__main__":
-    # print(build_deck())
-
-    # print_card((7,4))
-    # print_card((1,2))
-    # print_card((11,1))
- 
-    # print(define_value((7,4)))
-    # print(define_value((1,2)))
-    # print(define_value((11,1)))
-
     play_game()
