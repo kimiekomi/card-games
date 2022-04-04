@@ -126,7 +126,7 @@ def dealers_move(hand, card_deck):
     if debug: print("called dealers_move()")
 
     print(f"dealer hand revealed:")
-    print_hand(hand)
+    print(print_hand(hand))
     
     dealer_hand_total = calculate_total(hand)
 
@@ -142,7 +142,7 @@ def dealers_move(hand, card_deck):
 
     if len(hand) > 2:
         print(f"updated dealer hand:")
-        print_hand(hand)
+        print(print_hand(hand))
     
     print(f"updated dealer hand total: {dealer_hand_total}")
 
@@ -195,7 +195,7 @@ def play_game(deck=None, shuffle=False):
             else: 
                 raise Exception("Handle later...need at least 4 cards")
 
-        print(f"\nplayer hand: {print_card(player_hand[0])}, {print_card(player_hand[1])}")
+        print(f"\nplayer hand: {print_hand(player_hand)}")
         print(f"dealer hand: ___ of ___ , {print_card(dealer_hand[1])}")
         
         player_hand_total = calculate_total(player_hand)
@@ -277,7 +277,7 @@ def play_game(deck=None, shuffle=False):
                             player_hand_total -= 10
                 
                         print(f"updated player hand:")
-                        print_hand(player_hand)
+                        print(print_hand(player_hand))
                         print(f"\nupdated player hand total: {player_hand_total}") 
                         print(f"dealer card1 value: {define_value(dealer_hand[1])}") 
                 
@@ -312,7 +312,7 @@ def play_game(deck=None, shuffle=False):
                     if trace: print("player elected to double down")
 
                     if len(player_hand) == 2:
-                        if define_value(player_hand[0]) + define_value(player_hand[1]) == 9 or define_value(player_hand[0]) + define_value(player_hand[1]) == 10 or define_value(player_hand[0]) + define_value(player_hand[1]) == 11:
+                        if calculate_total(player_hand) == 9 or calculate_total(player_hand) == 10 or calculate_total(player_hand) == 11:
                             initial_bet += initial_bet
                             player_bank -= (initial_bet/2)
         
@@ -324,7 +324,7 @@ def play_game(deck=None, shuffle=False):
                             player_hand_total += define_value(hit_card)
                         
                             print(f"updated player hand:")
-                            print_hand(player_hand)
+                            print(print_hand(player_hand))
                             print(f"updated player hand total: {player_hand_total}") 
                         
                             break
@@ -387,6 +387,5 @@ def play_game(deck=None, shuffle=False):
 
 
 if __name__ == "__main__":
-    # play_game()
+    play_game()
 
-    print_hand([(2, Spades), (4, Clubs), (6, Hearts), (8, Diamonds)])
