@@ -2,29 +2,27 @@
 
 import unittest
 from blackjack import *
+from cards import *
 
-sample_card = (Ace, Spades)
-sample_card2 = (8, Hearts)
+sample_hand = [Two_of_Spades, Four_of_Clubs, Six_of_Hearts, Eight_of_Diamonds]
+sample_hand2 = [Ace_of_Spades, Jack_of_Clubs, Queen_of_Hearts, King_of_Diamonds]
 
-sample_hand = [(2, Spades), (4, Clubs), (6, Hearts), (8, Diamonds)]
-sample_hand2 = [(Ace, Spades), (Jack, Clubs), (Queen, Hearts), (King, Diamonds)]
-
-natural_true = [(Ace, Spades), (Jack, Clubs)]
-natural_false = [(4, Clubs), (Jack, Clubs)]
+natural_true = [Ace_of_Spades, Jack_of_Clubs]
+natural_false = [Four_of_Clubs, Jack_of_Clubs]
 
 dealer_below_17 = []
 dealer_above_17 = []
 dealer_hard_17 = []
 
-dealer_blackjack_test = [(), (2, Clubs), (King, Hearts), (4, Diamonds), (Ace, Spades)]
-dealer_ace_test = [(), (2, Clubs), (9, Hearts), (4, Diamonds), (Ace, Spades)]
+dealer_blackjack_test = [Ace_of_Hearts, Two_of_Clubs, King_of_Hearts, Four_of_Diamonds, Ace_of_Spades]
+dealer_ace_test = [(), Two_of_Clubs, Nine_of_Hearts, Four_of_Diamonds, Ace_of_Spades]
 
-player_blackjack_test = [(), (Ace, Clubs), (6, Hearts), (10, Diamonds), (Ace, Spades)]
-player_double_test = [(), (6, Clubs), (6, Hearts), (4, Diamonds), (Ace, Spades)]
-player_split_test = [(), (10, Clubs), (6, Hearts), (10, Diamonds), (Ace, Spades)]
+player_blackjack_test = [Ace_of_Hearts, Ace_of_Clubs, Six_of_Hearts, Ten_of_Diamonds, Ace_of_Spades]
+player_double_test = [Ace_of_Hearts, Six_of_Clubs, Six_of_Hearts, Ten_of_Diamonds, Ace_of_Spades]
+player_split_test = [Ace_of_Hearts, Ten_of_Clubs, Six_of_Hearts, Ten_of_Diamonds, Ace_of_Spades]
 
 
-class PythonTDD(unittest.TestCase):
+class TestBlackJack(unittest.TestCase):
     
     def test_build_deck(self):
         print("testing build_deck()")
@@ -33,8 +31,8 @@ class PythonTDD(unittest.TestCase):
     
     def test_print_card(self):
         print("testing print_card()")
-        self.assertEqual(print_card(sample_card), 'Ace of Spades')
-        self.assertEqual(print_card(sample_card2), '8 of Hearts')
+        self.assertEqual(print_card(Ace_of_Spades), 'Ace of Spades')
+        self.assertEqual(print_card(Eight_of_Hearts), '8 of Hearts')
 
     
     def test_print_hand(self):
@@ -45,8 +43,8 @@ class PythonTDD(unittest.TestCase):
     
     def test_get_value(self):
         print("testing get_value()")
-        self.assertEqual(get_value(sample_card), 11)
-        self.assertEqual(get_value(sample_card2), 8)
+        self.assertEqual(get_value(Ace_of_Spades), 11)
+        self.assertEqual(get_value(Eight_of_Hearts), 8)
 
 
     def test_calculate_total(self):

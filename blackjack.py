@@ -265,7 +265,6 @@ def play_game(deck=None, shuffle=False):
                     if trace: print("player elected to hit")
     
                     while True:
-                
                         hit_card = deck.pop(0)
                         hit_card_rank = hit_card[0]
                         player_hand.append(hit_card)

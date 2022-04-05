@@ -31,8 +31,32 @@ def print_card(card):
     elif rank == King:
         rank = "King" 
 
+    elif rank == 2:
+        rank = "Two"
+
+    elif rank == 3:
+        rank = "Three"
+
+    elif rank == 4:
+        rank = "Four"
+
+    elif rank == 5:
+        rank = "Five"
+
+    elif rank == 6:
+        rank = "Six"
+
+    elif rank == 7:
+        rank = "Seven"
+
+    elif rank == 8:
+        rank = "Eight"
+
+    elif rank == 9:
+        rank = "Nine"
+
     else:
-        rank = str(rank)
+        rank = "Ten"
 
     if suit == Spades:
         suit = "Spades"
@@ -50,6 +74,7 @@ def print_card(card):
         
     return f"{rank}_of_{suit}"
 
+
 def build_deck():
     if debug: print("deck() called")
 
@@ -57,7 +82,7 @@ def build_deck():
     ranks = [Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King]
 
     deck = []
-    card_deck = []
+    Card_Deck = []
 
     file = open("cards.py", "a")
     
@@ -66,11 +91,11 @@ def build_deck():
             card = (rank, suit)
             
             deck.append(card)
-            card_deck.append(print_card(card))
+            Card_Deck.append(print_card(card))
 
             file.write(f"{print_card(card)} = {card}\n")
 
-    file.write(f"\ncard_deck = {card_deck}")
+    file.write(f"\nCard_Deck = {Card_Deck}")
     file.close()
 
     if trace: print(f"\ngame deck({len(deck)}): {deck}")

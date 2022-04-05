@@ -1,2 +1,2 @@
 language = "undefined"
-run = "python3 test.py"
+run = "python3 test_blackjack.py"
