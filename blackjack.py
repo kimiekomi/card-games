@@ -2,6 +2,7 @@
 
 import random
 import os
+from cards import *
 
 debug = False
 trace = False
@@ -72,18 +73,19 @@ def print_card(card):
 
 
 def print_hand(hand):
-    if debug: print("print_hand() called")
+    print(f"print_hand({hand}) called")
 
     results = []
     for card in hand:
         result = print_card(card)
+        print (result)
         results.append(result)
 
     return results
         
         
 def get_value(card):
-    if debug: print("called define_value()")
+    if debug: print("called get_value()")
 
     rank = card[0]
     
@@ -133,11 +135,11 @@ def dealers_move(hand, card_deck):
     if trace: print(f"dealer hand total: {dealer_hand_total}")
          
     while dealer_hand_total < 17:
-        dealer_card = card_deck.pop()
+        dealer_card = card_deck.pop(0)
         hand.append(dealer_card)
-        dealer_hand_total += define_value(dealer_card)
+        dealer_hand_total += get_value(dealer_card)
         
-        if define_value(dealer_card) == 11 and dealer_hand_total >= 17:
+        if get_value(dealer_card) == 11 and dealer_hand_total >= 17:
             break
 
     if len(hand) > 2:
@@ -158,7 +160,7 @@ def play_game(deck=None, shuffle=False):
     if deck == None:
         deck = build_deck()
         
-        if shuttfle == True:
+        if shuffle == True:
             random.shuffle(deck)
 
     # burn card
@@ -203,9 +205,9 @@ def play_game(deck=None, shuffle=False):
 
         print(f"\nplayer hand total: {player_hand_total}") 
         if trace: print(f"dealer hand total: {dealer_hand_total}")
-        print(f"dealer card2 value: {define_value(dealer_hand[1])}") 
+        print(f"dealer card2 value: {get_value(dealer_hand[1])}") 
 
-        if define_value(dealer_hand[1]) == 11:
+        if get_value(dealer_hand[1]) == 11:
             want_insurance = input("\nDo you want insurance? ").lower()
 
             if want_insurance == "y":
@@ -278,7 +280,7 @@ def play_game(deck=None, shuffle=False):
                         print(f"updated player hand:")
                         print(print_hand(player_hand))
                         print(f"\nupdated player hand total: {player_hand_total}") 
-                        print(f"dealer card1 value: {define_value(dealer_hand[1])}") 
+                        print(f"dealer card1 value: {get_value(dealer_hand[1])}") 
                 
                         if player_hand_total == 21: 
                             break
@@ -320,7 +322,7 @@ def play_game(deck=None, shuffle=False):
                             hit_card = deck.pop(0)
                             player_hand.append(hit_card)
                                 
-                            player_hand_total += define_value(hit_card)
+                            player_hand_total += get_value(hit_card)
                         
                             print(f"updated player hand:")
                             print(print_hand(player_hand))
@@ -386,5 +388,7 @@ def play_game(deck=None, shuffle=False):
 
 
 if __name__ == "__main__":
-    play_game()
+    # play_game()
+
+    print(print_hand([Two_of_Spades, Four_of_Clubs, Six_of_Hearts, Eight_of_Diamonds]))
 

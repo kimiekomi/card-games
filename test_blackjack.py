@@ -10,12 +10,16 @@ sample_hand2 = [Ace_of_Spades, Jack_of_Clubs, Queen_of_Hearts, King_of_Diamonds]
 natural_true = [Ace_of_Spades, Jack_of_Clubs]
 natural_false = [Four_of_Clubs, Jack_of_Clubs]
 
-dealer_below_17 = []
-dealer_above_17 = []
-dealer_hard_17 = []
+dealer_below_17 = [Ace_of_Hearts, Two_of_Clubs]
+dealer_above_17 = [Jack_of_Clubs, Queen_of_Hearts]
+dealer_hard_17 = [King_of_Diamonds, Seven_of_Diamonds]
+dealer_soft_17 = [Eight_of_Hearts, Seven_of_Diamonds]
+dealer_ace_11 = [Six_of_Hearts, Two_of_Clubs]
+dealer_ace_1 = [Eight_of_Hearts, Nine_of_Clubs]
+
 
 dealer_blackjack_test = [Ace_of_Hearts, Two_of_Clubs, King_of_Hearts, Four_of_Diamonds, Ace_of_Spades]
-dealer_ace_test = [(), Two_of_Clubs, Nine_of_Hearts, Four_of_Diamonds, Ace_of_Spades]
+dealer_ace_test = [Ace_of_Hearts, Two_of_Clubs, Nine_of_Hearts, Four_of_Diamonds, Ace_of_Spades]
 
 player_blackjack_test = [Ace_of_Hearts, Ace_of_Clubs, Six_of_Hearts, Ten_of_Diamonds, Ace_of_Spades]
 player_double_test = [Ace_of_Hearts, Six_of_Clubs, Six_of_Hearts, Ten_of_Diamonds, Ace_of_Spades]
@@ -61,7 +65,12 @@ class TestBlackJack(unittest.TestCase):
 
     def test_dealers_move(self):
         print("testing dealers_move()")
-        self.assertEqual(is_natural(natural_true), True)
+        self.assertEqual(dealers_move(dealer_below_17, sample_hand), 19)
+        self.assertEqual(dealers_move(dealer_above_17, sample_hand), 20)
+        self.assertEqual(dealers_move(dealer_hard_17, sample_hand), 17)
+        self.assertEqual(dealers_move(dealer_soft_17, sample_hand), 17)
+        self.assertEqual(dealers_move(dealer_ace_11, sample_hand2), 19)
+        self.assertEqual(dealers_move(dealer_ace_1, sample_hand2), 18)
         
 
 if __name__ == "__main__":
