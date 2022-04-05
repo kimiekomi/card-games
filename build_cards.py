@@ -75,13 +75,12 @@ def print_card(card):
     return f"{rank}_of_{suit}"
 
 
-def build_deck():
+def build_cards():
     if debug: print("deck() called")
 
     suits = [Spades, Clubs, Hearts, Diamonds]        
     ranks = [Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King]
 
-    deck = []
     Card_Deck = []
 
     file = open("cards.py", "a")
@@ -89,8 +88,6 @@ def build_deck():
     for suit in suits:
         for rank in ranks:
             card = (rank, suit)
-            
-            deck.append(card)
             Card_Deck.append(print_card(card))
 
             file.write(f"{print_card(card)} = {card}\n")
@@ -104,5 +101,5 @@ def build_deck():
 
 
 if __name__ == "__main__":
-    build_deck()
+    build_cards()
 
