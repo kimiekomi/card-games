@@ -12,6 +12,10 @@ sample_hand2 = [(Ace, Spades), (Jack, Clubs), (Queen, Hearts), (King, Diamonds)]
 natural_true = [(Ace, Spades), (Jack, Clubs)]
 natural_false = [(4, Clubs), (Jack, Clubs)]
 
+dealer_below_17 = []
+dealer_above_17 = []
+dealer_hard_17 = []
+
 dealer_blackjack_test = [(), (2, Clubs), (King, Hearts), (4, Diamonds), (Ace, Spades)]
 dealer_ace_test = [(), (2, Clubs), (9, Hearts), (4, Diamonds), (Ace, Spades)]
 
@@ -55,6 +59,11 @@ class PythonTDD(unittest.TestCase):
         print("testing is_natural()")
         self.assertEqual(is_natural(natural_true), True)
         self.assertEqual(is_natural(natural_false), False)
+
+
+    def test_dealers_move(self):
+        print("testing dealers_move()")
+        self.assertEqual(is_natural(natural_true), True)
         
 
 if __name__ == "__main__":
