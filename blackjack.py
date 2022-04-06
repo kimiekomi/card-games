@@ -18,7 +18,7 @@ Hearts = 3
 Diamonds = 4
 
 def build_deck():
-    if debug: print("deck() called")
+    if debug: print("build_deck()")
 
     suits = [Spades, Clubs, Hearts, Diamonds]        
     ranks = [Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King]
@@ -69,22 +69,18 @@ def print_card(card):
 
     # if trace: print(f"{rank} of {suit}")
         
-    return f"{rank} of {suit}"
+    print(f"{rank} of {suit}")
 
 
 def print_hand(hand):
-
-    results = []
-
-    for card in hand:
-        result = print_card(card)
-        results.append(result)
-
-    return results
+    if debug: print("print_hand()")
         
+    for card in hand:
+        print_card(card)
+
         
 def get_value(card):
-    if debug: print("called get_value()")
+    if debug: print("get_value()")
 
     rank = card[0]
     
@@ -100,7 +96,7 @@ def get_value(card):
 
 
 def calculate_total(hand):
-    if debug: print("called calculate_total()")
+    if debug: print("calculate_total()")
 
     total = 0
 
@@ -118,15 +114,16 @@ def calculate_total(hand):
 
 
 def is_natural(hand):
-    if debug: print("called is_natural()")
+    if debug: print("is_natural()")
 
     return len(hand) == 2 and calculate_total(hand) == 21
 
 
 def dealers_move(hand, card_deck):
-    if debug: print("called dealers_move()")
+    if debug: print("dealers_move()")
 
-    print(f"dealer hand revealed: {print_hand(hand)}")
+    print("\ndealer hand revealed:")
+    print_hand(hand)
     
     dealer_hand_total = calculate_total(hand)
 
@@ -142,16 +139,16 @@ def dealers_move(hand, card_deck):
             break
 
     if len(hand) > 2:
-        print(f"updated dealer hand:")
+        print("\nupdated dealer hand:")
         print(print_hand(hand))
     
-    print(f"updated dealer hand total: {dealer_hand_total}")
+    print(f"\nupdated dealer hand total: {dealer_hand_total}")
 
     return dealer_hand_total
 
 
 def play_game(deck=None, shuffle=False):
-    if debug: print(f"\ncalled play_game()")
+    if debug: print(f"\nplay_game()")
 
     initial_bet = 0
     player_bank = 0
@@ -188,6 +185,8 @@ def play_game(deck=None, shuffle=False):
 
             break
 
+        print(f"initial bet: ${initial_bet}")
+        
         for i in range(2):
             if len(deck) > 0:
                 player_hand.append(deck.pop(0))
@@ -196,8 +195,11 @@ def play_game(deck=None, shuffle=False):
             else: 
                 raise Exception("Handle later...need at least 4 cards")
 
-        print(f"\nplayer hand: {print_hand(player_hand)}")
-        print(f"dealer hand: ___ of ___ , {print_card(dealer_hand[1])}")
+        print("\nplayer hand:")
+        print_hand(player_hand)
+        print("\ndealer hand:")
+        print("___ of ___")
+        print_card(dealer_hand[1])
         
         player_hand_total = calculate_total(player_hand)
         dealer_hand_total = calculate_total(dealer_hand)
@@ -270,7 +272,8 @@ def play_game(deck=None, shuffle=False):
                                 if trace: print("soft hand")
                                 player_hand_total -= 10
                     
-                            print(f"updated player hand: {print_hand(player_hand)}")
+                            print("\nupdated player hand:")
+                            print_hand(player_hand)
                             print(f"\nupdated player hand total: {player_hand_total}") 
                             print(f"dealer card1 value: {get_value(dealer_hand[1])}") 
                     
@@ -318,10 +321,9 @@ def play_game(deck=None, shuffle=False):
                                     
                                 player_hand_total += get_value(hit_card)
                             
-                                print(f"updated player hand:")
-                                print(print_hand(player_hand))
+                                print("\nupdated player hand:")
+                                print_hand(player_hand)
                                 print(f"updated player hand total: {player_hand_total}") 
-                            
                                 break
             
                             print("> cards total NOT 9, 10, or 11...unable double")
@@ -410,8 +412,9 @@ if __name__ == "__main__":
     player_natural_dealer_below_17 = [Ace_of_Hearts, Queen_of_Hearts, Two_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Five_of_Hearts]
     both_natural = [Ace_of_Hearts, Queen_of_Hearts, Ace_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Jack_of_Hearts]
     
-    player_hit_soft_hand = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
-    player_hit_equal_21 = [Ace_of_Hearts, Seven_of_Spades, Four_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
+    player_hit_soft_hand_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
+    player_hit_reg_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Three_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
+    player_hit_no_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Ten_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
     player_hit_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds]
     player_hit_below_21 = [Ace_of_Hearts, Five_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds]
 
@@ -420,5 +423,5 @@ if __name__ == "__main__":
     double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
     double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
 
-    play_game(player_hit_soft_hand)
+    play_game(player_hit_no_ace_21)
 

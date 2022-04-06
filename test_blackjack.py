@@ -30,19 +30,6 @@ class TestBlackJack(unittest.TestCase):
         self.assertEqual(len(build_deck()), 52)
 
     
-    def test_print_card(self):
-        print("testing print_card()")
-        self.assertEqual(print_card(Ace_of_Spades), 'Ace of Spades')
-        self.assertEqual(print_card(Eight_of_Hearts), '8 of Hearts')
-
-    
-    def test_print_hand(self):
-        print("testing print_hand()")
-        print(sample_hand)
-        self.assertEqual(print_hand(sample_hand), ['2 of Spades', '4 of Clubs', '6 of Hearts', '8 of Diamonds'])
-        self.assertEqual(print_hand(sample_hand2), ['Ace of Spades', 'Jack of Clubs', 'Queen of Hearts', 'King of Diamonds'])
-
-    
     def test_get_value(self):
         print("testing get_value()")
         self.assertEqual(get_value(Ace_of_Spades), 11)
