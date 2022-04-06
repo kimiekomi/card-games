@@ -336,37 +336,37 @@ def play_game(deck=None, shuffle=False):
                     #     break
 
         # game over logic
-        dealers_hand_total = dealers_move(dealer_hand, deck)
-        
         if player_hand_total > 21:
             print("\n>>> Player Bust...You Lose")
             player_bank -= initial_bet
 
-        elif dealer_hand_total > 21:
-            print("\n>>> Dealer Bust...You Win")
-            player_bank += initial_bet 
-
-        elif player_hand_total < 21 and dealer_hand_total < 21:
-            if player_hand_total > dealer_hand_total:
-                print("\n>>> Player is closer to 21...You Win")
-                player_bank += initial_bet
-                
-            else: 
-                print("\n>>> Dealer is closer to 21...You Lose")
-                player_bank -= initial_bet
-
-        else:
-            if is_natural(dealer_hand) and not is_natural(player_hand):
+        elif is_natural(dealer_hand) and not is_natural(player_hand):
                 player_bank -= initial_bet
                 print("\n>>> Dealer has Natural...You Lose")
 
-            if is_natural(dealer_hand) and is_natural(player_hand):
-                print("\n>>> Both have Natural...Its a Draw")
+        elif is_natural(dealer_hand) and is_natural(player_hand):
+            print("\n>>> Both have Natural...Its a Draw")
 
-            if is_natural(player_hand) and not is_natural(dealer_hand):
-                player_bank += initial_bet * 1.5
-                print("\n>>> Player has Natural...You Win")
-                
+        elif is_natural(player_hand) and not is_natural(dealer_hand):
+            player_bank += initial_bet * 1.5
+            print("\n>>> Player has Natural...You Win")
+
+        else: 
+            dealers_hand_total = dealers_move(dealer_hand, deck)
+
+            if dealer_hand_total > 21:
+                print("\n>>> Dealer Bust...You Win")
+                player_bank += initial_bet 
+
+            elif player_hand_total < 21 and dealer_hand_total < 21:
+                if player_hand_total > dealer_hand_total:
+                    print("\n>>> Player is closer to 21...You Win")
+                    player_bank += initial_bet
+                    
+                else: 
+                    print("\n>>> Dealer is closer to 21...You Lose")
+                    player_bank -= initial_bet
+
         print(f">>> Updated Player Bank: ${player_bank}")
         
         another_round = input("\nAnother Round? ").lower()
@@ -401,7 +401,11 @@ if __name__ == "__main__":
     dealer_ten_natural_player_lose = [Ace_of_Hearts, Seven_of_Hearts, Ace_of_Clubs, Six_of_Diamonds, Ten_of_Spades]
     dealer_ten_natural_draw = [Ace_of_Hearts, Ace_of_Diamonds, Ace_of_Clubs, Queen_of_Diamonds, Ten_of_Spades]
 
-    player_natural = [Ace_of_Hearts, Queen_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Two_of_Spades]
+    player_natural_dealer_17 = [Ace_of_Hearts, Queen_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Ten_of_Spades]
+    player_natural_dealer_below_17 = [Ace_of_Hearts, Queen_of_Hearts, Two_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Five_of_Hearts]
+    both_natural = [Ace_of_Hearts, Queen_of_Hearts, Ace_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Jack_of_Hearts]
+    
+    
 
     player_hit_soft_hand = [Ace_of_Hearts, Seven_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds]
     player_hit_equal_21 = [Ace_of_Hearts, Seven_of_Spades, Four_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
@@ -413,5 +417,5 @@ if __name__ == "__main__":
     double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
     double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
 
-    play_game(dealer_ten_natural_player_lose)
+    play_game(both_natural)
 
