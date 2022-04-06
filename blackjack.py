@@ -105,12 +105,12 @@ def calculate_total(hand):
     total = 0
 
     for card in hand:
-       total += get_value(card)
+        total += get_value(card)
 
-    rank = card[0]
-
-    if rank == Ace and total > 21:
-        total -= 10
+        rank = card[0]
+    
+        if rank == Ace and total > 21:
+            total -= 10
     
     # if trace: print(f"hand total: {total}")
     
@@ -270,8 +270,7 @@ def play_game(deck=None, shuffle=False):
                                 if trace: print("soft hand")
                                 player_hand_total -= 10
                     
-                            print(f"updated player hand:")
-                            print(print_hand(player_hand))
+                            print(f"updated player hand: {print_hand(player_hand)}")
                             print(f"\nupdated player hand total: {player_hand_total}") 
                             print(f"dealer card1 value: {get_value(dealer_hand[1])}") 
                     
@@ -291,6 +290,8 @@ def play_game(deck=None, shuffle=False):
                             break
     
                         break
+
+                    break
             
                     # if first_option == "s":
                     #     if trace: print("player elected to split pair")
@@ -354,6 +355,10 @@ def play_game(deck=None, shuffle=False):
                 player_bank += initial_bet * 1.5
                 print("\n>>> Player has Natural...You Win")
 
+            elif player_hand_total == 21:
+                print("\n>>> Player has 21...You Win")
+                player_bank += initial_bet * 2
+
             elif dealer_hand_total > 21:
                 print("\n>>> Dealer Bust...You Win")
                 player_bank += initial_bet 
@@ -405,9 +410,7 @@ if __name__ == "__main__":
     player_natural_dealer_below_17 = [Ace_of_Hearts, Queen_of_Hearts, Two_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Five_of_Hearts]
     both_natural = [Ace_of_Hearts, Queen_of_Hearts, Ace_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Jack_of_Hearts]
     
-    
-
-    player_hit_soft_hand = [Ace_of_Hearts, Seven_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds]
+    player_hit_soft_hand = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
     player_hit_equal_21 = [Ace_of_Hearts, Seven_of_Spades, Four_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
     player_hit_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds]
     player_hit_below_21 = [Ace_of_Hearts, Five_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds]
@@ -417,5 +420,5 @@ if __name__ == "__main__":
     double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
     double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
 
-    play_game(both_natural)
+    play_game(player_hit_soft_hand)
 
