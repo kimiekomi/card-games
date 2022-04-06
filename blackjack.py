@@ -126,8 +126,7 @@ def is_natural(hand):
 def dealers_move(hand, card_deck):
     if debug: print("called dealers_move()")
 
-    print(f"dealer hand revealed:")
-    print(print_hand(hand))
+    print(f"dealer hand revealed: {print_hand(hand)}")
     
     dealer_hand_total = calculate_total(hand)
 
@@ -230,30 +229,23 @@ def play_game(deck=None, shuffle=False):
                         break
     
                     print(f"insurance bet: ${insurance_bet}")
-                    print(f"\ndealer hand revealed: {print_hand(dealer_hand)}")
                         
                     if is_natural(dealer_hand):
+                        player_bank += ((insurance_bet * 2) + insurance_bet)
+                        print("\n>>> You win insurance bet")
                         break
     
                     player_bank -= insurance_bet
                     print("\n>>> Dealer does NOT have Natural")
                     print(">>> You lose insurance bet")
     
-                    print(f"Updated Player Bank: ${player_bank}")
+                    print(f">>> Updated Player Bank: ${player_bank}\n")
                 
             if get_value(dealer_hand[1]) == 10 and dealer_hand_total == 21:
-                print(f"dealer hand revealed: {print_hand(dealer_hand)}")
-                
-                if not is_natural(player_hand):
-                    print("\n>>> Dealer has Natural...You Lose")
-                    player_bank -= initial_bet
-    
-                else:
-                    print("\n>>> Both have Natural...Its a Draw")
+                break
     
             if player_hand_total == 21:
-                if not is_natural(dealer_hand):
-                    player_bank += initial_bet * 1.5
+                break
     
             else:
                 while True:
@@ -344,6 +336,8 @@ def play_game(deck=None, shuffle=False):
                     #     break
 
         # game over logic
+        dealers_hand_total = dealers_move(dealer_hand, deck)
+        
         if player_hand_total > 21:
             print("\n>>> Player Bust...You Lose")
             player_bank -= initial_bet
@@ -362,18 +356,16 @@ def play_game(deck=None, shuffle=False):
                 player_bank -= initial_bet
 
         else:
-            dealers_hand_total = dealers_move(dealer_hand, deck)
-
             if is_natural(dealer_hand) and not is_natural(player_hand):
-                player_bank += ((insurance_bet * 2) + insurance_bet)
                 player_bank -= initial_bet
-                print("\n>>> You win insurance bet")
-                print(">>> Dealer has Natural...You Lose")
+                print("\n>>> Dealer has Natural...You Lose")
 
             if is_natural(dealer_hand) and is_natural(player_hand):
-                player_bank += ((insurance_bet * 2) + insurance_bet)
-                print("\n>>> You win insurance bet")
-                print(">>> Both have Natural...Its a Draw")
+                print("\n>>> Both have Natural...Its a Draw")
+
+            if is_natural(player_hand) and not is_natural(dealer_hand):
+                player_bank += initial_bet * 1.5
+                print("\n>>> Player has Natural...You Win")
                 
         print(f">>> Updated Player Bank: ${player_bank}")
         
@@ -402,7 +394,8 @@ def play_game(deck=None, shuffle=False):
 
 if __name__ == "__main__":
     insurance_dealer_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Jack_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
-    insurance_no_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Four_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
+    insurance_neither_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Four_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
+    insurance_player_blackjack = [Ace_of_Hearts, Ten_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Ace_of_Spades]
     insurance_both_blackjack = [Ace_of_Hearts, Queen_of_Hearts, Jack_of_Clubs, Ace_of_Diamonds, Ace_of_Spades]
 
     dealer_ten_natural_player_lose = [Ace_of_Hearts, Seven_of_Hearts, Ace_of_Clubs, Six_of_Diamonds, Ten_of_Spades]
@@ -420,5 +413,5 @@ if __name__ == "__main__":
     double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
     double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
 
-    play_game(insurance_dealer_blackjack)
+    play_game(dealer_ten_natural_player_lose)
 
