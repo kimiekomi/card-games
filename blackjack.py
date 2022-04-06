@@ -338,6 +338,8 @@ def play_game(deck=None, shuffle=False):
                     #     self.surrender()
                     #     break
 
+                break
+
         # game over logic
         if player_hand_total > 21:
             print("\n>>> Player Bust...You Lose")
@@ -416,6 +418,8 @@ if __name__ == "__main__":
     player_hit_reg_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Three_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
     player_hit_no_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Ten_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
     player_hit_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds]
+    player_hit_twice_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Two_of_Diamonds, Nine_of_Spades]
+    
     player_hit_below_21 = [Ace_of_Hearts, Five_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds]
 
     double_player_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds, Five_of_Clubs]
@@ -423,5 +427,5 @@ if __name__ == "__main__":
     double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
     double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
 
-    play_game(player_hit_no_ace_21)
+    play_game(player_hit_twice_bust)
 
