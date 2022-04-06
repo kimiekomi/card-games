@@ -216,7 +216,7 @@ def play_game(deck=None, shuffle=False):
                 while True:
                     print(f"initial bet: ${initial_bet}")
                     try:
-                        insurance_bet = int(input("\nEnter insurance amount: $"))
+                        insurance_bet = int(input("\nEnter insurance amount: $ ") or (initial_bet/2))
                 
                         if insurance_bet > (initial_bet/2):
                             print("> may only bet up to HALF the initial bet")
@@ -228,7 +228,7 @@ def play_game(deck=None, shuffle=False):
 
                     break
 
-                print(f"dealer hand revealed: {print_hand(hand)}")
+                print(f"dealer hand revealed: {print_hand(dealer_hand)}")
                     
                 if is_natural(dealer_hand):
                     player_bank += ((insurance_bet * 2) + insurance_bet)
@@ -248,7 +248,7 @@ def play_game(deck=None, shuffle=False):
                 print("\n>>> Dealer has Natural...You Lose")
                 player_bank -= insurance_bet
 
-            print("\n>>> Both have Natural...Its a Draw")
+            print("\n>>> Both have Natural...You Lose")
 
         if player_hand_total == 21:
             if not is_natural(dealer_hand):
@@ -388,5 +388,24 @@ def play_game(deck=None, shuffle=False):
 
 
 if __name__ == "__main__":
-    play_game()
+    insurance_dealer_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Jack_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
+    insurance_no_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Four_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
+    insurance_both_blackjack = [Ace_of_Hearts, Queen_of_Hearts, Jack_of_Clubs, Ace_of_Diamonds, Ace_of_Spades]
+
+    dealer_ten_natural_player_lose = [Ace_of_Hearts, Seven_of_Hearts, Ace_of_Clubs, Six_of_Diamonds, Ten_of_Spades]
+    dealer_ten_natural_draw = [Ace_of_Hearts, Ace_of_Diamonds, Ace_of_Clubs, Queen_of_Diamonds, Ten_of_Spades]
+
+    player_natural = [Ace_of_Hearts, Queen_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Two_of_Spades]
+
+    player_hit_soft_hand = [Ace_of_Hearts, Seven_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds]
+    player_hit_equal_21 = [Ace_of_Hearts, Seven_of_Spades, Four_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
+    player_hit_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds]
+    player_hit_below_21 = [Ace_of_Hearts, Five_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds]
+
+    double_player_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds, Five_of_Clubs]
+    double_dealer_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Ten_of_Diamonds]
+    double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
+    double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
+
+    play_game(insurance_dealer_blackjack)
 
