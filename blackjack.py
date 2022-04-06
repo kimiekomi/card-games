@@ -29,7 +29,7 @@ def build_deck():
         for rank in ranks:
             deck.append((rank, suit))
 
-    if trace: print(f"\ngame deck({len(deck)}): {deck}")
+    # if trace: print(f"\ngame deck({len(deck)}): {deck}")
 
     return deck
 
@@ -67,18 +67,17 @@ def print_card(card):
     elif suit == Diamonds:
         suit = "Diamonds"
 
-    if trace: print(f"{rank} of {suit}")
+    # if trace: print(f"{rank} of {suit}")
         
     return f"{rank} of {suit}"
 
 
 def print_hand(hand):
-    print(f"print_hand({hand}) called")
 
     results = []
+
     for card in hand:
         result = print_card(card)
-        print (result)
         results.append(result)
 
     return results
@@ -95,7 +94,7 @@ def get_value(card):
     if rank == Jack or rank == Queen or rank == King:
         return 10
 
-    if trace: print(f"rank: {rank}")
+    # if trace: print(f"rank: {rank}")
         
     return rank
 
@@ -113,7 +112,7 @@ def calculate_total(hand):
     if rank == Ace and total > 21:
         total -= 10
     
-    if trace: print(f"hand total: {total}")
+    # if trace: print(f"hand total: {total}")
     
     return total
 
@@ -139,7 +138,8 @@ def dealers_move(hand, card_deck):
         hand.append(dealer_card)
         dealer_hand_total += get_value(dealer_card)
         
-        if get_value(dealer_card) == 11 and dealer_hand_total >= 17:
+        if get_value(dealer_card) == 11 and dealer_hand_total >= 21:
+            dealer_hand_total -= 10
             break
 
     if len(hand) > 2:
@@ -388,7 +388,5 @@ def play_game(deck=None, shuffle=False):
 
 
 if __name__ == "__main__":
-    # play_game()
-
-    print(print_hand([Two_of_Spades, Four_of_Clubs, Six_of_Hearts, Eight_of_Diamonds]))
+    play_game()
 

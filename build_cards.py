@@ -81,6 +81,7 @@ def build_cards():
     suits = [Spades, Clubs, Hearts, Diamonds]        
     ranks = [Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King]
 
+    deck = []
     Card_Deck = []
 
     file = open("cards.py", "a")
@@ -88,14 +89,16 @@ def build_cards():
     for suit in suits:
         for rank in ranks:
             card = (rank, suit)
+            deck.append(card)
             Card_Deck.append(print_card(card))
 
             file.write(f"{print_card(card)} = {card}\n")
+    
+    file.write(f"Card_Deck = {Card_Deck}")
 
-    file.write(f"\nCard_Deck = {Card_Deck}")
     file.close()
 
-    if trace: print(f"\ngame deck({len(deck)}): {deck}")
+    # if trace: print(f"\ngame deck({len(Card_Deck)}): {Card_Deck}")
 
     return deck
 
