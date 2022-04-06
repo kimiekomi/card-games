@@ -340,21 +340,21 @@ def play_game(deck=None, shuffle=False):
             print("\n>>> Player Bust...You Lose")
             player_bank -= initial_bet
 
-        elif is_natural(dealer_hand) and not is_natural(player_hand):
-                player_bank -= initial_bet
-                print("\n>>> Dealer has Natural...You Lose")
-
-        elif is_natural(dealer_hand) and is_natural(player_hand):
-            print("\n>>> Both have Natural...Its a Draw")
-
-        elif is_natural(player_hand) and not is_natural(dealer_hand):
-            player_bank += initial_bet * 1.5
-            print("\n>>> Player has Natural...You Win")
-
         else: 
             dealers_hand_total = dealers_move(dealer_hand, deck)
 
-            if dealer_hand_total > 21:
+            if is_natural(dealer_hand) and not is_natural(player_hand):
+                    player_bank -= initial_bet
+                    print("\n>>> Dealer has Natural...You Lose")
+    
+            elif is_natural(dealer_hand) and is_natural(player_hand):
+                print("\n>>> Both have Natural...Its a Draw")
+    
+            elif is_natural(player_hand) and not is_natural(dealer_hand):
+                player_bank += initial_bet * 1.5
+                print("\n>>> Player has Natural...You Win")
+
+            elif dealer_hand_total > 21:
                 print("\n>>> Dealer Bust...You Win")
                 player_bank += initial_bet 
 
