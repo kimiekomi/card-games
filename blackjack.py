@@ -2,22 +2,13 @@
 
 import random
 import os
+
 from cards import *
 
 debug = False
 trace = False
 
-Ace = 1
-Jack = 11
-Queen = 12
-King = 13
-
-Spades = 1
-Clubs = 2
-Hearts = 3
-Diamonds = 4
-
-def build_deck():
+def build_deck(shuffle=False):
     if debug: print("build_deck()")
 
     suits = [Spades, Clubs, Hearts, Diamonds]        
@@ -30,6 +21,9 @@ def build_deck():
             deck.append((rank, suit))
 
     # if trace: print(f"\ngame deck({len(deck)}): {deck}")
+
+    if shuffle == True:
+        random.shuffle(deck)
 
     return deck
 
@@ -99,13 +93,17 @@ def calculate_total(hand):
     if debug: print("calculate_total()")
 
     total = 0
+    ace_count = 0
 
     for card in hand:
         total += get_value(card)
 
         rank = card[0]
     
-        if rank == Ace and total > 21:
+        if rank == Ace:
+            ace_count += 1
+            
+    if ace_count >0 and total > 21:
             total -= 10
     
     # if trace: print(f"hand total: {total}")
@@ -119,8 +117,8 @@ def is_natural(hand):
     return len(hand) == 2 and calculate_total(hand) == 21
 
 
-def dealers_move(hand, card_deck):
-    if debug: print("dealers_move()")
+def dealer_move(hand, card_deck):
+    if debug: print("dealer_move()")
 
     print("\ndealer hand revealed:")
     print_hand(hand)
@@ -140,14 +138,14 @@ def dealers_move(hand, card_deck):
 
     if len(hand) > 2:
         print("\nupdated dealer hand:")
-        print(print_hand(hand))
+        print_hand(hand)
     
     print(f"\nupdated dealer hand total: {dealer_hand_total}")
 
     return dealer_hand_total
 
 
-def play_game(deck=None, shuffle=False):
+def play_game(deck=None):
     if debug: print(f"\nplay_game()")
 
     initial_bet = 0
@@ -156,9 +154,6 @@ def play_game(deck=None, shuffle=False):
     if deck == None:
         deck = build_deck()
         
-        if shuffle == True:
-            random.shuffle(deck)
-
     # burn card
     deck.pop(0)
 
@@ -176,6 +171,7 @@ def play_game(deck=None, shuffle=False):
         print(f"\nPlayer Bank: ${player_bank}\n")
 
         while True:
+
             try:
                 initial_bet = int(input("Enter initial bet: $ ") or 10)
     
@@ -188,6 +184,7 @@ def play_game(deck=None, shuffle=False):
         print(f"initial bet: ${initial_bet}")
         
         for i in range(2):
+
             if len(deck) > 0:
                 player_hand.append(deck.pop(0))
                 dealer_hand.append(deck.pop(0))
@@ -204,11 +201,14 @@ def play_game(deck=None, shuffle=False):
         player_hand_total = calculate_total(player_hand)
         dealer_hand_total = calculate_total(dealer_hand)
 
-        print(f"\nplayer hand total: {player_hand_total}") 
+        print(f"\nplayer hand total: {player_hand_total}")
+
         if trace: print(f"dealer hand total: {dealer_hand_total}")
+        
         print(f"dealer card2 value: {get_value(dealer_hand[1])}") 
 
-        while True: 
+        while True:
+
             if get_value(dealer_hand[1]) == 11:
                 want_insurance = input("\nDo you want insurance? ").lower()
     
@@ -217,6 +217,7 @@ def play_game(deck=None, shuffle=False):
                     
                     while True:
                         print(f"initial bet: ${initial_bet}")
+
                         try:
                             insurance_bet = int(input("\nEnter insurance amount: $ ") or (initial_bet/2))
                     
@@ -255,7 +256,6 @@ def play_game(deck=None, shuffle=False):
                 
                     if first_option == "s":
                         if trace: print("player elected to stand")
-                            
                         break
             
                     if first_option == "h":
@@ -296,7 +296,7 @@ def play_game(deck=None, shuffle=False):
 
                     break
             
-                    # if first_option == "s":
+                    # if first_option == "p":
                     #     if trace: print("player elected to split pair")
                 
                     #     if self.player.hand[0].rank == self.player.hand[1].rank:
@@ -308,9 +308,11 @@ def play_game(deck=None, shuffle=False):
                 
                     if first_option == "d":
                         if trace: print("player elected to double down")
+
+                        player_hand_total = calculate_total(player_hand)
     
                         if len(player_hand) == 2:
-                            if calculate_total(player_hand) == 9 or calculate_total(player_hand) == 10 or calculate_total(player_hand) == 11:
+                            if player_hand_total == 9 or player_hand_total == 10 or player_hand_total == 11:
                                 initial_bet += initial_bet
                                 player_bank -= (initial_bet/2)
             
@@ -346,7 +348,7 @@ def play_game(deck=None, shuffle=False):
             player_bank -= initial_bet
 
         else: 
-            dealers_hand_total = dealers_move(dealer_hand, deck)
+            dealer_hand_total = dealer_move(dealer_hand, deck)
 
             if is_natural(dealer_hand) and not is_natural(player_hand):
                     player_bank -= initial_bet
@@ -402,30 +404,5 @@ def play_game(deck=None, shuffle=False):
 
 
 if __name__ == "__main__":
-    insurance_dealer_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Jack_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
-    insurance_neither_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Four_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
-    insurance_player_blackjack = [Ace_of_Hearts, Ten_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Ace_of_Spades]
-    insurance_both_blackjack = [Ace_of_Hearts, Queen_of_Hearts, Jack_of_Clubs, Ace_of_Diamonds, Ace_of_Spades]
-
-    dealer_ten_natural_player_lose = [Ace_of_Hearts, Seven_of_Hearts, Ace_of_Clubs, Six_of_Diamonds, Ten_of_Spades]
-    dealer_ten_natural_draw = [Ace_of_Hearts, Ace_of_Diamonds, Ace_of_Clubs, Queen_of_Diamonds, Ten_of_Spades]
-
-    player_natural_dealer_17 = [Ace_of_Hearts, Queen_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Ten_of_Spades]
-    player_natural_dealer_below_17 = [Ace_of_Hearts, Queen_of_Hearts, Two_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Five_of_Hearts]
-    both_natural = [Ace_of_Hearts, Queen_of_Hearts, Ace_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Jack_of_Hearts]
+    play_game()
     
-    player_hit_soft_hand_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
-    player_hit_reg_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Three_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
-    player_hit_no_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Ten_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
-    player_hit_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds]
-    player_hit_twice_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Two_of_Diamonds, Nine_of_Spades]
-    
-    player_hit_below_21 = [Ace_of_Hearts, Five_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds]
-
-    double_player_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds, Five_of_Clubs]
-    double_dealer_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Ten_of_Diamonds]
-    double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
-    double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
-
-    play_game(player_hit_twice_bust)
-

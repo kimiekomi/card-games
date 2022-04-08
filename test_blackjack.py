@@ -1,64 +1,44 @@
 #! /usr/bin/env python3
 
-import unittest
 from blackjack import *
 from cards import *
 
-sample_hand = [Two_of_Spades, Four_of_Clubs, Six_of_Hearts, Eight_of_Diamonds]
-sample_hand2 = [Ace_of_Spades, Jack_of_Clubs, Queen_of_Hearts, King_of_Diamonds]
 
-natural_true = [Ace_of_Spades, Jack_of_Clubs]
-natural_false = [Four_of_Clubs, Jack_of_Clubs]
+insurance_dealer_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Jack_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
+insurance_neither_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Four_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
+insurance_player_blackjack = [Ace_of_Hearts, Ten_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Ace_of_Spades]
+insurance_both_blackjack = [Ace_of_Hearts, Queen_of_Hearts, Jack_of_Clubs, Ace_of_Diamonds, Ace_of_Spades]
 
-sample_dealer_deck = [King_of_Diamonds, Seven_of_Diamonds, Eight_of_Hearts, Nine_of_Clubs]
-dealer_deck_below_17 = [Six_of_Spades, Three_of_Clubs, Five_of_Hearts, Seven_of_Diamonds]
-dealer_deck_soft_17 = [Two_of_Hearts, Seven_of_Diamonds, Queen_of_Hearts, Three_of_Clubs]
-dealer_deck_ace_11 = [Ace_of_Spades, Four_of_Clubs, Six_of_Hearts, Eight_of_Diamonds]
-dealer_deck_ace_1 = [Ace_of_Spades, Jack_of_Clubs, Queen_of_Hearts, King_of_Diamonds]
+dealer_ten_natural_player_lose = [Ace_of_Hearts, Seven_of_Hearts, Ace_of_Clubs, Six_of_Diamonds, Ten_of_Spades]
+dealer_ten_natural_draw = [Ace_of_Hearts, Ace_of_Diamonds, Ace_of_Clubs, Queen_of_Diamonds, Ten_of_Spades]
 
-dealer_below_17 = [Ace_of_Hearts, Two_of_Clubs]
-dealer_above_17 = [Jack_of_Clubs, Queen_of_Hearts]
-dealer_hard_17 = [King_of_Diamonds, Seven_of_Diamonds]
-dealer_soft_17 = [Eight_of_Hearts, Seven_of_Diamonds]
-dealer_ace_11 = [Six_of_Hearts, Two_of_Clubs]
-dealer_ace_1 = [Seven_of_Hearts, Nine_of_Clubs]
+player_natural_dealer_17 = [Ace_of_Hearts, Queen_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Ten_of_Spades]
+player_natural_dealer_below_17 = [Ace_of_Hearts, Queen_of_Hearts, Two_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Five_of_Hearts]
+both_natural = [Ace_of_Hearts, Queen_of_Hearts, Ace_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Jack_of_Hearts]
 
-class TestBlackJack(unittest.TestCase):
+player_hit_soft_hand_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
+player_hit_reg_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Three_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
+player_hit_no_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Ten_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
+player_hit_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds]
+player_hit_twice_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Two_of_Diamonds, Nine_of_Spades]
+player_hit_hit_stand_dealer_win = [Ace_of_Hearts, Five_of_Spades, Ten_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds]
+player_hit_stand_player_win = [Ace_of_Hearts, Five_of_Spades, Ten_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
+player_stand_dealer_bust = [Ace_of_Hearts, Ten_of_Spades, Six_of_Clubs, Ten_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
+
+
+double_player_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds, Five_of_Clubs]
+double_dealer_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Ten_of_Diamonds]
+double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
+double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
+
+Tests = [
+    ("insurance dealer blackjack", insurance_dealer_blackjack),
+    ("insurance neither blackjack", insurance_neither_blackjack)
     
-    def test_build_deck(self):
-        print("testing build_deck()")
-        self.assertEqual(len(build_deck()), 52)
+]
 
-    
-    def test_get_value(self):
-        print("testing get_value()")
-        self.assertEqual(get_value(Ace_of_Spades), 11)
-        self.assertEqual(get_value(Eight_of_Hearts), 8)
-
-
-    def test_calculate_total(self):
-        print("testing calculate_total()")
-        self.assertEqual(calculate_total(sample_hand), 20)
-        self.assertEqual(calculate_total(sample_hand2), 41)
-
-
-    def test_is_natural(self):
-        print("testing is_natural()")
-        self.assertEqual(is_natural(natural_true), True)
-        self.assertEqual(is_natural(natural_false), False)
-
-
-    def test_dealers_move(self):
-        print("testing dealers_move()")
-        self.assertEqual(dealers_move(dealer_below_17, dealer_deck_below_17), 19)
-        self.assertEqual(dealers_move(dealer_above_17, sample_dealer_deck), 20)
-        self.assertEqual(dealers_move(dealer_hard_17, sample_dealer_deck), 17)
-        self.assertEqual(dealers_move(dealer_soft_17, dealer_deck_soft_17), 17)
-        self.assertEqual(dealers_move(dealer_ace_11, dealer_deck_ace_11), 19)
-        self.assertEqual(dealers_move(dealer_ace_1, dealer_deck_ace_1), 17)
-        
 
 if __name__ == "__main__":
-    unittest.main()
+    play_game(insurance_dealer_blackjack)
+    # fix double down...
 
-    

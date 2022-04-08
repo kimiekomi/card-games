@@ -1,3 +1,26 @@
+
+Spades = 1
+Clubs = 2
+Hearts = 3
+Diamonds = 4
+
+Suits = [Spades, Clubs, Hearts, Diamonds]
+
+Ace = 1
+Jack = 11
+Queen = 12
+King = 13
+
+Ranks = [Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King]
+
+Rank_Index = 0
+Suit_Index = 1
+
+Suit_Map = {Spades: "Spades", Clubs: "Clubs", Hearts: "Hearts", Diamonds: "Diamonds"}
+Suit_Symbols = ['♠', '♣', '♥', '♦']
+
+Rank_Map = {1: "Ace", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine", 10: "Ten", 11: "Jack", 12: "Queen", 13: "King"}
+
 Ace_of_Spades = (1, 1)
 Two_of_Spades = (2, 1)
 Three_of_Spades = (3, 1)
