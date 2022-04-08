@@ -8,6 +8,250 @@ from cards import *
 debug = False
 trace = False
 
+def play(deck=None):
+    if debug: print(f"\nplay()")
+
+    initial_bet = 0
+    player_bank = 0
+
+    if deck == None:
+        deck = build_deck()
+        
+    # burn card
+    deck.pop(0)
+
+    # if trace: print(f"\ngame deck({len(deck)}): {deck}")
+
+    while True:
+        player_hand = []
+        dealer_hand = []
+
+        player_hand_total = 0
+        dealer_hand_total = 0
+
+        if trace: print(f"\nplayer hand({len(player_hand)}), dealer hand({len(dealer_hand)})\nplayer total: {player_hand_total}, dealer total: {dealer_hand_total}")
+            
+        print(f"\nPlayer Bank: ${player_bank}\n")
+
+        while True:
+
+            try:
+                initial_bet = float(input("Enter initial bet: $ ") or 10)
+    
+            except ValueError:
+                print("> Error: Enter a valid number\n")
+                continue
+
+            break
+
+        print(f"initial bet: ${initial_bet}")
+        
+        for i in range(2):
+
+            if len(deck) > 0:
+                player_hand.append(deck.pop(0))
+                dealer_hand.append(deck.pop(0))
+
+            else: 
+                raise Exception("Handle later...need at least 4 cards")
+
+        print("\nplayer hand:")
+        print_hand(player_hand)
+        print("\ndealer hand:")
+        print("___ of ___")
+        print_card(dealer_hand[1])
+        
+        player_hand_total = total(player_hand)
+        dealer_hand_total = total(dealer_hand)
+
+        print(f"\nplayer hand total: {player_hand_total}")
+
+        if trace: print(f"dealer hand total: {dealer_hand_total}")
+        
+        print(f"dealer card2 value: {value(dealer_hand[1])}") 
+
+        while True:
+
+            if get_value(dealer_hand[1]) == 11:
+                want_insurance = input("\nDo you want insurance? ").lower()
+    
+                if want_insurance == "y":
+                    if trace: print("player wants insurance")
+                    
+                    while True:
+                        print(f"initial bet: ${initial_bet}")
+
+                        try:
+                            insurance_bet = float(input("\nEnter insurance amount: $ ") or (initial_bet/2))
+                    
+                            if insurance_bet > (initial_bet/2):
+                                print("> may only bet up to HALF the initial bet")
+                                continue
+    
+                        except:
+                            print("Enter a valid number")
+                            continue
+    
+                        break
+    
+                    print(f"insurance bet: ${insurance_bet}")
+                        
+                    if is_blackjack(dealer_hand):
+                        player_bank += ((insurance_bet * 2) + insurance_bet)
+                        print("\n>>> You win insurance bet")
+                        break
+    
+                    player_bank -= insurance_bet
+                    print("\n>>> Dealer does NOT have Natural")
+                    print(">>> You lose insurance bet")
+    
+                    print(f">>> Updated Player Bank: ${player_bank}\n")
+                
+            if value(dealer_hand[1]) == 10 and dealer_hand_total == 21:
+                break
+    
+            if player_hand_total == 21:
+                break
+    
+            else:
+                while True:
+                    first_option = input("\nEnter first move (s-stand, h-hit, d-double): ").lower()
+                
+                    if first_option == "s":
+                        if trace: print("player elected to stand")
+                        break
+            
+                    if first_option == "h":
+                        if trace: print("player elected to hit")
+        
+                        while True:
+                            hit_card = deck.pop(0)
+                            hit_card_rank = hit_card[0]
+                            player_hand.append(hit_card)
+                            
+                            player_hand_total = total(player_hand)
+                        
+                            if hit_card_rank == Ace and player_hand_total > 21:
+                                if trace: print("soft hand")
+                                player_hand_total -= 10
+                    
+                            print("\nupdated player hand:")
+                            print_hand(player_hand)
+                            print(f"\nupdated player hand total: {player_hand_total}") 
+                            print(f"dealer card1 value: {value(dealer_hand[1])}") 
+                    
+                            if player_hand_total == 21: 
+                                break
+                    
+                            if player_hand_total > 21: 
+                                break
+                    
+                            next_option = input("\nEnter next move (s-stand, h-hit): ").lower()
+                    
+                            if next_option == "h":
+                                continue
+                    
+                            if trace: print("player elected to stand")
+                    
+                            break
+    
+                        break
+
+                    break
+            
+                    # if first_option == "p":
+                    #     if trace: print("player elected to split pair")
+                
+                    #     if self.player.hand[0].rank == self.player.hand[1].rank:
+                    #         self.split()
+                    #         break
+                
+                    #     print("> equal rank cards...unable split")
+                    #     continue
+                
+                    if first_option == "d":
+                        if trace: print("player elected to double down")
+
+                        player_hand_total = total(player_hand)
+    
+                        if len(player_hand) == 2:
+                            if player_hand_total == 9 or player_hand_total == 10 or player_hand_total == 11:
+                                initial_bet += initial_bet
+                                player_bank -= (initial_bet/2)
+            
+                                print(f"Updated Player Bank: ${player_bank}")
+            
+                                hit_card = deck.pop(0)
+                                player_hand.append(hit_card)
+                                    
+                                player_hand_total += value(hit_card)
+                            
+                                print("\nupdated player hand:")
+                                print_hand(player_hand)
+                                print(f"updated player hand total: {player_hand_total}") 
+                                break
+            
+                            print("> cards total NOT 9, 10, or 11...unable double")
+                            continue
+    
+                        print("> unable double after initial move")
+                        continue
+            
+                    # elif first_option != "t" and first_option != "s" and first_option != "d" and first_option != "h":
+                    #     if trace: print("player elected to surrender")
+                            
+                    #     self.surrender()
+                    #     break
+
+                break
+
+        # game over logic
+        if player_hand_total > 21:
+            print("\n>>> Player Bust...You Lose")
+            player_bank -= initial_bet
+
+        else: 
+            dealer_hand_total = dealer_move(dealer_hand, deck)
+
+            if is_blackjack(dealer_hand) and not is_blackjack(player_hand):
+                    player_bank -= initial_bet
+                    print("\n>>> Dealer has Natural...You Lose")
+    
+            elif is_blackjack(dealer_hand) and is_blackjack(player_hand):
+                print("\n>>> Both have Natural...Its a Draw")
+    
+            elif is_blackjack(player_hand) and not is_blackjack(dealer_hand):
+                player_bank += initial_bet * 1.5
+                print("\n>>> Player has Natural...You Win")
+
+            elif player_hand_total == 21:
+                print("\n>>> Player has 21...You Win")
+                player_bank += initial_bet
+
+            elif dealer_hand_total > 21:
+                print("\n>>> Dealer Bust...You Win")
+                player_bank += initial_bet 
+
+            elif player_hand_total < 21 and dealer_hand_total < 21:
+                if player_hand_total > dealer_hand_total:
+                    print("\n>>> Player is closer to 21...You Win")
+                    player_bank += initial_bet
+                    
+                else: 
+                    print("\n>>> Dealer is closer to 21...You Lose")
+                    player_bank -= initial_bet
+
+        print(f">>> Updated Player Bank: ${player_bank}")
+        
+        another_round = input("\nAnother Round? ").lower()
+
+        if another_round[0] != "y":
+            print("\n>>> Goodbye...\n")
+            break
+
+        os.system("clear")
+        
+
 def build_deck(shuffle=False):
     if debug: print("build_deck()")
 
@@ -73,8 +317,8 @@ def print_hand(hand):
         print_card(card)
 
         
-def get_value(card):
-    if debug: print("get_value()")
+def value(card):
+    if debug: print("value()")
 
     rank = card[0]
     
@@ -89,21 +333,21 @@ def get_value(card):
     return rank
 
 
-def calculate_total(hand):
-    if debug: print("calculate_total()")
+def total(hand):
+    if debug: print("total()")
 
     total = 0
     ace_count = 0
 
     for card in hand:
-        total += get_value(card)
+        total += value(card)
 
         rank = card[0]
     
         if rank == Ace:
             ace_count += 1
             
-    if ace_count >0 and total > 21:
+    if ace_count > 0 and total > 21:
             total -= 10
     
     # if trace: print(f"hand total: {total}")
@@ -111,10 +355,10 @@ def calculate_total(hand):
     return total
 
 
-def is_natural(hand):
-    if debug: print("is_natural()")
+def is_blackjack(hand):
+    if debug: print("is_blackjack()")
 
-    return len(hand) == 2 and calculate_total(hand) == 21
+    return len(hand) == 2 and total(hand) == 21
 
 
 def dealer_move(hand, card_deck):
@@ -123,16 +367,16 @@ def dealer_move(hand, card_deck):
     print("\ndealer hand revealed:")
     print_hand(hand)
     
-    dealer_hand_total = calculate_total(hand)
+    dealer_hand_total = total(hand)
 
     if trace: print(f"dealer hand total: {dealer_hand_total}")
          
     while dealer_hand_total < 17:
         dealer_card = card_deck.pop(0)
         hand.append(dealer_card)
-        dealer_hand_total += get_value(dealer_card)
+        dealer_hand_total += value(dealer_card)
         
-        if get_value(dealer_card) == 11 and dealer_hand_total >= 21:
+        if value(dealer_card) == 11 and dealer_hand_total >= 21:
             dealer_hand_total -= 10
             break
 
@@ -143,250 +387,6 @@ def dealer_move(hand, card_deck):
     print(f"\nupdated dealer hand total: {dealer_hand_total}")
 
     return dealer_hand_total
-
-
-def play_game(deck=None):
-    if debug: print(f"\nplay_game()")
-
-    initial_bet = 0
-    player_bank = 0
-
-    if deck == None:
-        deck = build_deck()
-        
-    # burn card
-    deck.pop(0)
-
-    # if trace: print(f"\ngame deck({len(deck)}): {deck}")
-
-    while True:
-        player_hand = []
-        dealer_hand = []
-
-        player_hand_total = 0
-        dealer_hand_total = 0
-
-        if trace: print(f"\nplayer hand({len(player_hand)}), dealer hand({len(dealer_hand)})\nplayer total: {player_hand_total}, dealer total: {dealer_hand_total}")
-            
-        print(f"\nPlayer Bank: ${player_bank}\n")
-
-        while True:
-
-            try:
-                initial_bet = int(input("Enter initial bet: $ ") or 10)
-    
-            except ValueError:
-                print("> Error: Enter a valid number\n")
-                continue
-
-            break
-
-        print(f"initial bet: ${initial_bet}")
-        
-        for i in range(2):
-
-            if len(deck) > 0:
-                player_hand.append(deck.pop(0))
-                dealer_hand.append(deck.pop(0))
-
-            else: 
-                raise Exception("Handle later...need at least 4 cards")
-
-        print("\nplayer hand:")
-        print_hand(player_hand)
-        print("\ndealer hand:")
-        print("___ of ___")
-        print_card(dealer_hand[1])
-        
-        player_hand_total = calculate_total(player_hand)
-        dealer_hand_total = calculate_total(dealer_hand)
-
-        print(f"\nplayer hand total: {player_hand_total}")
-
-        if trace: print(f"dealer hand total: {dealer_hand_total}")
-        
-        print(f"dealer card2 value: {get_value(dealer_hand[1])}") 
-
-        while True:
-
-            if get_value(dealer_hand[1]) == 11:
-                want_insurance = input("\nDo you want insurance? ").lower()
-    
-                if want_insurance == "y":
-                    if trace: print("player wants insurance")
-                    
-                    while True:
-                        print(f"initial bet: ${initial_bet}")
-
-                        try:
-                            insurance_bet = int(input("\nEnter insurance amount: $ ") or (initial_bet/2))
-                    
-                            if insurance_bet > (initial_bet/2):
-                                print("> may only bet up to HALF the initial bet")
-                                continue
-    
-                        except:
-                            print("Enter a valid number")
-                            continue
-    
-                        break
-    
-                    print(f"insurance bet: ${insurance_bet}")
-                        
-                    if is_natural(dealer_hand):
-                        player_bank += ((insurance_bet * 2) + insurance_bet)
-                        print("\n>>> You win insurance bet")
-                        break
-    
-                    player_bank -= insurance_bet
-                    print("\n>>> Dealer does NOT have Natural")
-                    print(">>> You lose insurance bet")
-    
-                    print(f">>> Updated Player Bank: ${player_bank}\n")
-                
-            if get_value(dealer_hand[1]) == 10 and dealer_hand_total == 21:
-                break
-    
-            if player_hand_total == 21:
-                break
-    
-            else:
-                while True:
-                    first_option = input("\nEnter first move (s-stand, h-hit, d-double): ").lower()
-                
-                    if first_option == "s":
-                        if trace: print("player elected to stand")
-                        break
-            
-                    if first_option == "h":
-                        if trace: print("player elected to hit")
-        
-                        while True:
-                            hit_card = deck.pop(0)
-                            hit_card_rank = hit_card[0]
-                            player_hand.append(hit_card)
-                            
-                            player_hand_total = calculate_total(player_hand)
-                        
-                            if hit_card_rank == Ace and player_hand_total > 21:
-                                if trace: print("soft hand")
-                                player_hand_total -= 10
-                    
-                            print("\nupdated player hand:")
-                            print_hand(player_hand)
-                            print(f"\nupdated player hand total: {player_hand_total}") 
-                            print(f"dealer card1 value: {get_value(dealer_hand[1])}") 
-                    
-                            if player_hand_total == 21: 
-                                break
-                    
-                            if player_hand_total > 21: 
-                                break
-                    
-                            next_option = input("\nEnter next move (s-stand, h-hit): ").lower()
-                    
-                            if next_option == "h":
-                                continue
-                    
-                            if trace: print("player elected to stand")
-                    
-                            break
-    
-                        break
-
-                    break
-            
-                    # if first_option == "p":
-                    #     if trace: print("player elected to split pair")
-                
-                    #     if self.player.hand[0].rank == self.player.hand[1].rank:
-                    #         self.split()
-                    #         break
-                
-                    #     print("> equal rank cards...unable split")
-                    #     continue
-                
-                    if first_option == "d":
-                        if trace: print("player elected to double down")
-
-                        player_hand_total = calculate_total(player_hand)
-    
-                        if len(player_hand) == 2:
-                            if player_hand_total == 9 or player_hand_total == 10 or player_hand_total == 11:
-                                initial_bet += initial_bet
-                                player_bank -= (initial_bet/2)
-            
-                                print(f"Updated Player Bank: ${player_bank}")
-            
-                                hit_card = deck.pop(0)
-                                player_hand.append(hit_card)
-                                    
-                                player_hand_total += get_value(hit_card)
-                            
-                                print("\nupdated player hand:")
-                                print_hand(player_hand)
-                                print(f"updated player hand total: {player_hand_total}") 
-                                break
-            
-                            print("> cards total NOT 9, 10, or 11...unable double")
-                            continue
-    
-                        print("> unable double after initial move")
-                        continue
-            
-                    # elif first_option != "t" and first_option != "s" and first_option != "d" and first_option != "h":
-                    #     if trace: print("player elected to surrender")
-                            
-                    #     self.surrender()
-                    #     break
-
-                break
-
-        # game over logic
-        if player_hand_total > 21:
-            print("\n>>> Player Bust...You Lose")
-            player_bank -= initial_bet
-
-        else: 
-            dealer_hand_total = dealer_move(dealer_hand, deck)
-
-            if is_natural(dealer_hand) and not is_natural(player_hand):
-                    player_bank -= initial_bet
-                    print("\n>>> Dealer has Natural...You Lose")
-    
-            elif is_natural(dealer_hand) and is_natural(player_hand):
-                print("\n>>> Both have Natural...Its a Draw")
-    
-            elif is_natural(player_hand) and not is_natural(dealer_hand):
-                player_bank += initial_bet * 1.5
-                print("\n>>> Player has Natural...You Win")
-
-            elif player_hand_total == 21:
-                print("\n>>> Player has 21...You Win")
-                player_bank += initial_bet * 2
-
-            elif dealer_hand_total > 21:
-                print("\n>>> Dealer Bust...You Win")
-                player_bank += initial_bet 
-
-            elif player_hand_total < 21 and dealer_hand_total < 21:
-                if player_hand_total > dealer_hand_total:
-                    print("\n>>> Player is closer to 21...You Win")
-                    player_bank += initial_bet
-                    
-                else: 
-                    print("\n>>> Dealer is closer to 21...You Lose")
-                    player_bank -= initial_bet
-
-        print(f">>> Updated Player Bank: ${player_bank}")
-        
-        another_round = input("\nAnother Round? ").lower()
-
-        if another_round[0] != "y":
-            print("\n>>> Goodbye...\n")
-            break
-
-        os.system("clear")
 
 
 # def split(self):
@@ -404,5 +404,5 @@ def play_game(deck=None):
 
 
 if __name__ == "__main__":
-    play_game()
+    play()
     

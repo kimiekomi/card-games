@@ -9,12 +9,12 @@ insurance_neither_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Four_of_Clubs, Si
 insurance_player_blackjack = [Ace_of_Hearts, Ten_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Ace_of_Spades]
 insurance_both_blackjack = [Ace_of_Hearts, Queen_of_Hearts, Jack_of_Clubs, Ace_of_Diamonds, Ace_of_Spades]
 
-dealer_ten_natural_player_lose = [Ace_of_Hearts, Seven_of_Hearts, Ace_of_Clubs, Six_of_Diamonds, Ten_of_Spades]
-dealer_ten_natural_draw = [Ace_of_Hearts, Ace_of_Diamonds, Ace_of_Clubs, Queen_of_Diamonds, Ten_of_Spades]
+dealer_ten_blackjack_player_lose = [Ace_of_Hearts, Seven_of_Hearts, Ace_of_Clubs, Six_of_Diamonds, Ten_of_Spades]
+dealer_ten_blackjack_draw = [Ace_of_Hearts, Ace_of_Diamonds, Ace_of_Clubs, Queen_of_Diamonds, Ten_of_Spades]
 
-player_natural_dealer_17 = [Ace_of_Hearts, Queen_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Ten_of_Spades]
-player_natural_dealer_below_17 = [Ace_of_Hearts, Queen_of_Hearts, Two_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Five_of_Hearts]
-both_natural = [Ace_of_Hearts, Queen_of_Hearts, Ace_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Jack_of_Hearts]
+player_blackjack_dealer_17 = [Ace_of_Hearts, Queen_of_Hearts, Seven_of_Clubs, Ace_of_Diamonds, Ten_of_Spades]
+player_blackjack_dealer_below_17 = [Ace_of_Hearts, Queen_of_Hearts, Two_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Five_of_Hearts]
+both_blackjack = [Ace_of_Hearts, Queen_of_Hearts, Ace_of_Clubs, Ace_of_Diamonds, Ten_of_Spades, Jack_of_Hearts]
 
 player_hit_soft_hand_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
 player_hit_reg_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Three_of_Diamonds, Eight_of_Hearts, Ace_of_Diamonds, Seven_of_Hearts]
@@ -39,6 +39,6 @@ Tests = [
 
 
 if __name__ == "__main__":
-    play_game(insurance_dealer_blackjack)
+    play(insurance_dealer_blackjack)
     # fix double down...
 
