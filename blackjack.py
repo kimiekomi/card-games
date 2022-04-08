@@ -12,7 +12,7 @@ def play(deck=None):
     if debug: print(f"\nplay()")
 
     initial_bet = 0
-    player_bank = 0
+    player_earnings = 0
 
     if deck == None:
         deck = build_deck()
@@ -31,7 +31,7 @@ def play(deck=None):
 
         if trace: print(f"\nplayer hand({len(player_hand)}), dealer hand({len(dealer_hand)})\nplayer total: {player_hand_total}, dealer total: {dealer_hand_total}")
             
-        print(f"\nPlayer Bank: ${player_bank}\n")
+        print(f"\nPlayer Earnings: ${player_earnings}\n")
 
         while True:
 
@@ -97,15 +97,15 @@ def play(deck=None):
                     print(f"insurance bet: ${insurance_bet}")
                         
                     if is_blackjack(dealer_hand):
-                        player_bank += ((insurance_bet * 2) + insurance_bet)
+                        player_earnings += ((insurance_bet * 2) + insurance_bet)
                         print("\n>>> You win insurance bet")
                         break
     
-                    player_bank -= insurance_bet
+                    player_earnings -= insurance_bet
                     print("\n>>> Dealer does NOT have Natural")
                     print(">>> You lose insurance bet")
     
-                    print(f">>> Updated Player Bank: ${player_bank}\n")
+                    print(f">>> Updated Player Earnings: ${player_earnings}\n")
                 
             if value(dealer_hand[1]) == 10 and dealer_hand_total == 21:
                 break
@@ -177,7 +177,7 @@ def play(deck=None):
                         if len(player_hand) == 2:
                             if player_hand_total == 9 or player_hand_total == 10 or player_hand_total == 11:
                                 initial_bet += initial_bet
-                                player_bank -= (initial_bet/2)
+                                player_earnings -= (initial_bet/2)
             
                                 print(f"Updated Player Bank: ${player_bank}")
             
@@ -208,38 +208,38 @@ def play(deck=None):
         # game over logic
         if player_hand_total > 21:
             print("\n>>> Player Bust...You Lose")
-            player_bank -= initial_bet
+            player_earnings -= initial_bet
 
         else: 
             dealer_hand_total = dealer_move(dealer_hand, deck)
 
             if is_blackjack(dealer_hand) and not is_blackjack(player_hand):
-                    player_bank -= initial_bet
+                    player_earnings -= initial_bet
                     print("\n>>> Dealer has Natural...You Lose")
     
             elif is_blackjack(dealer_hand) and is_blackjack(player_hand):
                 print("\n>>> Both have Natural...Its a Draw")
     
             elif is_blackjack(player_hand) and not is_blackjack(dealer_hand):
-                player_bank += initial_bet * 1.5
+                player_earnings += initial_bet * 1.5
                 print("\n>>> Player has Natural...You Win")
 
             elif player_hand_total == 21:
                 print("\n>>> Player has 21...You Win")
-                player_bank += initial_bet
+                player_earnings += initial_bet
 
             elif dealer_hand_total > 21:
                 print("\n>>> Dealer Bust...You Win")
-                player_bank += initial_bet 
+                player_earnings += initial_bet 
 
             elif player_hand_total < 21 and dealer_hand_total < 21:
                 if player_hand_total > dealer_hand_total:
                     print("\n>>> Player is closer to 21...You Win")
-                    player_bank += initial_bet
+                    player_earnings += initial_bet
                     
                 else: 
                     print("\n>>> Dealer is closer to 21...You Lose")
-                    player_bank -= initial_bet
+                    player_earnings -= initial_bet
 
         print(f">>> Updated Player Bank: ${player_bank}")
         
