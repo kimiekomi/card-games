@@ -14,6 +14,8 @@ def play(deck=None):
     testing = False
     keep_playing = True 
 
+    global player_earnings
+    
     initial_bet = 0
     player_earnings = 0
 
