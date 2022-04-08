@@ -2,7 +2,7 @@
 
 from blackjack import *
 from cards import *
-
+import os
 
 insurance_dealer_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Jack_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
 insurance_neither_blackjack = [Ace_of_Hearts, Seven_of_Hearts, Four_of_Clubs, Six_of_Diamonds, Ace_of_Spades]
@@ -57,10 +57,14 @@ Tests = [
 
 
 if __name__ == "__main__":
+    print()
+    
     for i, test in enumerate(Tests):
         print(f"{i+1} - {test[0]}")
               
-    test = input("\nEnter a test: ")
+    test = int(input("\nEnter a test number: "))
+
+    os.system("clear")
     
     play(Tests[test][1])
     # fix double down...

@@ -11,11 +11,18 @@ trace = False
 def play(deck=None):
     if debug: print(f"\nplay()")
 
+    testing = False
+    keep_playing = True 
+
     initial_bet = 0
     player_earnings = 0
 
     if deck == None:
         deck = build_deck()
+
+    else:
+        testing = True
+        keep_playing = False
         
     # burn card
     deck.pop(0)
@@ -72,7 +79,7 @@ def play(deck=None):
 
         while True:
 
-            if get_value(dealer_hand[1]) == 11:
+            if value(dealer_hand[1]) == 11:
                 want_insurance = input("\nDo you want insurance? ").lower()
     
                 if want_insurance == "y":
@@ -241,15 +248,20 @@ def play(deck=None):
                     print("\n>>> Dealer is closer to 21...You Lose")
                     player_earnings -= initial_bet
 
-        print(f">>> Updated Player Bank: ${player_bank}")
-        
-        another_round = input("\nAnother Round? ").lower()
+        print(f">>> Updated Player Earnings: ${player_earnings}")
 
-        if another_round[0] != "y":
+        if keep_playing:
+            another_round = input("\nAnother Round? ").lower()
+    
+            if another_round[0] != "y":
+                print("\n>>> Goodbye...\n")
+                break
+    
+            os.system("clear")
+
+        else:
             print("\n>>> Goodbye...\n")
-            break
-
-        os.system("clear")
+            return
         
 
 def build_deck(shuffle=True):
