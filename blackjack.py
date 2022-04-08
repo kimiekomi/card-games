@@ -252,7 +252,7 @@ def play(deck=None):
         os.system("clear")
         
 
-def build_deck(shuffle=False):
+def build_deck(shuffle=True):
     if debug: print("build_deck()")
 
     suits = [Spades, Clubs, Hearts, Diamonds]        

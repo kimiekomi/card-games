@@ -33,12 +33,35 @@ double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamon
 
 Tests = [
     ("insurance dealer blackjack", insurance_dealer_blackjack),
-    ("insurance neither blackjack", insurance_neither_blackjack)
-    
+    ("insurance neither blackjack", insurance_neither_blackjack),
+    ("insurance player blackjack", insurance_player_blackjack),
+    ("insurance both blackjack", insurance_both_blackjack),
+    ("dealer ten blackjack player lose", dealer_ten_blackjack_player_lose),
+    ("dealer ten blackjack draw", dealer_ten_blackjack_draw),
+    ("player blackjack dealer 17", player_blackjack_dealer_17),
+    ("player blackjack dealer below 17", player_blackjack_dealer_below_17),
+    ("both blackjack", both_blackjack),
+    ("player hit soft hand 21", player_hit_soft_hand_21),
+    ("player hit reg ace 21", player_hit_reg_ace_21),
+    ("player hit no ace 21", player_hit_no_ace_21),
+    ("player hit bust", player_hit_bust),
+    ("player hit twice bust", player_hit_twice_bust),
+    ("player hit hit stand dealer win", player_hit_hit_stand_dealer_win),
+    ("player hit stand player win", player_hit_stand_player_win),
+    ("player stand dealer bust", player_stand_dealer_bust),
+    ("double player bust", double_player_bust),
+    ("double dealer bust", double_dealer_bust),
+    ("double player win", double_player_win),
+    ("double player lose", double_player_lose),
 ]
 
 
 if __name__ == "__main__":
-    play(insurance_dealer_blackjack)
+    for i, test in enumerate(Tests):
+        print(f"{i+1} - {test[0]}")
+              
+    test = input("\nEnter a test: ")
+    
+    play(Tests[test][1])
     # fix double down...
 
