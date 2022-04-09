@@ -13,62 +13,6 @@ No_One_Won = 0
 Player_Won = 1
 Player_Lost = 2
 
-def user_option (can_hit=False, can_buy_insurance=False, can_double_down=False, can_split=False):
-
-    while True:
-        valid_options = ["s"]
-
-        print ("What would you like to do: ")
-    
-        if can_buy_insurance:
-            print ("    I)nsurance")
-            valid_options += "i"
-    
-        if can_split:
-            print ("    S(p)lit")
-            valid_options += "s"
-            
-        if can_double_down:
-            print ("    (D)ouble Down")
-            valid_options += "d"
-    
-        if can_hit:
-            print ("    (H)it")
-            valid_options += "h"
-
-        print ("    (S)tand")
-    
-        option = input ("? ")
-
-        if len(option) == 0:
-            continue
-
-        option = option [0].lower ()
-
-        if option in valid_options:
-            return option
-
-        if not can_buy_insurance and option == "i":
-            print ("You cannot buy insurance now")
-            continue
-        
-        if not can_double_down and option == "d":
-            print ("You cannot double down now")
-            continue
-        
-        if not can_split and option == "p":
-            print ("You cannot double down now")
-            continue
-
-        if not can_hit and option == "h":
-            print ("You cannot hit now")
-            continue
-
-        print ("Please chose a valid option\n")
-        
-    return option
-
-
 def play(deck=None):
     if debug: print(f"play()")
 
@@ -78,11 +22,13 @@ def play(deck=None):
     player_bank = 100
     print(f"Player Bank: ${player_bank}")
 
-    if deck is None:
-        deck = build_deck()
-    else:
+    if not deck is None:
         testing = True
+    else:
+        deck = build_deck()
 
+    if len(deck) == 0: raise Exception("Empty deck logic is not implemented yet")
+    
     deck.pop(0) # burn a card
 
     another_round = True
@@ -158,7 +104,7 @@ def play_hand (deck):
         player_choice = user_option(can_hit=True, can_double_down=True, can_buy_insurance=True, can_split=splittable).lower()
 
         if player_choice == "i":
-            if trace: print("player chose to buy insurance")
+            if trace: print("Player chose to buy insurance")
 
             player_choice = None
 
@@ -217,6 +163,9 @@ def play_hand (deck):
         print ("Player doubled his bet and gets a card")
         player_choice = None
         player_bet *= 2.0
+
+        if len(deck) == 0: raise Exception("Empty deck logic is not implemented yet")
+
         player_hand.append(deck.pop(0))
 
         display_hand("Player", player_hand)
@@ -237,6 +186,9 @@ def play_hand (deck):
 
         if player_choice == "h":
             player_choice = None
+
+            if len(deck) == 0: raise Exception("Empty deck logic is not implemented yet")
+
             card = deck.pop(0)
             print ("Player hits and gets the", end=" ")
             print_card (card, 0)
@@ -262,6 +214,9 @@ def play_hand (deck):
         return -(player_bet + insurance_bet)
 
     while total(dealer_hand) < 17:
+
+        if len(deck) == 0: raise Exception("Empty deck logic is not implemented yet")
+
         card = deck.pop(0)
         dealer_hand.append(card)
 
@@ -445,6 +400,61 @@ def display_hand (player, hand, hide_first_card=False):
         print(f"total: {total(hand)}\n")
     else:
         print ()
+
+def user_option (can_hit=False, can_buy_insurance=False, can_double_down=False, can_split=False):
+
+    while True:
+        valid_options = ["s"]
+
+        print ("What would you like to do: ")
+    
+        if can_buy_insurance:
+            print ("    (I)nsurance")
+            valid_options += "i"
+    
+        if can_split:
+            print ("    S(p)lit")
+            valid_options += "s"
+            
+        if can_double_down:
+            print ("    (D)ouble Down")
+            valid_options += "d"
+    
+        if can_hit:
+            print ("    (H)it")
+            valid_options += "h"
+
+        print ("    (S)tand")
+    
+        option = input ("? ")
+
+        if len(option) == 0:
+            continue
+
+        option = option [0].lower ()
+
+        if option in valid_options:
+            return option
+
+        if not can_buy_insurance and option == "i":
+            print ("You cannot buy insurance now")
+            continue
+        
+        if not can_double_down and option == "d":
+            print ("You cannot double down now")
+            continue
+        
+        if not can_split and option == "p":
+            print ("You cannot double down now")
+            continue
+
+        if not can_hit and option == "h":
+            print ("You cannot hit now")
+            continue
+
+        print ("Please chose a valid option\n")
+        
+    return option
 
 
 if __name__ == "__main__":

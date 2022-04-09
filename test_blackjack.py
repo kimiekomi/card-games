@@ -57,7 +57,7 @@ Tests = [
 
 
 if __name__ == "__main__":
-    print()
+    print("\n*** Blackjack Test Menu ***\n")
     
     for i, test in enumerate(Tests):
         print(f"{i+1} - {test[0]}")
@@ -65,7 +65,9 @@ if __name__ == "__main__":
     test = int(input("\nEnter a test number: "))
 
     os.system("clear")
+
+    print(f"\n*** Testing: {Tests[test-1][0]} ***")
     
-    play(Tests[test][1])
+    play(Tests[test-1][1])
     # fix double down...
 
