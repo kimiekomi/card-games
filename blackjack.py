@@ -32,8 +32,6 @@ def play(deck=None):
 
         play_hand(deck)
 
-        print(f">>> Updated Player Earnings: ${player_earnings}")
-    
         if testing:
             keep_playing = False
 
@@ -144,6 +142,8 @@ def play_hand(deck):
 
 def settle_bets(dealer_hand, player_hand, player_wager, player_insurance):
 
+    result = 0
+
     if is_blackjack(dealer_hand):
 
         if player_insurance > 0:
@@ -151,24 +151,26 @@ def settle_bets(dealer_hand, player_hand, player_wager, player_insurance):
 
         if is_blackjack(player_hand):
             print("\n>>> Both have blackjack...Its a Draw")
-            return player_insurance * 2
+            result = player_insurance * 2
 
         print("\n>>> Dealer has blackjack...You lose")
-        return -player_wager + player_insurance * 2
+        result = -player_wager + player_insurance * 2
     
     if is_blackjack(player_hand):
-        return player_wager * 1.5 - player_insurance
+        result = player_wager * 1.5 - player_insurance
             
     if total(dealer_hand) > total(player_hand):
         print("\n>>> Dealer is closer to 21...You Lose")
-        return -player_wager - player_insurance
+        result = -player_wager - player_insurance
 
     if total(player_hand) > total(dealer_hand):
         print("\n>>> Player is closer to 21...You Win")
-        return player_wager - player_insurance
+        result = player_wager - player_insurance
 
-    return -player_insurance
+    result = -player_insurance
 
+    print(f">>> Updated Player Earnings: ${result}")
+    return result
     
 
 def build_deck(shuffle=True):
@@ -291,6 +293,10 @@ def dealer_move(hand, deck):
     if trace: print(f"dealer hand total: {dealer_hand_total}")
          
     while dealer_hand_total < 17:
+        
+        if len(deck) == 0:
+            raise Exception("Handle later...need at least 4 cards")
+            
         dealer_card = deck.pop(0)
         hand.append(dealer_card)
         dealer_hand_total += value(dealer_card)
@@ -321,6 +327,10 @@ def player_move(hand, deck):
             if trace: print("player elected to hit")
 
             while True:
+
+                if len(deck) == 0:
+                    raise Exception("Handle later...need at least 4 cards")
+            
                 hit_card = deck.pop(0)
                 hit_card_rank = hit_card[0]
                 hand.append(hit_card)
@@ -364,6 +374,9 @@ def player_move(hand, deck):
 
                     print(f"Updated Player Bank: ${player_bank}")
 
+                    if len(deck) == 0:
+                        raise Exception("Handle later...need at least 4 cards")
+            
                     hit_card = deck.pop(0)
                     hand.append(hit_card)
                         
