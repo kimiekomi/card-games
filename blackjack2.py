@@ -262,6 +262,31 @@ def evaluate_hands (dealer_hand, players_hand):
     return No_One_Won
 
 
+def settle_bets(dealer_hand, player_hand, player_wager, player_insurance):
+
+    if is_blackjack(dealer_hand):
+
+        if is_blackjack(player_hand):
+            print("\nBoth have blackjack...Its a Draw")
+            return player_insurance * 2
+
+        print("\n>>> Dealer has blackjack...You lose")
+        return -player_wager + player_insurance * 2
+    
+    if is_blackjack(player_hand):
+        return player_wager * 1.5 - player_insurance
+            
+    if total(dealer_hand) > total(player_hand):
+        print("\n>>> Dealer is closer to 21...You Lose")
+        return -player_wager - player_insurance
+
+    if total(player_hand) > total(dealer_hand):
+        print("\n>>> Player is closer to 21...You Win")
+        return player_wager - player_insurance
+
+    return -player_insurance
+
+
 def build_deck(shuffle=True):
     if debug: print(f"build_deck({shuffle})")
 

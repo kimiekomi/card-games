@@ -93,7 +93,7 @@ def play_hand(deck):
     
     print(f"dealer card2 value: {value(dealer_hand[1])}") 
 
-    if dealer_hand[1][0] == Ace:
+    if is_ace(dealer_hand[1]):
         want_insurance = input("\nDo you want insurance? ").lower()
 
         if want_insurance == "y":
@@ -156,18 +156,19 @@ def settle_bets(dealer_hand, player_hand, player_wager, player_insurance):
         print("\n>>> Dealer has blackjack...You lose")
         result = -player_wager + player_insurance * 2
     
-    if is_blackjack(player_hand):
+    elif is_blackjack(player_hand):
         result = player_wager * 1.5 - player_insurance
             
-    if total(dealer_hand) > total(player_hand):
+    elif total(dealer_hand) > total(player_hand):
         print("\n>>> Dealer is closer to 21...You Lose")
         result = -player_wager - player_insurance
 
-    if total(player_hand) > total(dealer_hand):
+    elif total(player_hand) > total(dealer_hand):
         print("\n>>> Player is closer to 21...You Win")
         result = player_wager - player_insurance
 
-    result = -player_insurance
+    elif:
+        result = -player_insurance
 
     print(f">>> Updated Player Earnings: ${result}")
     return result
@@ -269,7 +270,7 @@ def total(hand):
             ace_count += 1
             
     if ace_count > 0 and total > 21:
-            total -= 10
+        total -= 10
     
     # if trace: print(f"hand total: {total}")
     
@@ -282,36 +283,38 @@ def is_blackjack(hand):
     return len(hand) == 2 and total(hand) == 21
 
 
+def is_ace(card):
+    if debug: print("is_ace()")
+        
+    return card[0] == 1
+
+
 def dealer_move(hand, deck):
     if debug: print("dealer_move()")
 
     print("\ndealer hand revealed:")
     print_hand(hand)
     
-    dealer_hand_total = total(hand)
-
-    if trace: print(f"dealer hand total: {dealer_hand_total}")
+    if trace: print(f"dealer hand total: {total(dealer_hand)}")
          
-    while dealer_hand_total < 17:
+    while total(dealer_hand) < 17:
         
         if len(deck) == 0:
             raise Exception("Handle later...need at least 4 cards")
             
         dealer_card = deck.pop(0)
         hand.append(dealer_card)
-        dealer_hand_total += value(dealer_card)
         
-        if value(dealer_card) == 11 and dealer_hand_total >= 21:
-            dealer_hand_total -= 10
+        if total(dealer_hand) >= 21:
             break
 
     if len(hand) > 2:
         print("\nupdated dealer hand:")
         print_hand(hand)
     
-    print(f"\nupdated dealer hand total: {dealer_hand_total}")
+    print(f"\nupdated dealer hand total: {total(dealer_hand)}")
 
-    return dealer_hand_total
+    return total(dealer_hand)
 
 
 def player_move(hand, deck):
@@ -335,20 +338,16 @@ def player_move(hand, deck):
                 hit_card_rank = hit_card[0]
                 hand.append(hit_card)
                 
-                player_hand_total = total(hand)
+                # player_hand_total = total(hand)
             
-                if hit_card_rank == Ace and player_hand_total > 21:
-                    if trace: print("soft hand")
-                    player_hand_total -= 10
-        
                 print("\nupdated player hand:")
                 print_hand(hand)
-                print(f"\nupdated player hand total: {player_hand_total}") 
+                print(f"\nupdated player hand total: {total(player_hand)}") 
         
-                if player_hand_total == 21: 
+                if total(player_hand) == 21: 
                     break
         
-                if player_hand_total > 21: 
+                if total(player_hand) > 21: 
                     break
         
                 next_option = input("\nEnter next move (s-stand, h-hit): ").lower()
@@ -365,10 +364,8 @@ def player_move(hand, deck):
         if first_option == "d":
             if trace: print("player elected to double down")
 
-            player_hand_total = total(hand)
-
             if len(player_hand) == 2:
-                if player_hand_total == 9 or player_hand_total == 10 or player_hand_total == 11:
+                if total(player_hand) == 9 or total(player_hand) == 10 or total(player_hand) == 11:
                     initial_bet += initial_bet
                     player_earnings -= (initial_bet/2)
 
@@ -380,11 +377,9 @@ def player_move(hand, deck):
                     hit_card = deck.pop(0)
                     hand.append(hit_card)
                         
-                    player_hand_total += value(hit_card)
-                
                     print("\nupdated player hand:")
                     print_hand(player_hand)
-                    print(f"updated player hand total: {player_hand_total}") 
+                    print(f"updated player hand total: {total(player_hand)}") 
                     break
 
                 print("> cards total NOT 9, 10, or 11...unable double")
@@ -393,7 +388,9 @@ def player_move(hand, deck):
             print("> unable double after initial move")
             continue
 
+    return total(player_hand)
+
 
 if __name__ == "__main__":
     play()
-    
+
