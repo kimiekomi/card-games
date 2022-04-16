@@ -260,9 +260,9 @@ def dealer_move(hand, deck):
     print("\ndealer hand revealed:")
     print_hand(hand)
     
-    if trace: print(f"dealer hand total: {total(dealer_hand)}")
+    if trace: print(f"dealer hand total: {total(hand)}")
          
-    while total(dealer_hand) < 17:
+    while total(hand) < 17:
         
         if len(deck) == 0:
             raise Exception("Handle later...need at least 4 cards")
@@ -270,16 +270,16 @@ def dealer_move(hand, deck):
         dealer_card = deck.pop(0)
         hand.append(dealer_card)
         
-        if total(dealer_hand) >= 21:
+        if total(hand) >= 21:
             break
 
     if len(hand) > 2:
         print("\nupdated dealer hand:")
         print_hand(hand)
     
-    print(f"\nupdated dealer hand total: {total(dealer_hand)}")
+    print(f"\nupdated dealer hand total: {total(hand)}")
 
-    return total(dealer_hand)
+    return total(hand)
 
 
 def player_move(hand, deck, player_wager):

@@ -21,15 +21,14 @@ player_hit_reg_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Nine_of_Clubs, Three_of
 player_hit_no_ace_21 = [Ace_of_Hearts, Seven_of_Spades, Ten_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
 player_hit_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds]
 player_hit_twice_bust = [Ace_of_Hearts, Eight_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Two_of_Diamonds, Nine_of_Spades]
-player_hit_hit_stand_dealer_win = [Ace_of_Hearts, Five_of_Spades, Ten_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds]
+player_hit_hit_stand_dealer_win = [Ace_of_Hearts, Four_of_Spades, Ten_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Two_of_Clubs]
 player_hit_stand_player_win = [Ace_of_Hearts, Five_of_Spades, Ten_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
 player_stand_dealer_bust = [Ace_of_Hearts, Ten_of_Spades, Six_of_Clubs, Ten_of_Diamonds, Eight_of_Hearts, Nine_of_Diamonds]
 
 
-double_player_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Ten_of_Diamonds, Five_of_Clubs]
-double_dealer_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Ten_of_Diamonds]
-double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
-double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Six_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
+double_dealer_bust = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Ten_of_Diamonds]
+double_player_win = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Eight_of_Diamonds, Five_of_Diamonds]
+double_player_lose = [Ace_of_Hearts, Six_of_Spades, Four_of_Clubs, Five_of_Diamonds, Eight_of_Hearts, Five_of_Diamonds, Eight_of_Diamonds]
 
 Tests = [
     ("insurance dealer blackjack", insurance_dealer_blackjack),
@@ -49,7 +48,6 @@ Tests = [
     ("player hit hit stand dealer win", player_hit_hit_stand_dealer_win),
     ("player hit stand player win", player_hit_stand_player_win),
     ("player stand dealer bust", player_stand_dealer_bust),
-    ("double player bust", double_player_bust),
     ("double dealer bust", double_dealer_bust),
     ("double player win", double_player_win),
     ("double player lose", double_player_lose),
@@ -69,5 +67,4 @@ if __name__ == "__main__":
     print(f"\n*** Testing: {Tests[test-1][0]} ***")
     
     play(Tests[test-1][1])
-    # fix double down...
 
