@@ -207,6 +207,31 @@ def print_hand(hand):
     for card in hand:
         print_card(card)
 
+
+def display_hand(hand):
+    if debug: print("display_hand()")
+
+    suits_symbols = ['♠', '♣', '♥', '♦']
+
+    for card in hand:
+        rank = card[0]
+        suit = card[1]
+
+        if rank == 1: rank = "A"
+        if rank == 11: rank = "J"
+        if rank == 12: rank = "Q"
+        if rank == 13: rank = "K"
+        
+        suit = suits_symbols[card[1] - 1]
+    
+        print("┌───────┐")
+        print(f"│{rank}      │")
+        print("│       │")
+        print(f"│   {suit}   │")
+        print("│       │")
+        print(f"│      {rank}│")
+        print("└───────┘")
+    
         
 def value(card):
     if debug: print("value()")
@@ -389,8 +414,9 @@ def settle_bets(dealer_hand, player_hand, player_wager, player_insurance, player
 
 
 if __name__ == "__main__":
-    play()
-
+    # play()
+    
+    sample_display = [Ace_of_Spades, Two_of_Hearts, Jack_of_Clubs, Queen_of_Spades, King_of_Diamonds]
     # hand_hit = [Ace_of_Spades, Four_of_Hearts]
     # hand_hit_bust = [Ace_of_Spades, Nine_of_Hearts]
     # hand_double = [Two_of_Spades, Seven_of_Hearts]
@@ -398,3 +424,5 @@ if __name__ == "__main__":
     # deck = [Two_of_Spades, Four_of_Spades, Six_of_Spades, Eight_of_Spades, Ten_of_Spades]
     
     # player_move(hand_double, deck, 10)
+
+    display_hand(sample_display)
