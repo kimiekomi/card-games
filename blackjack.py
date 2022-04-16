@@ -6,7 +6,7 @@ import os
 from cards import *
 
 debug = False
-trace = True
+trace = False
 
 def play(deck=None):
     if debug: print(f"\nplay()")
@@ -14,9 +14,8 @@ def play(deck=None):
     testing = False
     keep_playing = True 
 
-    global player_earnings
-    
     player_earnings = 0
+    player_bank = 100
 
     if deck == None:
         deck = build_deck()
@@ -28,9 +27,15 @@ def play(deck=None):
     deck.pop(0)
 
     while keep_playing:
-        print(f"\nPlayer Earnings: ${player_earnings}\n")
+        print("\n*** Let's Play Blackjack ***\n")
 
-        play_hand(deck)
+        player_bank += player_earnings
+
+        print(f"Player Bank: ${player_bank}")
+
+        player_earnings = play_hand(deck)
+        
+        print(f">>> Player Earnings: ${player_earnings}")
 
         if testing:
             keep_playing = False
@@ -44,7 +49,6 @@ def play(deck=None):
     
             os.system("clear")
     
-        
 
 def play_hand(deck):
     if debug: print("play_hand()")
@@ -60,7 +64,7 @@ def play_hand(deck):
     while True:
 
         try:
-            initial_bet = float(input("Enter initial bet: $ ") or 10)
+            initial_bet = float(input("\nEnter initial bet: $ ") or 10)
 
         except ValueError:
             print("> Error: Enter a valid number\n")
@@ -362,6 +366,7 @@ def settle_bets(dealer_hand, player_hand, player_wager, player_insurance, player
         return -player_wager + player_insurance * 2
     
     if is_blackjack(player_hand):
+        print("\n>>> Player has blackjack...You win")
         return player_wager * 1.5 - player_insurance
             
     if total(dealer_hand) > total(player_hand):
@@ -384,8 +389,6 @@ def settle_bets(dealer_hand, player_hand, player_wager, player_insurance, player
 
 
 if __name__ == "__main__":
-    print("\n*** Let's Play Blackjack ***")
-    
     play()
 
     # hand_hit = [Ace_of_Spades, Four_of_Hearts]
