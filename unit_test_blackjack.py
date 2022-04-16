@@ -79,6 +79,7 @@ class TestBlackJack(unittest.TestCase):
     #     self.assertEqual(dealer_move(dealer_ace_11, dealer_deck_ace_11), 19)
     #     self.assertEqual(dealer_move(dealer_ace_1, dealer_deck_ace_1), 17)
 
+    
 if __name__ == "__main__":
     unittest.main()
 

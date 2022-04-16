@@ -127,52 +127,16 @@ def play_hand(deck):
     # game over logic
     if total(player_hand) > 21:
         print("\n>>> Player Bust...You Lose")
-        # player_earnings -= initial_bet
         return -initial_bet
 
     dealer_move(dealer_hand, deck)
 
     if total(dealer_hand) > 21:
         print("\n>>> Dealer Bust...You Win")
-        # player_earnings += initial_bet 
         return initial_bet
 
     return settle_bets(dealer_hand, player_hand, initial_bet, insurance_bet)
      
-
-def settle_bets(dealer_hand, player_hand, player_wager, player_insurance):
-
-    result = 0
-
-    if is_blackjack(dealer_hand):
-
-        if player_insurance > 0:
-            print("\n>>> You win insurance bet")
-
-        if is_blackjack(player_hand):
-            print("\n>>> Both have blackjack...Its a Draw")
-            result = player_insurance * 2
-
-        print("\n>>> Dealer has blackjack...You lose")
-        result = -player_wager + player_insurance * 2
-    
-    elif is_blackjack(player_hand):
-        result = player_wager * 1.5 - player_insurance
-            
-    elif total(dealer_hand) > total(player_hand):
-        print("\n>>> Dealer is closer to 21...You Lose")
-        result = -player_wager - player_insurance
-
-    elif total(player_hand) > total(dealer_hand):
-        print("\n>>> Player is closer to 21...You Win")
-        result = player_wager - player_insurance
-
-    elif:
-        result = -player_insurance
-
-    print(f">>> Updated Player Earnings: ${result}")
-    return result
-    
 
 def build_deck(shuffle=True):
     if debug: print("build_deck()")
@@ -317,10 +281,13 @@ def dealer_move(hand, deck):
     return total(dealer_hand)
 
 
-def player_move(hand, deck):
+def player_move(hand, deck, player_wager):
+    if debug: print("player_move()")
+
+    double = False
 
     while True:
-        first_option = input("\nEnter first move (s-stand, h-hit, d-double): ").lower()
+        first_option = input("\nEnter your move (s-stand, h-hit, d-double): ").lower()
     
         if first_option == "s":
             if trace: print("player elected to stand")
@@ -329,47 +296,36 @@ def player_move(hand, deck):
         if first_option == "h":
             if trace: print("player elected to hit")
 
-            while True:
-
-                if len(deck) == 0:
-                    raise Exception("Handle later...need at least 4 cards")
+            if len(deck) == 0:
+                raise Exception("Handle later...need at least 4 cards")
+        
+            hit_card = deck.pop(0)
+            hit_card_rank = hit_card[0]
+            hand.append(hit_card)
             
-                hit_card = deck.pop(0)
-                hit_card_rank = hit_card[0]
-                hand.append(hit_card)
-                
-                # player_hand_total = total(hand)
-            
-                print("\nupdated player hand:")
-                print_hand(hand)
-                print(f"\nupdated player hand total: {total(player_hand)}") 
-        
-                if total(player_hand) == 21: 
-                    break
-        
-                if total(player_hand) > 21: 
-                    break
-        
-                next_option = input("\nEnter next move (s-stand, h-hit): ").lower()
-        
-                if next_option == "h":
-                    continue
-        
-                if trace: print("player elected to stand")
-        
+            print("\nupdated player hand:")
+            print_hand(hand)
+            print(f"\nupdated player hand total: {total(hand)}") 
+    
+            if total(hand) == 21: 
                 break
-
-        break
+    
+            if total(hand) > 21: 
+                break
+    
+            continue
 
         if first_option == "d":
             if trace: print("player elected to double down")
 
-            if len(player_hand) == 2:
-                if total(player_hand) == 9 or total(player_hand) == 10 or total(player_hand) == 11:
-                    initial_bet += initial_bet
-                    player_earnings -= (initial_bet/2)
+            double = True
 
-                    print(f"Updated Player Bank: ${player_bank}")
+            if len(hand) == 2:
+                if total(hand) == 9 or total(hand) == 10 or total(hand) == 11:
+                    player_wager += player_wager
+                    player_earnings -= (player_wager/2)
+
+                    print(f"Updated Player Earnings: ${player_earnings}")
 
                     if len(deck) == 0:
                         raise Exception("Handle later...need at least 4 cards")
@@ -378,8 +334,8 @@ def player_move(hand, deck):
                     hand.append(hit_card)
                         
                     print("\nupdated player hand:")
-                    print_hand(player_hand)
-                    print(f"updated player hand total: {total(player_hand)}") 
+                    print_hand(hand)
+                    print(f"updated player hand total: {total(hand)}") 
                     break
 
                 print("> cards total NOT 9, 10, or 11...unable double")
@@ -388,9 +344,44 @@ def player_move(hand, deck):
             print("> unable double after initial move")
             continue
 
-    return total(player_hand)
+    return total(hand)
+
+
+def settle_bets(dealer_hand, player_hand, player_wager, player_insurance):
+
+    if is_blackjack(dealer_hand):
+
+        if player_insurance > 0:
+            print("\n>>> You win insurance bet")
+
+        if is_blackjack(player_hand):
+            print("\n>>> Both have blackjack...Its a Draw")
+            return player_insurance * 2
+
+        print("\n>>> Dealer has blackjack...You lose")
+        return -player_wager + player_insurance * 2
+    
+    if is_blackjack(player_hand):
+        return player_wager * 1.5 - player_insurance
+            
+    if total(dealer_hand) > total(player_hand):
+        print("\n>>> Dealer is closer to 21...You Lose")
+        return -player_wager - player_insurance
+
+    if total(player_hand) > total(dealer_hand):
+        print("\n>>> Player is closer to 21...You Win")
+        return player_wager - player_insurance
+
+    return -player_insurance
 
 
 if __name__ == "__main__":
-    play()
+    # play()
 
+    hand_hit = [Ace_of_Spades, Four_of_Hearts]
+    hand_hit_bust = [Ace_of_Spades, Nine_of_Hearts]
+    hand_double = [Two_of_Spades, Seven_of_Hearts]
+    
+    deck = [Two_of_Spades, Four_of_Spades, Six_of_Spades, Eight_of_Spades, Ten_of_Spades]
+    
+    player_move(hand_double, deck, 10)
