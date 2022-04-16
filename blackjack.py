@@ -39,11 +39,11 @@ def play(deck=None):
             another_round = input("\nAnother Round? ").lower()
     
             if another_round[0] != "y":
+                print("\n>>> Goodbye...\n")
                 break
     
             os.system("clear")
     
-        print("\n>>> Goodbye...\n")
         
 
 def play_hand(deck):
@@ -384,6 +384,8 @@ def settle_bets(dealer_hand, player_hand, player_wager, player_insurance, player
 
 
 if __name__ == "__main__":
+    print("\n*** Let's Play Blackjack ***")
+    
     play()
 
     # hand_hit = [Ace_of_Spades, Four_of_Hearts]
