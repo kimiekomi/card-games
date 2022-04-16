@@ -6,7 +6,7 @@ import os
 from cards import *
 
 debug = False
-trace = False
+trace = True
 
 def play(deck=None):
     if debug: print(f"\nplay()")
@@ -55,6 +55,7 @@ def play_hand(deck):
     initial_bet = 0
     insurance = False
     insurance_bet = 0
+    double_down = False
 
     while True:
 
@@ -120,9 +121,9 @@ def play_hand(deck):
             print(f"insurance bet: ${insurance_bet}")
 
     if is_blackjack(dealer_hand) or is_blackjack(player_hand):
-        return settle_bets(dealer_hand, player_hand, initial_bet, insurance_bet)
+        return settle_bets(dealer_hand, player_hand, initial_bet, insurance_bet, double_down)
 
-    player_move(player_hand, deck)    
+    double_down = player_move(player_hand, deck, initial_bet)[1]    
 
     # game over logic
     if total(player_hand) > 21:
@@ -135,7 +136,7 @@ def play_hand(deck):
         print("\n>>> Dealer Bust...You Win")
         return initial_bet
 
-    return settle_bets(dealer_hand, player_hand, initial_bet, insurance_bet)
+    return settle_bets(dealer_hand, player_hand, initial_bet, insurance_bet, double_down)
      
 
 def build_deck(shuffle=True):
@@ -323,9 +324,8 @@ def player_move(hand, deck, player_wager):
             if len(hand) == 2:
                 if total(hand) == 9 or total(hand) == 10 or total(hand) == 11:
                     player_wager += player_wager
-                    player_earnings -= (player_wager/2)
 
-                    print(f"Updated Player Earnings: ${player_earnings}")
+                    print(f"\nUpdated Initial Bet: ${player_wager}")
 
                     if len(deck) == 0:
                         raise Exception("Handle later...need at least 4 cards")
@@ -335,7 +335,7 @@ def player_move(hand, deck, player_wager):
                         
                     print("\nupdated player hand:")
                     print_hand(hand)
-                    print(f"updated player hand total: {total(hand)}") 
+                    print(f"\nupdated player hand total: {total(hand)}") 
                     break
 
                 print("> cards total NOT 9, 10, or 11...unable double")
@@ -344,10 +344,10 @@ def player_move(hand, deck, player_wager):
             print("> unable double after initial move")
             continue
 
-    return total(hand)
+    return total(hand), double
 
 
-def settle_bets(dealer_hand, player_hand, player_wager, player_insurance):
+def settle_bets(dealer_hand, player_hand, player_wager, player_insurance, player_double):
 
     if is_blackjack(dealer_hand):
 
@@ -366,22 +366,30 @@ def settle_bets(dealer_hand, player_hand, player_wager, player_insurance):
             
     if total(dealer_hand) > total(player_hand):
         print("\n>>> Dealer is closer to 21...You Lose")
+
+        if player_double:
+            return -player_wager*2 - player_insurance
+            
         return -player_wager - player_insurance
 
     if total(player_hand) > total(dealer_hand):
         print("\n>>> Player is closer to 21...You Win")
+
+        if player_double:
+            return player_wager*2 - player_insurance
+            
         return player_wager - player_insurance
 
     return -player_insurance
 
 
 if __name__ == "__main__":
-    # play()
+    play()
 
-    hand_hit = [Ace_of_Spades, Four_of_Hearts]
-    hand_hit_bust = [Ace_of_Spades, Nine_of_Hearts]
-    hand_double = [Two_of_Spades, Seven_of_Hearts]
+    # hand_hit = [Ace_of_Spades, Four_of_Hearts]
+    # hand_hit_bust = [Ace_of_Spades, Nine_of_Hearts]
+    # hand_double = [Two_of_Spades, Seven_of_Hearts]
     
-    deck = [Two_of_Spades, Four_of_Spades, Six_of_Spades, Eight_of_Spades, Ten_of_Spades]
+    # deck = [Two_of_Spades, Four_of_Spades, Six_of_Spades, Eight_of_Spades, Ten_of_Spades]
     
-    player_move(hand_double, deck, 10)
+    # player_move(hand_double, deck, 10)
