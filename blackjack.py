@@ -208,31 +208,37 @@ def print_hand(hand):
         print_card(card)
 
 
-def display_hand(hand):
-    if debug: print("display_hand()")
+def display_card(card):
+    if debug: print("display_card()")
 
     suits_symbols = ['♠', '♣', '♥', '♦']
 
-    for card in hand:
-        rank = card[0]
-        suit = card[1]
+    rank = card[0]
+    suit = card[1]
 
-        if rank == 1: rank = "A"
-        if rank == 11: rank = "J"
-        if rank == 12: rank = "Q"
-        if rank == 13: rank = "K"
-        
-        suit = suits_symbols[card[1] - 1]
+    if rank == 1: rank = "A"
+    if rank == 11: rank = "J"
+    if rank == 12: rank = "Q"
+    if rank == 13: rank = "K"
     
-        print("┌───────┐")
-        print(f"│{rank}      │")
-        print("│       │")
-        print(f"│   {suit}   │")
-        print("│       │")
-        print(f"│      {rank}│")
-        print("└───────┘")
+    suit = suits_symbols[card[1]-1]
+
+    print("┌───────┐")
+    print(f"│{rank}      │")
+    print("│       │")
+    print(f"│   {suit}   │")
+    print("│       │")
+    print(f"│      {rank}│")
+    print("└───────┘")
     
+
+def display_hand(hand):
+    if debug: print("display_hand()")
+
+    for card in hand:
+        display_card(card)
         
+
 def value(card):
     if debug: print("value()")
 
@@ -425,4 +431,10 @@ if __name__ == "__main__":
     
     # player_move(hand_double, deck, 10)
 
+    # display_card(Ace_of_Spades)
+    # display_card(Two_of_Hearts)
+    # display_card(Jack_of_Clubs)
+    # display_card(Queen_of_Spades)
+    # display_card(King_of_Diamonds)
+    
     display_hand(sample_display)
