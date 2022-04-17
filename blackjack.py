@@ -140,11 +140,11 @@ def play_hand(deck):
                 raise Exception("Handle later...need at least 4 cards")
     
             hit_card = deck.pop(0)
-            hand.append(hit_card)
+            player_hand.append(hit_card)
                 
             print("\nupdated player hand:")
-            print_hand(hand)
-            print(f"\nupdated player hand total: {total(hand)}") 
+            print_hand(player_hand)
+            print(f"\nupdated player hand total: {total(player_hand)}") 
 
             return settle_bets(dealer_hand, player_hand, initial_bet, insurance_bet)
             
