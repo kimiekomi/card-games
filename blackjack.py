@@ -126,7 +126,7 @@ def play_hand(deck):
     if is_blackjack(dealer_hand) or is_blackjack(player_hand):
         return settle_bets(dealer_hand, player_hand, initial_bet, insurance_bet)
 
-    if total(player_hand) == 9 or total(hand) == 10 or total(hand) == 11:
+    if total(player_hand) == 9 or total(player_hand) == 10 or total(player_hand) == 11:
         want_double = input("\nDo you want to double down? ").lower()
 
         if want_double == "y":
