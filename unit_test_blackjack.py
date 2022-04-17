@@ -5,10 +5,8 @@ import unittest
 from blackjack import *
 from cards import *
 
-sample_hand1 = [Two_of_Spades, Four_of_Clubs, Six_of_Hearts, Eight_of_Diamonds]
 sample_hand2 = [Ace_of_Spades, Jack_of_Clubs, Queen_of_Hearts, King_of_Diamonds]
 sample_hand3 = [Ace_of_Spades, Five_of_Clubs, Six_of_Hearts, Nine_of_Diamonds]
-
 sample_hand4 = [Ace_of_Spades, Four_of_Diamonds, Six_of_Hearts]
 sample_hand5 = [Four_of_Diamonds, Ace_of_Spades, Six_of_Hearts]
 sample_hand6 = [Four_of_Diamonds, Six_of_Hearts, Ace_of_Spades]
@@ -28,6 +26,7 @@ dealer_hard_17 = [King_of_Diamonds, Seven_of_Diamonds]
 dealer_soft_17 = [Eight_of_Hearts, Seven_of_Diamonds]
 dealer_ace_11 = [Six_of_Hearts, Two_of_Clubs]
 dealer_ace_1 = [Seven_of_Hearts, Nine_of_Clubs]
+
 
 class TestBlackJack(unittest.TestCase):
     
@@ -50,7 +49,7 @@ class TestBlackJack(unittest.TestCase):
 
     # def test_total(self):
     #     print("testing total()")
-    #     self.assertEqual(total(sample_hand1), 20)
+    #     self.assertEqual(total([Two_of_Spades, Four_of_Clubs, Six_of_Hearts, Eight_of_Diamonds]), 20)
     #     self.assertEqual(total(sample_hand2), 31)
     #     self.assertEqual(total(sample_hand3), 21)
     #     self.assertEqual(total(sample_hand4), 21)
@@ -79,7 +78,16 @@ class TestBlackJack(unittest.TestCase):
     #     self.assertEqual(dealer_move(dealer_ace_11, dealer_deck_ace_11), 19)
     #     self.assertEqual(dealer_move(dealer_ace_1, dealer_deck_ace_1), 17)
 
-    
+
+    def test_settle_bets(self):
+        print("testing settle_bets()")
+        self.assertEqual(settle_bets([Ten_of_Hearts, Ace_of_Hearts], [Jack_of_Clubs, Ace_of_Spades], 10, 5), 10)
+        self.assertEqual(settle_bets([Ten_of_Hearts, Ace_of_Hearts], [Two_of_Clubs, Ace_of_Spades], 10, 5), 0)
+        self.assertEqual(settle_bets([Ten_of_Hearts, Nine_of_Hearts], [Jack_of_Clubs, Ace_of_Spades], 10, 0), 15)
+        self.assertEqual(settle_bets([Ten_of_Hearts, Ten_of_Hearts], [Jack_of_Clubs, Two_of_Spades], 10, 0), -10)
+        self.assertEqual(settle_bets([Ten_of_Hearts, Seven_of_Hearts], [Jack_of_Clubs, Ten_of_Spades], 10, 0), 10)
+        
+        
 if __name__ == "__main__":
     unittest.main()
 

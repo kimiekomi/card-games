@@ -13,8 +13,8 @@ King = 13
 
 Ranks = [Ace, 2, 3, 4, 5, 6, 7, 8, 9, 10, Jack, Queen, King]
 
-Rank_Index = 0
-Suit_Index = 1
+Rank = 0
+Suit = 1
 
 Suit_Map = {Spades: "Spades", Clubs: "Clubs", Hearts: "Hearts", Diamonds: "Diamonds"}
 Suit_Symbols = ['♠', '♣', '♥', '♦']
